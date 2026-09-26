@@ -222,9 +222,9 @@ input,textarea,button{font-family:inherit}
             <div style="font-size:18px;font-weight:800;">Novo produto</div>
             <div style="font-size:13px;color:#476788">Fica em rascunho até você enviar.</div>
           </div>
-          <label style="border:1.5px dashed #a6bbd1;border-radius:14px;padding:20px;text-align:center;cursor:pointer;font-size:14px;color:#476788;display:flex;flex-direction:column;gap:4px;background:#f8f9fb">
+          <label onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" style="border:1.5px dashed {{ dropBorda }};border-radius:14px;padding:20px;text-align:center;cursor:pointer;font-size:14px;color:#476788;display:flex;flex-direction:column;gap:4px;background:{{ dropBg }}">
             <span style="font-weight:800;color:#0b3558">+ Adicionar fotos</span>
-            <span style="font-size:12px">Uma ou mais fotos do produto</span>
+            <span style="font-size:12px">{{ dropTxt }}</span>
             <input type="file" accept="image/*" multiple onChange="{{ onFiles }}" style="display:none">
           </label>
           <sc-if value="{{ temNovasFotos }}" hint-placeholder-val="{{ false }}">
@@ -340,7 +340,7 @@ input,textarea,button{font-family:inherit}
                 <sc-for list="{{ g.itens }}" as="it" hint-placeholder-count="2">
                   <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #edf2f8;flex-wrap:wrap;background:{{ it.rowBg }}">
                     <input type="checkbox" checked="{{ it.sel }}" onChange="{{ it.toggle }}" style="width:20px;height:20px;accent-color:#0b3558;cursor:pointer;margin:0;flex:0 0 20px">
-                    <label title="Adicionar fotos" style="flex:0 0 48px;height:48px;border-radius:8px;overflow:hidden;cursor:pointer;background:repeating-linear-gradient(135deg,#f0f3f8 0 6px,#e3ebf4 6px 12px);display:flex;align-items:center;justify-content:center;font-size:10px;color:#476788;position:relative;font-weight:700">
+                    <label title="Adicionar fotos (clique ou arraste)" onDragOver="{{ it.onDragOver }}" onDrop="{{ it.onDrop }}" style="flex:0 0 48px;height:48px;border-radius:8px;overflow:hidden;cursor:pointer;background:repeating-linear-gradient(135deg,#f0f3f8 0 6px,#e3ebf4 6px 12px);display:flex;align-items:center;justify-content:center;font-size:10px;color:#476788;position:relative;font-weight:700">
                       <sc-if value="{{ it.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ it.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
                       <sc-if value="{{ it.semFoto }}" hint-placeholder-val="{{ true }}"><span>+ foto</span></sc-if>
                       <sc-if value="{{ it.variasFotos }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:2px;bottom:2px;background:rgba(0,0,0,.7);color:#fff;border-radius:4px;padding:0 4px;font-size:10px">{{ it.nFotos }}</span></sc-if>
@@ -556,6 +556,8 @@ class Component extends DCLogic {
     window.addEventListener('storage', this.onStorage);
     this.onHide = () => this.flush();
     window.addEventListener('pagehide', this.onHide);
+    this.noDrop = e => { e.preventDefault(); };
+    window.addEventListener('dragover', this.noDrop); window.addEventListener('drop', this.noDrop);
     this.init();
   }
   async init() {
@@ -805,6 +807,8 @@ class Component extends DCLogic {
         podeReenviar: i.status === 'naosei',
         reenviar: () => this.setItem(i.id, { status: 'pendente', obs: '' }),
         excluir: () => { if (confirm(`Excluir ${i.marca} ${i.ref}?`)) this.upd(x => x.filter(y => y.id !== i.id)); },
+        onDragOver: e => e.preventDefault(),
+        onDrop: async e => { e.preventDefault(); e.stopPropagation(); const fs = Array.from(e.dataTransfer.files || []).filter(x => x.type.startsWith('image/')); if (!fs.length) return; const f = await this.lerFotos(fs); if (f.length) this.upd(x => x.map(y => y.id === i.id ? { ...y, fotos: [...y.fotos, ...f] } : y)); },
         onFotos: async e => { const f = await this.lerFotos(e.target.files); e.target.value = ''; if (f.length) this.upd(x => x.map(y => y.id === i.id ? { ...y, fotos: [...y.fotos, ...f] } : y)); }
       })) };
     });
@@ -920,6 +924,11 @@ class Component extends DCLogic {
       // painel
       novasFotos: s.novasFotos.map((src, k) => ({ src, remover: () => this.setState(st => ({ novasFotos: st.novasFotos.filter((_, j) => j !== k) })) })),
       temNovasFotos: s.novasFotos.length > 0,
+      dropBorda: s.arrastando ? '#006bff' : '#a6bbd1', dropBg: s.arrastando ? '#e6f0ff' : '#f8f9fb',
+      dropTxt: s.arrastando ? 'Solte as fotos aqui' : 'Clique ou arraste as fotos aqui',
+      onDragOver: e => { e.preventDefault(); if (!s.arrastando) this.setState({ arrastando: true }); },
+      onDragLeave: e => { if (!e.currentTarget.contains(e.relatedTarget)) this.setState({ arrastando: false }); },
+      onDrop: async e => { e.preventDefault(); this.setState({ arrastando: false }); const fs = Array.from(e.dataTransfer.files || []).filter(x => x.type.startsWith('image/')); if (!fs.length) return; const f = await this.lerFotos(fs); this.setState(st => ({ novasFotos: [...st.novasFotos, ...f] })); },
       onFiles: async e => { const f = await this.lerFotos(e.target.files); e.target.value = ''; this.setState(st => ({ novasFotos: [...st.novasFotos, ...f] })); },
       novaMarca: s.novaMarca, novaRef: s.novaRef, novaNota: s.novaNota, marcasTodas,
       onMarca: e => this.setState({ novaMarca: e.target.value.toUpperCase() }),
