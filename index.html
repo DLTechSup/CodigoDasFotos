@@ -262,7 +262,7 @@ input,textarea,button{font-family:inherit}
         </section>
 
         <section style="background:#fff;border:1px solid #d4e0ed;border-radius:24px;box-shadow:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 4px 10px,rgba(71,103,136,.05) 0 10px 20px;padding:6px 18px;display:flex;flex-direction:column">
-          <button onClick="{{ toggleAcessos }}" style="border:0;background:transparent;padding:12px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#0b3558;font-size:15px;font-weight:800">Acessos · {{ nUsuarios }} <span style="font-size:13px;color:#476788">{{ acessosSeta }}</span></button>
+          <button onClick="{{ toggleAcessos }}" style="border:0;background:transparent;padding:12px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#0b3558;font-size:15px;font-weight:800"><span>Acessos · {{ nUsuarios }}</span> <span style="font-size:13px;color:#476788">{{ acessosSeta }}</span></button>
           <sc-if value="{{ acessosAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:12px;padding-bottom:16px">
               <div style="display:flex;flex-direction:column;gap:6px">
@@ -717,7 +717,10 @@ class Component extends DCLogic {
     const up = Object.values(this.pend.up), del = Object.keys(this.pend.del);
     this.pend = { up: {}, del: {} };
     try {
-      if (up.length) { const r = await this.sb.from('itens').upsert(up.map(d => ({ id: d.id, doc: d }))); if (r.error) throw r.error; }
+      if (up.length) {
+        if (this.state.user) { const r = await this.sb.from('itens').upsert(up.map(d => ({ id: d.id, doc: d }))); if (r.error) throw r.error; }
+        else for (const d of up) { const r = await this.sb.from('itens').update({ doc: d, atualizado: new Date().toISOString() }).eq('id', d.id); if (r.error) throw r.error; }
+      }
       if (del.length) { const r = await this.sb.from('itens').delete().in('id', del); if (r.error) throw r.error; }
     } catch (e) { this.showToast('Erro ao salvar: ' + (e.message || e)); }
   }
