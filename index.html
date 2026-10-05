@@ -372,31 +372,43 @@ input,textarea,button{font-family:inherit}
               <button onClick="{{ feitoTodos }}" style="height:36px;padding:0 14px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Marcar todos como feito</button>
             </div>
           </sc-if>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <sc-for list="{{ recebidos }}" as="it" hint-placeholder-count="3">
-              <div style="background:#fff;border:1px solid {{ it.borda }};border-radius:14px;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-                <div style="flex:1 1 160px;min-width:0;display:flex;flex-direction:column;gap:3px">
-                  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-                    <span style="font-size:13px;font-weight:800;letter-spacing:0.02em">{{ it.marca }}</span>
-                    <sc-if value="{{ it.novo }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:800;color:#006bff">● novo</span></sc-if>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ gruposRecebidos }}" as="g" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:15px;font-weight:800;color:#0b3558">{{ g.marca }}</span>
+                  <span style="min-width:26px;height:26px;padding:0 8px;border-radius:8px;background:#e6f0ff;color:#006bff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ g.n }}</span>
+                </div>
+                <sc-for list="{{ g.itens }}" as="it" hint-placeholder-count="2">
+                  <div style="background:#fff;border:1px solid {{ it.borda }};border-radius:14px;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                    <div style="flex:1 1 160px;min-width:0;display:flex;flex-direction:column;gap:3px">
+                      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">{{ it.ref }}</span>
+                        <sc-if value="{{ it.novo }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:800;color:#006bff">● novo</span></sc-if>
+                      </div>
+                      <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
+                      <div style="font-size:12px;color:#5f7d9c">{{ it.quando }}</div>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
+                      <button onClick="{{ it.copiar }}" title="Copiar" style="border:2px solid #0b3558;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;gap:1px;color:#0b3558">
+                        <span style="font-size:19px;font-weight:700;font-family:'JetBrains Mono',monospace">{{ it.codigo }}</span>
+                        <span style="font-size:11px;color:#476788;font-weight:600">{{ it.copiarTxt }}</span>
+                      </button>
+                      <button onClick="{{ it.feito }}" style="height:44px;padding:0 14px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Feito</button>
+                    </div>
                   </div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">{{ it.ref }}</div>
-                  <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
-                  <div style="font-size:12px;color:#5f7d9c">{{ it.quando }}</div>
-                </div>
-                <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
-                  <button onClick="{{ it.copiar }}" title="Copiar" style="border:2px solid #0b3558;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;gap:1px;color:#0b3558">
-                    <span style="font-size:19px;font-weight:700;font-family:'JetBrains Mono',monospace">{{ it.codigo }}</span>
-                    <span style="font-size:11px;color:#476788;font-weight:600">{{ it.copiarTxt }}</span>
-                  </button>
-                  <button onClick="{{ it.feito }}" style="height:44px;padding:0 14px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Feito</button>
-                </div>
+                </sc-for>
               </div>
             </sc-for>
           </div>
         </sc-if>
 
         <sc-if value="{{ abaHistorico }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ temHistorico }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:flex-end">
+              <button onClick="{{ imprimirRelatorio }}" style="height:38px;padding:0 16px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:13px;font-weight:700;cursor:pointer">Imprimir relatório</button>
+            </div>
+          </sc-if>
           <div style="display:flex;flex-direction:column;gap:14px">
             <sc-for list="{{ dias }}" as="d" hint-placeholder-count="2">
               <div style="background:#fff;border:1px solid #d4e0ed;border-radius:24px;box-shadow:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 4px 10px,rgba(71,103,136,.05) 0 10px 20px;overflow:hidden">
@@ -788,7 +800,7 @@ class Component extends DCLogic {
     const aguard = itens.filter(i => i.status === 'rascunho' || i.status === 'pendente' || i.status === 'naosei');
     const rasc = itens.filter(i => i.status === 'rascunho');
     const receb = itens.filter(i => i.status === 'respondido');
-    const resp = itens.filter(i => (i.status === 'respondido' || i.status === 'feito') && i.respondidoEm);
+    const resp = itens.filter(i => i.status === 'feito' && i.feitoEm);
     const nNovos = receb.filter(i => !i.visto).length;
     const parsed = s.importTxt.trim() ? parseLista(s.importTxt) : [];
     const podeEnviar = s.codigo.trim().length > 0;
@@ -818,29 +830,32 @@ class Component extends DCLogic {
       })) };
     });
 
-    const recebidos = receb.slice().sort((a, b) => b.respondidoEm - a.respondidoEm).map(i => {
-      const key = 'r' + i.id;
-      return { ...i, temObs: !!i.obs, novo: !i.visto,
-        borda: !i.visto ? '#006bff' : '#d4e0ed',
-        quando: `Respondido ${hora(i.respondidoEm)} · fotos de ${i.data}`,
-        copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Toque para copiar',
-        copiar: () => { this.copiar(i.codigo, key); if (!i.visto) this.setItem(i.id, { visto: true }); },
-        feito: () => this.setItem(i.id, { status: 'feito', feitoEm: Date.now(), visto: true })
-      };
+const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
+      const l = receb.filter(i => i.marca === m).sort((a, b) => b.respondidoEm - a.respondidoEm);
+      return { marca: m, n: l.length, itens: l.map(i => {
+        const key = 'r' + i.id;
+        return { ...i, temObs: !!i.obs, novo: !i.visto,
+          borda: !i.visto ? '#5fa0ff' : '#d4e0ed',
+          quando: `Respondido ${hora(i.respondidoEm)} · fotos de ${i.data}`,
+          copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Toque para copiar',
+          copiar: () => { this.copiar(i.codigo, key); if (!i.visto) this.setItem(i.id, { visto: true }); },
+          feito: () => this.setItem(i.id, { status: 'feito', feitoEm: Date.now(), visto: true })
+        };
+      }) };
     });
 
     const porDia = {};
-    resp.forEach(i => { const k = diaKey(i.respondidoEm); (porDia[k] = porDia[k] || []).push(i); });
+    resp.forEach(i => { const k = diaKey(i.feitoEm); (porDia[k] = porDia[k] || []).push(i); });
     const dias = Object.keys(porDia).sort().reverse().map(k => {
-      const l = porDia[k].slice().sort((a, b) => a.respondidoEm - b.respondidoEm);
+      const l = porDia[k].slice().sort((a, b) => a.feitoEm - b.feitoEm);
       const ms = [...new Set(l.map(i => i.marca))];
       const fimDia = s.fim.filter(t => diaKey(t) === k);
-      const t0 = new Date(l[0].respondidoEm);
+      const t0 = new Date(l[0].feitoEm);
       const dkey = 'd' + k;
       const texto = `Códigos das fotos — ${t0.toLocaleDateString('pt-BR')}\n\n` + ms.map(m => m + '\n' + l.filter(i => i.marca === m).map(i => `${i.ref} — ${i.codigo}${i.obs ? ' (' + i.obs + ')' : ''}`).join('\n')).join('\n\n');
       return {
         titulo: t0.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: '2-digit' }),
-        sub: `${l.length} códigos · ${ms.length} marcas · das ${hm(l[0].respondidoEm)} às ${hm(l[l.length - 1].respondidoEm)}`,
+        sub: `${l.length} códigos · ${ms.length} marcas · das ${hm(l[0].feitoEm)} às ${hm(l[l.length - 1].feitoEm)}`,
         temTudo: fimDia.length > 0, tudoTxt: fimDia.length ? `Tudo preenchido às ${hm(fimDia[fimDia.length - 1])}` : '',
         copiarTxt: s.copiado === dkey ? 'Copiado ✓' : 'Copiar dia',
         copiar: () => this.copiar(texto, dkey),
@@ -966,7 +981,8 @@ class Component extends DCLogic {
       },
       abas: abaDef.map(([k, label, n]) => ({ label, n, bg: s.aba === k ? '#0b3558' : '#fff', fg: s.aba === k ? '#fff' : '#0b3558', borda: s.aba === k ? '#0b3558' : '#d4e0ed', ir: () => this.setState({ aba: k }) })),
       abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaHistorico: s.aba === 'historico',
-      gruposAguard, recebidos, dias,
+      gruposAguard, gruposRecebidos, dias, temHistorico: resp.length > 0,
+      imprimirRelatorio: () => this.imprimirRelatorio(),
       temRascunho: rasc.length > 0,
       rascunhoTxt: rasc.length === 1 ? '1 referência em rascunho' : `${rasc.length} referências em rascunho`,
       enviarRascunho: () => {
@@ -997,6 +1013,38 @@ class Component extends DCLogic {
       vazioTxt: { aguardando: 'Nada esperando o escritório.', recebidos: 'Nenhum código novo ainda.', historico: 'O histórico aparece aqui conforme os códigos chegam.' }[s.aba],
       temToast: !!s.toast, toast: s.toast
     };
+  }
+  imprimirRelatorio() {
+    const itens = this.state.itens.filter(i => i.status === 'feito' && i.feitoEm).slice().sort((a, b) => a.feitoEm - b.feitoEm);
+    if (!itens.length) return this.showToast('Nada no histórico ainda.');
+    const win = window.open('', '_blank');
+    if (!win) return this.showToast('Permita pop-ups para imprimir.');
+    const marcas = [...new Set(itens.map(i => i.marca))];
+    const blocos = marcas.map(m => {
+      const l = itens.filter(i => i.marca === m);
+      const linhas = l.map(i => `<tr><td>${i.ref}</td><td>${hora(i.feitoEm)}</td></tr>`).join('');
+      return `<h2>${m} <span class="n">(${l.length})</span></h2>
+<table><thead><tr><th>Referência</th><th>Data e hora</th></tr></thead><tbody>${linhas}</tbody></table>`;
+    }).join('\n');
+    win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Relatório — Códigos das Fotos</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;color:#0b3558;padding:28px}
+h1{font-size:20px;margin:0 0 4px}
+p{font-size:13px;color:#476788;margin:0 0 20px}
+h2{font-size:15px;margin:22px 0 8px;border-bottom:1px solid #d4e0ed;padding-bottom:6px}
+h2 .n{color:#476788;font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:4px}
+th,td{border:1px solid #d4e0ed;padding:8px 10px;text-align:left}
+th{background:#f0f3f8}
+@media print{h2{break-after:avoid}table{break-inside:avoid}}
+</style></head><body>
+<h1>Relatório de códigos preenchidos</h1>
+<p>Calçados 24h · gerado em ${hora(Date.now())} · ${itens.length} itens · ${marcas.length} marcas</p>
+${blocos}
+</body></html>`);
+    win.document.close();
+    win.focus();
+    setTimeout(() => win.print(), 300);
   }
   adicionar() {
     const s = this.state;
