@@ -63,6 +63,8 @@ input,textarea,button{font-family:inherit}
           </div>
         </div>
       </sc-if>
+
+
       <sc-if value="{{ podeAtivarNotif }}" hint-placeholder-val="{{ false }}">
         <button onClick="{{ ativarNotif }}" style="align-self:flex-start;border:0;background:transparent;padding:0;font-size:14px;font-weight:600;color:#006bff;cursor:pointer;text-decoration:underline">Receber aviso neste aparelho quando chegar produto novo</button>
       </sc-if>
@@ -347,6 +349,9 @@ input,textarea,button{font-family:inherit}
               <button onClick="{{ apagarSel }}" style="margin-left:auto;height:36px;padding:0 14px;border:0;border-radius:8px;background:#006bff;color:#fff;font-size:13px;font-weight:800;cursor:pointer;opacity:{{ apagarOpacity }}">Apagar selecionados</button>
             </div>
           </sc-if>
+          <sc-if value="{{ temComNota }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ gerarListaFotos }}" style="align-self:flex-start;height:38px;padding:0 16px;border:1px solid #f1d99a;border-radius:8px;background:#fff8e6;color:#8a5a00;font-size:13px;font-weight:800;cursor:pointer">📋 Gerar lista de fotos pendentes ({{ nComNota }})</button>
+          </sc-if>
           <div style="display:flex;flex-direction:column;gap:12px">
             <sc-for list="{{ gruposAguard }}" as="g" hint-placeholder-count="3">
               <div style="background:#fff;border:1px solid #d4e0ed;border-radius:24px;box-shadow:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 4px 10px,rgba(71,103,136,.05) 0 10px 20px;overflow:hidden">
@@ -382,6 +387,13 @@ input,textarea,button{font-family:inherit}
                           <button onClick="{{ it.editar }}" title="Editar marca/referência" style="border:0;background:transparent;padding:0;font-size:11px;font-weight:700;color:#006bff;cursor:pointer">editar</button>
                         </div>
                       </sc-if>
+                      <select value="{{ it.motivoFoto }}" onChange="{{ it.onMotivoFoto }}" style="width:100%;height:32px;border:1px solid {{ it.notaBorda }};border-radius:8px;padding:0 8px;font-size:13px;color:#0b3558;background:{{ it.notaBg }};outline:none">
+                        <option value="">Situação da foto (opcional)</option>
+                        <option value="Falta receber as fotos">Falta receber as fotos</option>
+                        <option value="Não tenho fotos">Não tenho fotos</option>
+                        <option value="Somente foto de capa">Somente foto de capa</option>
+                        <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                      </select>
                       <input value="{{ it.nota }}" onChange="{{ it.onNota }}" placeholder="+ observação" style="width:100%;height:32px;border:1px solid {{ it.notaBorda }};border-radius:8px;padding:0 10px;font-size:13px;color:#0b3558;background:{{ it.notaBg }};outline:none">
                       <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#0b3558;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
                     </div>
@@ -967,8 +979,9 @@ class Component extends DCLogic {
         sel: !!sel[i.id], rowBg: sel[i.id] ? '#e6f0ff' : '#fff', toggle: () => setSel([i.id], !sel[i.id]),
         statusTxt: { naosei: 'Escritório não sabe', rascunho: 'Rascunho', pendente: 'Com o escritório' }[i.status],
         statusBg: { naosei: 'oklch(0.92 0.07 45)', rascunho: 'oklch(0.93 0.07 90)', pendente: '#e3ebf4' }[i.status],
-        notaBorda: i.nota ? '#d4e0ed' : '#e3ebf4', notaBg: i.nota ? '#fff' : '#f8f9fb',
+        notaBorda: (i.nota || i.motivoFoto) ? '#d4e0ed' : '#e3ebf4', notaBg: (i.nota || i.motivoFoto) ? '#fff' : '#f8f9fb',
         onNota: e => this.setItem(i.id, { nota: e.target.value }),
+        motivoFoto: i.motivoFoto || '', onMotivoFoto: e => this.setItem(i.id, { motivoFoto: e.target.value }),
         podeReenviar: i.status === 'naosei',
         reenviar: () => this.setItem(i.id, { status: 'pendente', obs: '' }),
         excluir: () => this.confirmar(`Excluir ${i.marca} ${i.ref}?`, () => this.upd(x => x.filter(y => y.id !== i.id))),
@@ -1147,6 +1160,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       alertaSub: [...new Set(novosEsc.map(i => i.marca))].join(' · '),
       alertaVer: () => { const i = novosEsc[0]; this.gravar(KEY_VISTO, Date.now()); this.setState({ vistoAte: Date.now(), eView: 'item', eId: i.id, eMarca: i.marca }); },
       alertaOk: () => { this.gravar(KEY_VISTO, Date.now()); this.setState({ vistoAte: Date.now() }); },
+
       podeAtivarNotif: s.modo === 'escritorio' && view === 'home' && s.notifPerm === 'default',
       ativarNotif: () => { try { Notification.requestPermission().then(p => { this.setState({ notifPerm: p }); if (p === 'granted') this.notificar('Avisos ativados. Você será avisado quando chegar produto novo.'); }); } catch (e) {} },
       irEsc: () => this.setState({ modo: 'escritorio' }), irPainel: () => this.setState({ modo: 'painel' }),
@@ -1242,6 +1256,8 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       resumoHist: `${resp.length} código${resp.length === 1 ? '' : 's'} · ${remessas.length} registro${remessas.length === 1 ? '' : 's'}`,
       buscaSemResultado: resp.length > 0 && modoCatalogo && catalogo.length === 0,
       imprimirRelatorio: () => this.imprimirRelatorio(),
+      temComNota: pend.some(i => i.nota || i.motivoFoto), nComNota: pend.filter(i => i.nota || i.motivoFoto).length,
+      gerarListaFotos: () => this.gerarListaFotos(),
       temRascunho: rasc.length > 0,
       rascunhoTxt: rasc.length === 1 ? '1 referência em rascunho' : `${rasc.length} referências em rascunho`,
       enviarRascunho: () => {
@@ -1291,6 +1307,36 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       semConexao: !s.online,
       temToast: !!s.toast, toast: s.toast
     };
+  }
+  gerarListaFotos() {
+    const itens = this.state.itens.filter(i => i.status !== 'feito' && (i.nota || i.motivoFoto)).slice().sort((a, b) => a.marca.localeCompare(b.marca));
+    if (!itens.length) return this.showToast('Nenhuma referência com observação de foto pendente.');
+    const win = window.open('', '_blank');
+    if (!win) return this.showToast('Permita pop-ups para imprimir.');
+    const marcas = [...new Set(itens.map(i => i.marca))];
+    const blocos = marcas.map(m => {
+      const l = itens.filter(i => i.marca === m);
+      const linhas = l.map(i => `<div class="row"><span class="ref">${i.ref}</span>${i.motivoFoto ? `<span class="tag">${i.motivoFoto}</span>` : '<span></span>'}<span class="nota">${i.nota || ''}</span></div>`).join('');
+      return `<section class="marca"><h2>${m}<span class="n">${l.length}</span></h2>${linhas}</section>`;
+    }).join('\n');
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Fotos pendentes</title><style>
+      body{font-family:Arial,sans-serif;color:#0b3558;max-width:720px;margin:30px auto;padding:0 16px}
+      h1{font-size:20px;margin:0 0 4px} .sub{color:#476788;font-size:13px;margin-bottom:24px}
+      .marca h2{font-size:15px;font-weight:800;margin:14px 0 10px;display:flex;align-items:center;gap:8px}
+      .marca h2 .n{background:#fff4d6;color:#8a5a00;border-radius:999px;font-size:12px;font-weight:800;padding:2px 9px}
+      .row{display:grid;grid-template-columns:110px 170px 1fr;gap:14px;align-items:center;padding:8px 0;border-top:1px solid #edf2f8;font-size:14px}
+      .row:first-of-type{border-top:none}
+      .ref{font-family:'Courier New',monospace;font-weight:700}
+      .tag{background:#fff4d6;color:#8a5a00;border-radius:999px;font-size:12px;font-weight:700;padding:3px 10px;width:fit-content}
+      .nota{color:#476788;font-size:13px}
+      @media print{button{display:none}}
+    </style></head><body>
+      <h1>Referências aguardando fotos</h1>
+      <div class="sub">Gerado em ${new Date().toLocaleString('pt-BR')} · ${itens.length} referência${itens.length === 1 ? '' : 's'}</div>
+      <button onclick="window.print()" style="margin-bottom:16px;height:36px;padding:0 16px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Imprimir / Salvar PDF</button>
+      ${blocos}
+    </body></html>`);
+    win.document.close();
   }
   imprimirRelatorio() {
     const fm = this.state.filtroMarcaHist || '';
