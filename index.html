@@ -10,99 +10,193 @@
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <style>
 body{margin:0;background:#f8f9fb;color:#0b3558;font-family:"Manrope","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:#0b3558}a:hover{color:#006bff}
-@keyframes cfPulse{0%{box-shadow:0 0 0 0 rgba(0,107,255,.45)}70%{box-shadow:0 0 0 10px rgba(0,107,255,0)}100%{box-shadow:0 0 0 0 rgba(0,107,255,0)}}
+@keyframes cfPulse{0%{box-shadow:0 0 0 0 rgba(176,230,30,.55)}70%{box-shadow:0 0 0 10px rgba(176,230,30,0)}100%{box-shadow:0 0 0 0 rgba(176,230,30,0)}}
 *{box-sizing:border-box}
 input,textarea,button{font-family:inherit}
 </style>
 </helmet>
 <div style="min-height:100vh;display:flex;flex-direction:column">
-  <header style="background:#fff;border-bottom:1px solid #d4e0ed;padding:10px 18px;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:5;flex-wrap:wrap">
-    <div style="display:flex;align-items:center;gap:14px;min-width:0">
-      <img src="https://acdn-us.mitiendanube.com/stores/001/682/645/themes/common/logo-1707774246-1740764394-ec7e9dd0f42891352d1ab5c0a549e7871740764394-480-0.webp" alt="Calçados 24h" style="height:40px;max-width:180px;object-fit:contain;display:block">
-      <div style="width:1px;height:22px;background:#d4e0ed"></div>
-      <div style="font-size:14px;font-weight:600;color:#476788;white-space:nowrap">{{ modoLabel }}</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <sc-if value="{{ mostrarSino }}" hint-placeholder-val="{{ true }}">
-        <button onClick="{{ irHomeEsc }}" title="Produtos esperando código" style="height:40px;padding:0 12px 0 10px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;color:#0b3558;font-size:14px;font-weight:700">
-          <span style="width:10px;height:10px;border-radius:50%;background:{{ sinoCor }};animation:{{ sinoAnim }}"></span>
-          {{ sinoTxt }}
-        </button>
-      </sc-if>
-      <sc-if value="{{ mostrarToggle }}" hint-placeholder-val="{{ true }}">
-        <div style="display:flex;gap:4px;padding:4px;background:#f0f3f8;border-radius:8px">
-          <button onClick="{{ irEsc }}" style="border:0;padding:8px 14px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;background:{{ bgEsc }};color:{{ fgEsc }};box-shadow:{{ shEsc }}">Escritório</button>
-          <button onClick="{{ irPainel }}" style="border:0;padding:8px 14px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;background:{{ bgPainel }};color:{{ fgPainel }};box-shadow:{{ shPainel }};display:flex;gap:6px;align-items:center">Meu painel<sc-if value="{{ temNovos }}" hint-placeholder-val="{{ false }}"><span style="background:#006bff;color:#fff;border-radius:9999px;font-size:11px;padding:2px 7px">{{ nNovos }}</span></sc-if></button>
+  <header style="position:sticky;top:0;z-index:5">
+    <div style="background:#0f172a;border-bottom:1px solid #1e293b;padding:10px 18px;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:14px;min-width:0">
+        <div style="background:#fff;border-radius:10px;padding:4px 8px;display:flex;align-items:center">
+          <img src="https://acdn-us.mitiendanube.com/stores/001/682/645/themes/common/logo-1707774246-1740764394-ec7e9dd0f42891352d1ab5c0a549e7871740764394-480-0.webp" alt="Calçados 24h" style="height: 54px; max-width: 150px; object-fit: contain; display: block; width: 154px">
         </div>
-      </sc-if>
-      <sc-if value="{{ podeSair }}" hint-placeholder-val="{{ false }}">
-        <button onClick="{{ sair }}" style="border:0;background:transparent;padding:8px 4px;font-size:14px;font-weight:600;cursor:pointer;color:#476788">Sair</button>
-      </sc-if>
+        
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <sc-if value="{{ mostrarSino }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ irHomeEsc }}" title="Produtos esperando código" style="height:38px;padding:0 12px 0 10px;border:1px solid #334155;border-radius:8px;background:#1e293b;cursor:pointer;display:flex;align-items:center;gap:8px;color:#fff;font-size:13px;font-weight:700">
+            <span style="width:9px;height:9px;border-radius:50%;background:{{ sinoCor }};animation:{{ sinoAnim }}"></span>
+            {{ sinoTxt }}
+          </button>
+        </sc-if>
+        <sc-if value="{{ mostrarToggle }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;gap:4px;padding:4px;background:#020617;border:1px solid #1e293b;border-radius:10px">
+            <button onClick="{{ irEsc }}" style="border:0;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;background:{{ bgEsc }};color:{{ fgEsc }}">Escritório</button>
+            <button onClick="{{ irPainel }}" style="border:0;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;background:{{ bgPainel }};color:{{ fgPainel }};display:flex;gap:6px;align-items:center">Meu painel<sc-if value="{{ temNovos }}" hint-placeholder-val="{{ false }}"><span style="background:#a3e635;color:#111418;border-radius:9999px;font-size:11px;padding:2px 7px">{{ nNovos }}</span></sc-if></button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ podeSair }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ sair }}" style="border:0;background:transparent;padding:8px 4px;font-size:13px;font-weight:600;cursor:pointer;color:#94a3b8">Sair</button>
+        </sc-if>
+      </div>
     </div>
+    <sc-if value="{{ modoEsc }}" hint-placeholder-val="{{ true }}">
+      <div style="background:#020617;border-bottom:1px solid #1e293b;padding:7px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        
+        <div style="display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700">
+          <span style="color:#fbbf24">{{ nPend }} esperando</span>
+          <span style="color:#334155">|</span>
+          <span style="color:#f87171">{{ nObs }} faltam fotos</span>
+          <span style="color:#334155">|</span>
+          <span style="color:#60a5fa">{{ nReceb }} recebidos</span>
+        </div>
+      </div>
+    </sc-if>
   </header>
 
   <sc-if value="{{ modoEsc }}" hint-placeholder-val="{{ true }}">
     <main style="width:100%;max-width:1100px;margin:0 auto;padding:18px 16px 48px;display:flex;flex-direction:column;gap:16px">
 
       <sc-if value="{{ temAlerta }}" hint-placeholder-val="{{ true }}">
-        <div style="display:flex;align-items:center;gap:14px;background:#e6f0ff;border:1px solid #b9d4ff;border-radius:16px;padding:14px 16px;flex-wrap:wrap">
-          <span style="width:12px;height:12px;flex:0 0 12px;border-radius:50%;background:#006bff;animation:cfPulse 1.6s infinite"></span>
+        <div style="display:flex;align-items:center;gap:14px;background:#f4ffd6;border:1px solid #c7ef6e;border-radius:16px;padding:14px 16px;flex-wrap:wrap">
+          <span style="width:12px;height:12px;flex:0 0 12px;border-radius:50%;background:#8fbf1a;animation:cfPulse 1.6s infinite"></span>
           <div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:3px">
             <div style="font-size:16px;font-weight:700;color:#0b3558">{{ alertaTitulo }}</div>
             <div style="font-size:14px;color:#476788;text-wrap:pretty">{{ alertaSub }}</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <button onClick="{{ alertaVer }}" style="height:40px;padding:0 16px;border:0;border-radius:8px;background:#006bff;color:#fff;font-size:15px;font-weight:600;cursor:pointer">Ver agora</button>
-            <button onClick="{{ alertaOk }}" title="Dispensar" style="height:40px;width:40px;border:1px solid #b9d4ff;border-radius:8px;background:#fff;color:#0b3558;font-size:16px;cursor:pointer">×</button>
+            <button onClick="{{ alertaVer }}" style="height:40px;padding:0 16px;border:0;border-radius:8px;background:#111418;color:#d7fb52;font-size:15px;font-weight:700;cursor:pointer">Ver agora</button>
+            <button onClick="{{ alertaOk }}" title="Dispensar" style="height:40px;width:40px;border:1px solid #c7ef6e;border-radius:8px;background:#fff;color:#0b3558;font-size:16px;cursor:pointer">×</button>
           </div>
         </div>
       </sc-if>
 
 
       <sc-if value="{{ podeAtivarNotif }}" hint-placeholder-val="{{ false }}">
-        <button onClick="{{ ativarNotif }}" style="align-self:flex-start;border:0;background:transparent;padding:0;font-size:14px;font-weight:600;color:#006bff;cursor:pointer;text-decoration:underline">Receber aviso neste aparelho quando chegar produto novo</button>
+        <button onClick="{{ ativarNotif }}" style="align-self:flex-start;border:0;background:transparent;padding:0;font-size:14px;font-weight:600;color:#111418;cursor:pointer;text-decoration:underline">Receber aviso neste aparelho quando chegar produto novo</button>
       </sc-if>
       <sc-if value="{{ eHome }}" hint-placeholder-val="{{ true }}">
-        <div style="background:#006bff;color:#fff;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:16px">
-          <div style="font-size:12px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase">Códigos das fotos pendentes</div>
-          <div style="display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap">
-            <div style="font-size:72px;font-weight:800;line-height:0.85;">{{ nPend }}</div>
-            <div style="display:flex;flex-direction:column;gap:3px;padding-bottom:4px">
-              <div style="font-size:18px;font-weight:700">referências esperando</div>
-              <div style="font-size:14px;font-weight:500">{{ resumoMarcas }}</div>
+        <sc-if value="{{ temPendHome }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#111418;color:#fff;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:16px">
+            <div style="font-size:12px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#9aa5ad">Códigos das fotos pendentes</div>
+            <div style="display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap">
+              <div style="font-size:72px;font-weight:800;line-height:0.85;color:#d7fb52">{{ nPend }}</div>
+              <div style="display:flex;flex-direction:column;gap:3px;padding-bottom:4px">
+                <div style="font-size:18px;font-weight:700">referências esperando</div>
+                <div style="font-size:14px;font-weight:500;color:#c3cbd2">{{ resumoMarcas }}</div>
+              </div>
+            </div>
+            <button onClick="{{ comecar }}" style="height:54px;border:0;border-radius:8px;background:#d7fb52;color:#111418;font-size:17px;font-weight:800;cursor:pointer">Começar a preencher →</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ semPendHome }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:14px;background:#eafaf0;border:1px solid #bfe8cf;border-radius:16px;padding:16px 18px">
+            <div style="width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:#bfe8cf;color:#157347;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800">✓</div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <div style="font-size:16px;font-weight:800;color:#0b3558">Tudo preenchido</div>
+              <div style="font-size:13px;color:#476788">Nenhuma referência esperando código agora. Quando uma nova chegar, ela aparece aqui.</div>
             </div>
           </div>
-          <button onClick="{{ comecar }}" style="height:54px;border:0;border-radius:8px;background:#fff;color:#0b3558;font-size:17px;font-weight:800;cursor:pointer">Começar a preencher →</button>
+        </sc-if>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+          <div style="background:#f4ffd6;border:1px solid #c7ef6e;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:28px;font-weight:800;color:#4a6b00">{{ nPend }}</span>
+            <span style="font-size:13px;color:#5c7a00;font-weight:600">esperando código</span>
+          </div>
+          <div onClick="{{ abrirAlertas }}" style="background:{{ obsStatBg }};border:{{ obsStatBorder }};border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;cursor:{{ obsStatCursor }}">
+            <span style="font-size:28px;font-weight:800;color:{{ obsStatFg }}">{{ nObs }}</span>
+            <span style="font-size:13px;color:{{ obsStatFg }};font-weight:700">⚠️ com observação</span>
+          </div>
+          <div style="background:#eafaf0;border:1px solid #bfe8cf;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:28px;font-weight:800;color:#157347">{{ nFeitosHoje }}</span>
+            <span style="font-size:13px;color:#157347;font-weight:600">feitos hoje</span>
+          </div>
         </div>
+
+        <sc-if value="{{ temPendHome }}" hint-placeholder-val="{{ true }}">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:4px;flex-wrap:wrap">
           <div style="font-size:18px;font-weight:800;">Marcas esperando código</div>
           <div style="font-size:13px;color:#476788">Toque para ver as referências</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px">
           <sc-for list="{{ marcasPend }}" as="m" hint-placeholder-count="6">
-            <button onClick="{{ m.abrir }}" style="display:flex;flex-direction:column;gap:12px;padding:16px;background:#fff;border:1px solid #d4e0ed;border-radius:8px;cursor:pointer;text-align:left;color:#0b3558">
+            <button onClick="{{ m.abrir }}" style="display:flex;flex-direction:column;gap:10px;padding:16px;background:#fff;border:{{ m.cardBorder }};border-radius:16px;cursor:pointer;text-align:left;color:#0b3558">
               <div style="display:flex;align-items:center;gap:12px;width:100%">
                 <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
                   <span style="font-size:20px;font-weight:800;overflow-wrap:anywhere">{{ m.marca }}</span>
                   <span style="font-size:13px;color:#476788">{{ m.nTxt }}</span>
                 </span>
-                <span style="min-width:42px;height:42px;padding:0 10px;border-radius:12px;background:#006bff;color:#fff;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ m.n }}</span>
+                <span style="min-width:42px;height:42px;padding:0 10px;border-radius:12px;background:{{ m.badgeBg }};color:{{ m.badgeFg }};font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ m.n }}</span>
               </div>
+              <sc-if value="{{ m.temAlerta }}" hint-placeholder-val="{{ false }}">
+                <span style="align-self:flex-start;font-size:11px;font-weight:800;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:999px;padding:2px 9px">⚠️ pendência de fotos</span>
+              </sc-if>
               <div style="display:flex;flex-wrap:wrap;gap:6px">
                 <sc-for list="{{ m.chips }}" as="c" hint-placeholder-count="3">
-                  <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:500;padding:4px 8px;border-radius:6px;background:#f0f3f8;color:#0b3558">{{ c }}</span>
+                  <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:600;padding:4px 8px;border-radius:6px;background:{{ c.bg }};color:{{ c.fg }};border:{{ c.border }}">{{ c.ref }}</span>
                 </sc-for>
                 <sc-if value="{{ m.temMais }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:700;padding:4px 6px;color:#476788">{{ m.maisTxt }}</span></sc-if>
               </div>
             </button>
           </sc-for>
         </div>
+        </sc-if>
+
+        <sc-if value="{{ temMarcasObs }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+            <span style="width:30px;height:30px;border-radius:9px;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px">⚠️</span>
+            <div style="font-size:18px;font-weight:800;color:#991b1b">Pendência de fotos</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px">
+            <sc-for list="{{ marcasObs }}" as="m" hint-placeholder-count="2">
+              <button onClick="{{ m.abrir }}" style="display:flex;flex-direction:column;gap:12px;padding:16px;background:#fef2f2;border:2px solid #ef4444;border-radius:16px;cursor:pointer;text-align:left;color:#0b3558">
+                <div style="display:flex;align-items:center;gap:12px;width:100%">
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                    <span style="font-size:20px;font-weight:800;overflow-wrap:anywhere">{{ m.marca }}</span>
+                    <span style="font-size:13px;color:#b91c1c;font-weight:700">{{ m.nTxt }}</span>
+                  </span>
+                  <span style="min-width:42px;height:42px;padding:0 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ m.n }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <sc-for list="{{ m.itens }}" as="it" hint-placeholder-count="2">
+                    <span style="font-size:12px;color:#7f1d1d;background:#fff;border:1px solid #fecaca;border-radius:8px;padding:5px 8px"><span style="font-family:'JetBrains Mono',monospace;font-weight:800">{{ it.ref }}</span> — {{ it.motivo }}</span>
+                  </sc-for>
+                  <sc-if value="{{ m.temMais }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:700;color:#b91c1c">{{ m.maisTxt }}</span></sc-if>
+                </div>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ temFeitosRecentes }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:18px;font-weight:800;margin-top:8px;display:flex;align-items:center;gap:6px">🔔 Feitos recentemente (já no site)</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:12px">
+            <sc-for list="{{ feitosRecentes }}" as="f" hint-placeholder-count="0">
+              <div style="background:#fff;border:1px solid #d4e0ed;border-radius:14px;overflow:hidden;display:flex;flex-direction:column">
+                <div style="width:100%;aspect-ratio:1/1;background:repeating-linear-gradient(135deg,#f0f3f8 0 8px,#e3ebf4 8px 16px);display:flex;align-items:center;justify-content:center">
+                  <sc-if value="{{ f.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ f.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                </div>
+                <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:10px;font-weight:800;color:#476788;letter-spacing:0.02em">{{ f.marca }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700">{{ f.ref }}</span>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#059669;background:#ecfdf5;border-radius:4px;padding:1px 6px">{{ f.codigo }}</span>
+                    <span style="font-size:10px;color:#8aa3bd">{{ f.quando }}</span>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
       </sc-if>
 
       <sc-if value="{{ eVazio }}" hint-placeholder-val="{{ false }}">
@@ -120,23 +214,80 @@ input,textarea,button{font-family:inherit}
           <div style="font-size:14px;color:#476788">{{ mSel.nTxt }}</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:16px">
-          <sc-for list="{{ refsMarca }}" as="r" hint-placeholder-count="4">
-            <div style="display:flex;flex-direction:column;background:#fff;border:1px solid #d4e0ed;border-radius:16px;overflow:hidden;box-shadow:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 4px 10px,rgba(71,103,136,.05) 0 10px 20px">
+          <sc-for list="{{ refsMarca }}" as="r" hint-placeholder-count="0">
+            <div style="display:flex;flex-direction:column;background:#fff;border:{{ r.cardBorder }};border-radius:16px;overflow:hidden;box-shadow:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 4px 10px,rgba(71,103,136,.05) 0 10px 20px">
+              <sc-if value="{{ r.isAlerta }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#ef4444;color:#fff;padding:8px 12px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px">⚠️ {{ r.motivoTxt }}</div>
+              </sc-if>
               <span onClick="{{ r.onToggleFoto }}" style="width:100%;aspect-ratio:1/1;overflow:hidden;cursor:zoom-in;background:repeating-linear-gradient(135deg,#f0f3f8 0 8px,#e3ebf4 8px 16px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#5f7d9c">
                 <sc-if value="{{ r.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ r.capa }}" alt="" style="width:100%;height:100%;object-fit:contain"></sc-if>
                 <sc-if value="{{ r.semFoto }}" hint-placeholder-val="{{ true }}">sem foto</sc-if>
               </span>
               <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
                 <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:24px;font-weight:800">{{ r.ref }}</span>
-                <sc-if value="{{ r.temNota }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#476788;text-wrap:pretty">{{ r.nota }}</span></sc-if>
+                <sc-if value="{{ r.temNota }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px;font-weight:600;color:{{ r.notaBoxFg }};background:{{ r.notaBoxBg }};border:{{ r.notaBoxBorder }};border-radius:8px;padding:8px 10px;text-wrap:pretty">{{ r.nota }}</span></sc-if>
                 <input value="{{ r.codigo }}" onChange="{{ r.onCodigo }}" onKeyDown="{{ r.onEnter }}" autocomplete="off" autocapitalize="characters" placeholder="Código" style="width:100%;height:44px;border:2px solid #0b3558;border-radius:8px;padding:0 12px;font-size:16px;font-weight:600;font-family:'JetBrains Mono',ui-monospace,monospace;background:#fff;color:#0b3558;outline:none;text-transform:uppercase">
                 <sc-if value="{{ r.obsAberta }}" hint-placeholder-val="{{ false }}">
                   <input value="{{ r.obs }}" onChange="{{ r.onObs }}" placeholder="Observação (opcional)" style="width:100%;height:38px;border:1px solid #d4e0ed;border-radius:8px;padding:0 10px;font-size:14px;background:#fff;color:#0b3558;outline:none">
                 </sc-if>
                 <sc-if value="{{ r.obsFechada }}" hint-placeholder-val="{{ true }}">
-                  <button onClick="{{ r.abrirObs }}" style="align-self:flex-start;border:0;background:transparent;padding:0;font-size:12px;font-weight:700;color:#006bff;cursor:pointer">+ observação</button>
+                  <button onClick="{{ r.abrirObs }}" style="align-self:flex-start;border:0;background:transparent;padding:0;font-size:12px;font-weight:700;color:#111418;cursor:pointer">+ observação</button>
                 </sc-if>
                 <button onClick="{{ r.enviar }}" style="height:42px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:14px;font-weight:700;cursor:pointer;opacity:{{ r.enviarOpacity }}">Enviar</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ temZoomMarca }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ fecharZoomMarca }}" style="position:fixed;inset:0;z-index:35;display:flex;align-items:center;justify-content:center;padding:40px;background:rgba(240,243,248,.9);backdrop-filter:blur(6px);cursor:zoom-out">
+            <div style="position:relative;max-width:90vw;max-height:90vh;box-shadow:rgba(11,53,88,.25) 0 20px 60px;border-radius:12px;overflow:hidden">
+              <img src="{{ zoomMarcaSrc }}" alt="" style="display:block;max-width:90vw;max-height:90vh;object-fit:contain">
+              <div style="position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(11,53,88,.88));padding:28px 20px 14px;display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:0.04em;text-transform:uppercase;text-shadow:0 1px 3px rgba(0,0,0,.6)">{{ zoomMarcaMarca }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)">{{ zoomMarcaRef }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ eAlertas }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ voltarHome }}" style="align-self:flex-start;border:0;background:transparent;padding:4px 0;font-size:15px;font-weight:700;cursor:pointer;color:#0b3558">‹ Voltar ao início</button>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="width:34px;height:34px;border-radius:10px;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px">⚠️</span>
+          <div>
+            <div style="font-size:24px;font-weight:800;color:#991b1b">{{ alertasTitulo }}</div>
+            <div style="font-size:13px;color:#7f1d1d">Produtos com pendência de fotos — alguns já têm código, só falta a foto para ir ao site</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:16px">
+          <sc-for list="{{ itensAlertaView }}" as="r" hint-placeholder-count="0">
+            <div style="display:flex;flex-direction:column;background:#fef2f2;border:2px solid #ef4444;border-radius:16px;overflow:hidden">
+              <div style="background:#ef4444;color:#fff;padding:8px 12px;font-size:15px;font-weight:800">⚠️ {{ r.motivoTxt }}</div>
+              <span onClick="{{ r.onToggleFoto }}" style="width:100%;aspect-ratio:1/1;overflow:hidden;cursor:zoom-in;background:repeating-linear-gradient(135deg,#fef2f2 0 8px,#fee2e2 8px 16px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#b91c1c">
+                <sc-if value="{{ r.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ r.capa }}" alt="" style="width:100%;height:100%;object-fit:contain"></sc-if>
+                <sc-if value="{{ r.semFoto }}" hint-placeholder-val="{{ true }}">sem foto</sc-if>
+              </span>
+              <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:11px;font-weight:800;color:#7f1d1d;letter-spacing:0.02em">{{ r.marca }}</span>
+                <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:22px;font-weight:800">{{ r.ref }}</span>
+                <sc-if value="{{ r.temNotaOf }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#7f1d1d;text-wrap:pretty">Escritório: {{ r.notaOf }}</span></sc-if>
+                <sc-if value="{{ r.temNota }}" hint-placeholder-val="{{ false }}"><span style="font-size: 15px; color: #7f1d1d; background: #fff; border: 1px solid #fecaca; border-radius: 8px; padding: 6px 8px; text-wrap: pretty">{{ r.nota }}</span></sc-if>
+                <sc-if value="{{ r.conferidoNaoRecebido }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#450a0a;color:#fecaca;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:700">Foi conferido e ainda não recebido as fotos</div>
+                </sc-if>
+                <button onClick="{{ r.jaEnviei }}" style="height:40px;border:1px solid #fecaca;border-radius:8px;background:#fff;color:#991b1b;font-size:13px;font-weight:800;cursor:pointer">📷 Já enviei as fotos</button>
+                <sc-if value="{{ r.jaRespondido }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:14px;font-weight:800;color:#047857">✓ Código já recebido</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:800;color:#064e3b">{{ r.codigo }}</span>
+                    <span style="font-size:14px;font-weight:600;color:#047857">Só falta a foto para ir ao site</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ r.pendenteCod }}" hint-placeholder-val="{{ true }}">
+                  <input value="{{ r.codInput }}" onChange="{{ r.onCodigo }}" onKeyDown="{{ r.onEnter }}" autocomplete="off" autocapitalize="characters" placeholder="Código" style="width:100%;height:44px;border:2px solid #0b3558;border-radius:8px;padding:0 12px;font-size:16px;font-weight:600;font-family:'JetBrains Mono',ui-monospace,monospace;background:#fff;color:#0b3558;outline:none;text-transform:uppercase">
+                  <button onClick="{{ r.enviar }}" style="height:42px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:14px;font-weight:700;cursor:pointer;opacity:{{ r.enviarOpacity }}">Enviar código</button>
+                </sc-if>
               </div>
             </div>
           </sc-for>
@@ -160,7 +311,20 @@ input,textarea,button{font-family:inherit}
           <span style="font-size:13px;color:#476788">{{ atual.pos }} de {{ atual.tot }} · fotos de {{ atual.data }}</span>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
-          <div style="flex:1 1 240px;max-width:320px;min-width:0;display:flex;flex-direction:column;gap:8px">
+          <div style="flex:2 1 360px;min-width:0;display:flex;flex-direction:column;gap:8px;order:1">
+            <div style="display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:18px">
+              <sc-for list="{{ atual.fotosObj }}" as="f" hint-placeholder-count="0">
+                <img src="{{ f.src }}" alt="" style="flex:0 0 100%;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:18px;scroll-snap-align:start;background:#e3ebf4">
+              </sc-for>
+              <sc-if value="{{ atual.semFotos }}" hint-placeholder-val="{{ true }}">
+                <div style="flex:0 0 100%;aspect-ratio:4/3;border-radius:18px;border:1px solid #d4e0ed;background:repeating-linear-gradient(135deg,#f0f3f8 0 10px,#e3ebf4 10px 20px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#476788">sem foto · confira pela referência</div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ atual.variasFotos }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12px;color:#476788;text-align:center;margin-top:-6px">{{ atual.nFotos }} fotos · deslize para ver</div>
+            </sc-if>
+          </div>
+          <div style="flex:1 1 240px;max-width:320px;min-width:0;display:flex;flex-direction:column;gap:8px;order:2">
             <div style="display:grid;grid-template-columns:1fr;gap:8px">
               <div style="background:#fff;border:1px solid #d4e0ed;border-radius:12px;padding:8px 12px;display:flex;flex-direction:column;gap:1px;min-width:0">
                 <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#476788;font-weight:700">Marca</span>
@@ -174,26 +338,13 @@ input,textarea,button{font-family:inherit}
             <sc-if value="{{ atual.temNota }}" hint-placeholder-val="{{ false }}">
               <div style="background:#fff8e6;border:1px solid #f1d99a;border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.4;text-wrap:pretty"><span style="font-weight:800">Observação:</span> {{ atual.nota }}</div>
             </sc-if>
-            <div style="background:#006bff;border-radius:12px;padding:10px;text-align:center;font-weight:800;font-size:15px;letter-spacing:0.03em;color:#fff">DIGITE O CÓDIGO DAS FOTOS</div>
+            <div style="background:#111418;border-radius:12px;padding:10px;text-align:center;font-weight:800;font-size:15px;letter-spacing:0.03em;color:#d7fb52">DIGITE O CÓDIGO DAS FOTOS</div>
             <input value="{{ codigo }}" onChange="{{ onCodigo }}" onKeyDown="{{ onEnter }}" autocomplete="off" autocapitalize="characters" enterkeyhint="send" placeholder="Código" style="width:100%;height:52px;border:2px solid #0b3558;border-radius:12px;padding:0 14px;font-size:20px;font-weight:700;font-family:'JetBrains Mono',ui-monospace,monospace;background:#fff;color:#0b3558;outline:none">
             <sc-if value="{{ mostrarObs }}" hint-placeholder-val="{{ true }}">
               <textarea value="{{ obs }}" onChange="{{ onObs }}" rows="2" placeholder="Observação (opcional)" style="width:100%;border:1px solid #d4e0ed;border-radius:12px;padding:10px 14px;font-size:16px;background:#fff;color:#0b3558;resize:none;outline:none"></textarea>
             </sc-if>
             <button onClick="{{ enviar }}" style="height:50px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:17px;font-weight:800;cursor:pointer;opacity:{{ okOpacity }}">Enviar</button>
             <button onClick="{{ naoSei }}" style="height:44px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:14px;font-weight:700;cursor:pointer">Não sei o código</button>
-          </div>
-          <div style="flex:2 1 360px;min-width:0;display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:18px">
-              <sc-for list="{{ atual.fotos }}" as="f" hint-placeholder-count="0">
-                <img src="{{ f }}" alt="" style="flex:0 0 100%;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:18px;scroll-snap-align:start;background:#e3ebf4">
-              </sc-for>
-              <sc-if value="{{ atual.semFotos }}" hint-placeholder-val="{{ true }}">
-                <div style="flex:0 0 100%;aspect-ratio:4/3;border-radius:18px;border:1px solid #d4e0ed;background:repeating-linear-gradient(135deg,#f0f3f8 0 10px,#e3ebf4 10px 20px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#476788">sem foto · confira pela referência</div>
-              </sc-if>
-            </div>
-            <sc-if value="{{ atual.variasFotos }}" hint-placeholder-val="{{ false }}">
-              <div style="font-size:12px;color:#476788;text-align:center;margin-top:-6px">{{ atual.nFotos }} fotos · deslize para ver</div>
-            </sc-if>
           </div>
         </div>
       </sc-if>
@@ -235,7 +386,34 @@ input,textarea,button{font-family:inherit}
   </sc-if>
 
   <sc-if value="{{ modoPainel }}" hint-placeholder-val="{{ false }}">
-    <main style="width:100%;max-width:1240px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+    <main style="width:100%;max-width:1240px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:20px">
+      <sc-if value="{{ temConfirmarFotos }}" hint-placeholder-val="{{ false }}">
+        <section style="background:#fef2f2;border:2px solid #ef4444;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:32px;height:32px;border-radius:9px;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px">📷</span>
+            <div>
+              <div style="font-size:17px;font-weight:800;color:#991b1b">Confirmar fotos recebidas</div>
+              <div style="font-size:12px;color:#7f1d1d">A loja marcou como enviadas — confirme se as fotos chegaram</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:10px">
+            <sc-for list="{{ confirmarFotosList }}" as="c" hint-placeholder-count="2">
+              <div style="background:#fff;border:1px solid #fecaca;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;flex-direction:column;gap:1px">
+                  <span style="font-size:11px;font-weight:800;color:#7f1d1d">{{ c.marca }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800">{{ c.ref }}</span>
+                  <span style="font-size:11px;color:#476788">{{ c.motivo }} · enviado {{ c.quando }}</span>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button onClick="{{ c.recebi }}" style="flex:1;height:38px;border:0;border-radius:8px;background:#059669;color:#fff;font-size:12px;font-weight:800;cursor:pointer">✓ Recebi</button>
+                  <button onClick="{{ c.naoRecebi }}" style="flex:1;height:38px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">Não recebi</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </sc-if>
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;width:100%">
       <div style="flex:1 1 320px;max-width:400px;display:flex;flex-direction:column;gap:14px">
         <section style="background:#fff;border:1px solid #d4e0ed;border-radius:24px;box-shadow:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 4px 10px,rgba(71,103,136,.05) 0 10px 20px;padding:18px;display:flex;flex-direction:column;gap:12px">
           <div style="display:flex;flex-direction:column;gap:3px">
@@ -245,7 +423,7 @@ input,textarea,button{font-family:inherit}
           <label onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" style="border:1.5px dashed {{ dropBorda }};border-radius:14px;padding:20px;text-align:center;cursor:pointer;font-size:14px;color:#476788;display:flex;flex-direction:column;gap:4px;background:{{ dropBg }}">
             <span style="font-weight:800;color:#0b3558">+ Adicionar fotos</span>
             <span style="font-size:12px">{{ dropTxt }}</span>
-            <input type="file" accept="image/*" multiple onChange="{{ onFiles }}" style="display:none">
+            <input type="file" accept="image/*" multiple="" onChange="{{ onFiles }}" style="display:none">
           </label>
           <sc-if value="{{ temNovasFotos }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
@@ -264,6 +442,16 @@ input,textarea,button{font-family:inherit}
           <datalist id="marcas-dl">
             <sc-for list="{{ marcasTodas }}" as="mt" hint-placeholder-count="0"><option value="{{ mt }}"></option></sc-for>
           </datalist>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:0.04em;color:#476788;text-transform:uppercase">Situação das fotos</span>
+            <select value="{{ novoMotivo }}" onChange="{{ onNovoMotivo }}" style="height:46px;border:1px solid #d4e0ed;border-radius:12px;padding:0 12px;font-size:15px;background:#fff;color:#0b3558;outline:none">
+              <option value="">Já tenho as fotos</option>
+              <option value="Falta o escritório mandar as fotos">Falta o escritório mandar as fotos</option>
+              <option value="Não tenho fotos">Não tenho fotos</option>
+              <option value="Somente foto de capa">Somente foto de capa</option>
+              <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+            </select>
+          </div>
           <input value="{{ novaNota }}" onChange="{{ onNota }}" placeholder="Observação para o escritório (opcional)" style="height:46px;border:1px solid #d4e0ed;border-radius:12px;padding:0 12px;font-size:15px;outline:none">
           <button onClick="{{ adicionar }}" style="height:50px;border:0;border-radius:8px;background:#006bff;color:#fff;font-size:16px;font-weight:800;cursor:pointer;opacity:{{ addOpacity }}">Adicionar à lista</button>
         </section>
@@ -272,7 +460,9 @@ input,textarea,button{font-family:inherit}
           <button onClick="{{ toggleImport }}" style="border:0;background:transparent;padding:12px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#0b3558;font-size:15px;font-weight:800">Colar lista de texto <span style="font-size:13px;color:#476788">{{ importSeta }}</span></button>
           <sc-if value="{{ importAberto }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:14px">
-              <textarea value="{{ importTxt }}" onChange="{{ onImport }}" rows="7" placeholder="MODARE&#10;7232.102 — Falta código das fotos.&#10;..." style="width:100%;border:1px solid #d4e0ed;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.4;resize:vertical;outline:none;font-family:'JetBrains Mono',monospace"></textarea>
+              <textarea value="{{ importTxt }}" onChange="{{ onImport }}" rows="7" placeholder="MODARE
+7232.102 — Falta código das fotos.
+..." style="width:100%;border:1px solid #d4e0ed;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.4;resize:vertical;outline:none;font-family:'JetBrains Mono',monospace"></textarea>
               <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
                 <span style="font-size:13px;color:#476788">{{ importInfo }}</span>
                 <button onClick="{{ importar }}" style="height:40px;padding:0 16px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:14px;font-weight:700;cursor:pointer;opacity:{{ importOpacity }}">Adicionar à lista</button>
@@ -367,7 +557,7 @@ input,textarea,button{font-family:inherit}
                       <sc-if value="{{ it.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ it.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
                       <sc-if value="{{ it.semFoto }}" hint-placeholder-val="{{ true }}"><span>+ foto</span></sc-if>
                       <sc-if value="{{ it.variasFotos }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:2px;bottom:2px;background:rgba(0,0,0,.7);color:#fff;border-radius:4px;padding:0 4px;font-size:10px">{{ it.nFotos }}</span></sc-if>
-                      <input type="file" accept="image/*" multiple onChange="{{ it.onFotos }}" style="display:none">
+                      <input type="file" accept="image/*" multiple="" onChange="{{ it.onFotos }}" style="display:none">
                     </label>
                     <div style="flex:1 1 160px;min-width:0;display:flex;flex-direction:column;gap:3px">
                       <sc-if value="{{ it.editando }}" hint-placeholder-val="{{ false }}">
@@ -389,13 +579,13 @@ input,textarea,button{font-family:inherit}
                       </sc-if>
                       <select value="{{ it.motivoFoto }}" onChange="{{ it.onMotivoFoto }}" style="width:100%;height:32px;border:1px solid {{ it.notaBorda }};border-radius:8px;padding:0 8px;font-size:13px;color:#0b3558;background:{{ it.notaBg }};outline:none">
                         <option value="">Situação da foto (opcional)</option>
-                        <option value="Falta receber as fotos">Falta receber as fotos</option>
+                        <option value="Falta o escritório mandar as fotos">Falta o escritório mandar as fotos</option>
                         <option value="Não tenho fotos">Não tenho fotos</option>
                         <option value="Somente foto de capa">Somente foto de capa</option>
                         <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
                       </select>
                       <input value="{{ it.nota }}" onChange="{{ it.onNota }}" placeholder="+ observação" style="width:100%;height:32px;border:1px solid {{ it.notaBorda }};border-radius:8px;padding:0 10px;font-size:13px;color:#0b3558;background:{{ it.notaBg }};outline:none">
-                      <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#0b3558;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
+                      <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;font-weight:600;color:#0b3558;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
                     </div>
                     <div style="display:flex;gap:4px;margin-left:auto">
                       <sc-if value="{{ it.podeReenviar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ it.reenviar }}" style="height:32px;padding:0 12px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:13px;font-weight:700;cursor:pointer">Reenviar</button></sc-if>
@@ -407,7 +597,7 @@ input,textarea,button{font-family:inherit}
             </sc-for>
           </div>
           </sc-if>
-        </sc-if>
+        
 
         <sc-if value="{{ abaRecebidos }}" hint-placeholder-val="{{ false }}">
           <sc-if value="{{ temRecebidos }}" hint-placeholder-val="{{ false }}">
@@ -415,6 +605,9 @@ input,textarea,button{font-family:inherit}
               <button onClick="{{ copiarRecebidos }}" style="height:36px;padding:0 14px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:#0b3558">{{ copiarRecebidosTxt }}</button>
               <button onClick="{{ feitoTodos }}" style="height:36px;padding:0 14px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Marcar todos como feito</button>
             </div>
+          </sc-if>
+          <sc-if value="{{ temComNota }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ gerarListaFotos }}" style="align-self:flex-start;height:38px;padding:0 16px;border:1px solid #f1d99a;border-radius:8px;background:#fff8e6;color:#8a5a00;font-size:13px;font-weight:800;cursor:pointer">📋 Gerar lista de fotos pendentes ({{ nComNota }})</button>
           </sc-if>
           <div style="display:flex;flex-direction:column;gap:16px">
             <sc-for list="{{ gruposRecebidos }}" as="g" hint-placeholder-count="2">
@@ -430,8 +623,15 @@ input,textarea,button{font-family:inherit}
                         <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">{{ it.ref }}</span>
                         <sc-if value="{{ it.novo }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:800;color:#006bff">● novo</span></sc-if>
                       </div>
-                      <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
+                      <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;font-weight:600;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
                       <div style="font-size:12px;color:#5f7d9c">{{ it.quando }}</div>
+                      <select value="{{ it.motivoFoto }}" onChange="{{ it.onMotivoFoto }}" style="width:100%;height:30px;border:1px solid #d4e0ed;border-radius:8px;padding:0 8px;font-size:12px;color:#0b3558;background:#fff;outline:none;margin-top:2px">
+                        <option value="">Situação da foto (opcional)</option>
+                        <option value="Falta o escritório mandar as fotos">Falta o escritório mandar as fotos</option>
+                        <option value="Não tenho fotos">Não tenho fotos</option>
+                        <option value="Somente foto de capa">Somente foto de capa</option>
+                        <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                      </select>
                       <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação" style="width:100%;height:30px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:12px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none;margin-top:2px">
                     </div>
                     <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
@@ -466,7 +666,7 @@ input,textarea,button{font-family:inherit}
           </sc-if>
           <sc-if value="{{ modoCatalogo }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr));gap:14px">
-              <sc-for list="{{ catalogo }}" as="c" hint-placeholder-count="6">
+              <sc-for list="{{ catalogo }}" as="c" hint-placeholder-count="0">
                 <div style="background:#fff;border:1px solid #d4e0ed;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 4px 10px,rgba(71,103,136,.05) 0 10px 20px">
                   <div style="width:100%;aspect-ratio:1/1;background:repeating-linear-gradient(135deg,#f0f3f8 0 8px,#e3ebf4 8px 16px)">
                     <sc-if value="{{ c.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ c.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
@@ -534,7 +734,8 @@ input,textarea,button{font-family:inherit}
             </sc-for>
           </div>
         </sc-if>
-      </section>
+      </sc-if></section>
+      </div>
     </main>
   </sc-if>
 
@@ -649,7 +850,7 @@ function parseLista(txt) {
   }
   return out;
 }
-const novoItem = p => ({ id: uid(), marca: p.marca, ref: p.ref, nota: p.nota || '', data: p.data || hoje(), fotos: p.fotos || [], status: p.status || 'pendente', origem: p.origem || 'avulso', cadastradoEm: p.cadastradoEm || Date.now(), codigo: '', obs: '', criado: Date.now(), visto: true });
+const novoItem = p => ({ id: uid(), marca: p.marca, ref: p.ref, nota: p.nota || '', motivoFoto: p.motivoFoto || '', data: p.data || hoje(), fotos: p.fotos || [], status: p.status || 'pendente', origem: p.origem || 'avulso', cadastradoEm: p.cadastradoEm || Date.now(), codigo: '', obs: '', criado: Date.now(), visto: true });
 function load() { const v = ler(KEY, null); return Array.isArray(v) ? v : parseLista(SEED).map(novoItem); }
 
 function resize(file) {
@@ -680,7 +881,7 @@ class Component extends DCLogic {
       modo: this.fixo ? q : (this.props.modoInicial === 'Meu painel' ? 'painel' : 'escritorio'),
       itens: [], fim: [],
       codigo: '', obs: '', aba: 'aguardando', eView: 'home', eMarca: null, eId: null,
-      novasFotos: [], novaMarca: '', novaRef: '', novaNota: '', importTxt: '',
+      novasFotos: [], novaMarca: '', novaRef: '', novaNota: '', novoMotivo: '', importTxt: '',
       importAberto: false, toast: '', copiado: null, buscaHist: '', filtroMarcaHist: '', histAberto: {}, modalId: null, zoom: false,
       pronto: false, user: null, entrando: false, online: typeof navigator === 'undefined' || navigator.onLine,
       editId: null, editMarca: '', editRef: '',
@@ -695,7 +896,7 @@ class Component extends DCLogic {
       if (this.sb) return;
       if (e.key === KEY_FIM) return this.setState({ fim: ler(KEY_FIM, []) });
       if (e.key === KEY_USERS) return this.carregarUsuarios();
-      if (e.key === KEY) this.aplicarRemoto(load());
+      if (e.key === KEY) this.aplicarRemoto(this.mesclarPendentes(load()));
     };
     window.addEventListener('storage', this.onStorage);
     this.onHide = () => this.flush();
@@ -746,7 +947,7 @@ class Component extends DCLogic {
         let l = this.cur.slice();
         if (p.eventType === 'DELETE') l = l.filter(i => i.id !== (p.old && p.old.id));
         else { const d = p.new.doc, k = l.findIndex(i => i.id === d.id); if (k >= 0) l[k] = d; else l.push(d); }
-        this.aplicarRemoto(l);
+        this.aplicarRemoto(this.mesclarPendentes(l));
       })
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'fins' }, p => this.setState(s => ({ fim: [...s.fim, +p.new.em] })))
       .subscribe();
@@ -815,17 +1016,27 @@ class Component extends DCLogic {
     this.carregarUsuarios();
     this.showToast('Acesso removido');
   }
+  mesclarPendentes(itens) {
+    if (!this.pend || !Object.keys(this.pend.up).length) return itens;
+    return itens.map(i => this.pend.up[i.id] || i);
+  }
   aplicarRemoto(itens) {
     {
       const antes = new Set(this.cur.filter(i => i.status === 'respondido').map(i => i.id));
+      const feitosAntes = new Set(this.cur.filter(i => i.status === 'feito').map(i => i.id));
       const pendAntes = this.cur.filter(i => i.status === 'pendente').length;
       const chegou = itens.filter(i => i.status === 'respondido' && !antes.has(i.id));
+      const novosFeitos = itens.filter(i => i.status === 'feito' && !feitosAntes.has(i.id));
       const novosPend = itens.filter(i => i.status === 'pendente').length - pendAntes;
       this.cur = itens;
       this.setState({ itens });
       if (chegou.length && this.state.modo === 'painel') {
         const c = chegou[0];
         this.showToast(chegou.length > 1 ? `${chegou.length} novos códigos chegaram` : `Novo código: ${c.marca} ${c.ref} → ${c.codigo}`);
+        this.beep();
+      } else if (novosFeitos.length && this.state.modo === 'escritorio') {
+        const f = novosFeitos[0];
+        this.showToast(novosFeitos.length > 1 ? `🔔 ${novosFeitos.length} produtos já estão no site` : `🔔 ${f.marca} ${f.ref} já está no site`);
         this.beep();
       } else if (novosPend > 0 && this.state.modo === 'escritorio') {
         const msg = novosPend > 1 ? `${novosPend} novos produtos esperando código` : 'Novo produto esperando código';
@@ -851,6 +1062,7 @@ class Component extends DCLogic {
     try { const a = new AudioContext(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 880; g.gain.value = 0.08; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + 0.15); } catch (e) {}
   }
   showToast(t) { clearTimeout(this.tt); this.setState({ toast: t }); this.tt = setTimeout(() => this.setState({ toast: '' }), 3200); }
+
   confirmar(msg, fn) { this.setState({ confirmMsg: msg, confirmFn: fn }); }
   gravar(k, v) {
     try { localStorage.setItem(k, JSON.stringify(v)); this.checarArmazenamento(); }
@@ -946,6 +1158,8 @@ class Component extends DCLogic {
     const s = this.state, itens = s.itens;
     const isAdmin = !!s.user;
     const pend = itens.filter(i => i.status === 'pendente');
+    const alertaItens = itens.filter(i => i.status !== 'feito' && (i.nota || i.motivoFoto || i.notaPainel) && !i.fotosEnviadas);
+    const confirmarFotos = itens.filter(i => i.status !== 'feito' && i.fotosEnviadas);
     const marcasOrd = [...new Set(pend.map(i => i.marca))];
     const itemSel = pend.find(i => i.id === s.eId);
     let view = s.eView;
@@ -966,7 +1180,8 @@ class Component extends DCLogic {
     const podeEnviar = s.codigo.trim().length > 0;
     const podeAdd = !!(s.novaMarca.trim() && s.novaRef.trim());
     const marcasTodas = [...new Set(itens.map(i => i.marca))].filter(m => m && m !== '—');
-    const fotoInfo = i => ({ temFoto: i.fotos.length > 0, semFoto: i.fotos.length === 0, capa: i.fotos[0], nFotos: i.fotos.length, variasFotos: i.fotos.length > 1 });
+    const fotoOk = u => typeof u === 'string' && u.length > 0 && !u.startsWith('{{');
+const fotoInfo = i => { const fs = (i.fotos || []).filter(fotoOk); return { temFoto: fs.length > 0, semFoto: fs.length === 0, capa: fs[0], nFotos: fs.length, variasFotos: fs.length > 1 }; };
 
     const sel = s.sel || {};
     const setSel = (ids, v) => this.setState(st => { const n = { ...(st.sel || {}) }; ids.forEach(id => { if (v) n[id] = true; else delete n[id]; }); return { sel: n }; });
@@ -1013,9 +1228,10 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
           quando: `Respondido ${hora(i.respondidoEm)} · fotos de ${i.data}`,
           notaPainel: i.notaPainel || '', notaPainelBorda: i.notaPainel ? '#d4e0ed' : '#e3ebf4', notaPainelBg: i.notaPainel ? '#fff' : '#f8f9fb',
           onNotaPainel: e => this.setItem(i.id, { notaPainel: e.target.value }),
+          motivoFoto: i.motivoFoto || '', onMotivoFoto: e => this.setItem(i.id, { motivoFoto: e.target.value }),
           copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Toque para copiar',
           copiar: () => { this.copiar(i.codigo, key); if (!i.visto) this.setItem(i.id, { visto: true }); },
-          feito: () => this.confirmar(`Marcar ${i.marca} ${i.ref} como feito? Vai para o histórico.`, () => this.setItem(i.id, { status: 'feito', feitoEm: Date.now(), visto: true })),
+          feito: () => this.confirmar(`Marcar ${i.marca} ${i.ref} como feito? Vai para o histórico.`, () => { this.setItem(i.id, { status: 'feito', feitoEm: Date.now(), visto: true }); this.showToast(`✅ ${i.marca} ${i.ref} já está no site`); }),
           copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
           copiar: () => { this.copiar(i.codigo, key); if (!i.visto) this.setItem(i.id, { visto: true }); },
           abrir: () => { if (!i.visto) this.setItem(i.id, { visto: true }); this.setState({ modalId: i.id }); }
@@ -1061,7 +1277,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         }),
         marcas: ms.map(m => ({ marca: m, itens: l.filter(i => i.marca === m).map(i => {
           const hk = 'h' + i.id;
-          return { apagar: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => { this.upd(x => x.filter(y => y.id !== i.id)); this.showToast('Registro apagado'); }), ref: i.ref, marca: i.marca, obs: i.obs, temObs: !!i.obs, temFoto: i.fotos.length > 0, capa: i.fotos[0], quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk) };
+          return { apagar: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => { this.upd(x => x.filter(y => y.id !== i.id)); this.showToast('Registro apagado'); }), ref: i.ref, marca: i.marca, obs: i.obs, temObs: !!i.obs, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa, quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk) };
         }) }))
       };
     }).filter(Boolean);
@@ -1098,7 +1314,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         }),
         marcas: ms.map(m => ({ marca: m, itens: l.filter(i => i.marca === m).map(i => {
           const hk = 'h' + i.id;
-          return { apagar: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => { this.upd(x => x.filter(y => y.id !== i.id)); this.showToast('Registro apagado'); }), ref: i.ref, marca: i.marca, obs: i.obs, temObs: !!i.obs, temFoto: i.fotos.length > 0, capa: i.fotos[0], quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk) };
+          return { apagar: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => { this.upd(x => x.filter(y => y.id !== i.id)); this.showToast('Registro apagado'); }), ref: i.ref, marca: i.marca, obs: i.obs, temObs: !!i.obs, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa, quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk) };
         }) }))
       };
     }).filter(Boolean);
@@ -1112,7 +1328,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
     const catalogo = modoCatalogo ? resp.filter(i => (!busca || i.ref.toUpperCase().includes(busca) || i.marca.toUpperCase().includes(busca)) && (!filtroMarca || i.marca === filtroMarca))
       .sort((a, b) => b.feitoEm - a.feitoEm).map(i => {
         const hk = 'cat' + i.id;
-        return { marca: i.marca, ref: i.ref, temFoto: i.fotos.length > 0, capa: i.fotos[0], quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk),
+        return { marca: i.marca, ref: i.ref, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa, quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk),
           excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => this.upd(x => x.filter(y => y.id !== i.id))) };
       }) : [];
     const abaDef = [['aguardando', 'Esperando código', aguard.length], ['recebidos', 'Códigos recebidos', receb.length], ['historico', 'Histórico', resp.length]];
@@ -1124,9 +1340,10 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       mostrarToggle: !this.fixo,
       carregando: !s.pronto, precisaLogin: s.pronto && s.modo === 'painel' && !isAdmin,
       modoEsc: s.pronto && s.modo === 'escritorio', modoPainel: s.pronto && isAdmin && s.modo === 'painel',
-      bgEsc: s.modo === 'escritorio' ? '#fff' : 'transparent', fgEsc: s.modo === 'escritorio' ? '#0b3558' : '#476788',
-      bgPainel: s.modo === 'painel' ? '#fff' : 'transparent', fgPainel: s.modo === 'painel' ? '#0b3558' : '#476788',
-      shEsc: s.modo === 'escritorio' ? 'rgba(71,103,136,.12) 0 1px 3px' : 'none', shPainel: s.modo === 'painel' ? 'rgba(71,103,136,.12) 0 1px 3px' : 'none',
+      bgEsc: s.modo === 'escritorio' ? '#2563eb' : 'transparent', fgEsc: s.modo === 'escritorio' ? '#fff' : '#94a3b8',
+      bgPainel: s.modo === 'painel' ? '#2563eb' : 'transparent', fgPainel: s.modo === 'painel' ? '#fff' : '#94a3b8',
+      shEsc: 'none', shPainel: 'none',
+      subBarTxt: s.modo === 'escritorio' ? 'Dashboard aberta: escritório digita códigos e envia direto, sem senha' : 'Meu painel: cadastre produtos e marque "Feito" para atualizar o site',
       podeSair: isAdmin && s.modo === 'painel',
       sair: () => this.sair(),
       loginSetup: false,
@@ -1152,7 +1369,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       temLoginErro: !!s.loginErro, loginErro: s.loginErro,
       mostrarSino: s.modo === 'escritorio',
       sinoTxt: pend.length ? (pend.length === 1 ? '1 esperando' : `${pend.length} esperando`) : 'Nada pendente',
-      sinoCor: pend.length ? '#006bff' : '#a6bbd1',
+      sinoCor: pend.length ? '#8fbf1a' : '#a6bbd1',
       sinoAnim: pend.length ? 'cfPulse 1.6s infinite' : 'none',
       irHomeEsc: () => this.setState({ eView: 'home' }),
       temAlerta: view === 'home' && novosEsc.length > 0,
@@ -1168,17 +1385,50 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       // escritório
       nPend: pend.length,
       resumoMarcas: marcasOrd.length === 1 ? 'em 1 marca' : `em ${marcasOrd.length} marcas`,
-      eHome: view === 'home' && pend.length > 0, eVazio: view === 'home' && pend.length === 0,
+      eHome: view === 'home', eVazio: false,
+      temPendHome: pend.length > 0, semPendHome: pend.length === 0,
       eMarca: view === 'marca', eItem: !!atual,
       comecar: () => pend[0] && this.setState({ eView: 'item', eId: pend[0].id, eMarca: pend[0].marca }),
       marcasPend: marcasOrd.map(m => {
         const l = pend.filter(i => i.marca === m);
-        return { marca: m, n: l.length, nTxt: refTxt(l.length), chips: l.slice(0, 4).map(i => i.ref), temMais: l.length > 4, maisTxt: `+${l.length - 4}`, abrir: () => this.setState({ eView: 'marca', eMarca: m }) };
+        const temAlerta = l.some(i => i.nota || i.motivoFoto);
+        return { marca: m, n: l.length, nTxt: refTxt(l.length), temAlerta,
+          cardBorder: temAlerta ? '2px solid #ef4444' : '1px solid #d4e0ed',
+          badgeBg: temAlerta ? '#ef4444' : '#a3e635', badgeFg: temAlerta ? '#fff' : '#111418',
+          chips: l.slice(0, 4).map(i => { const al = !!(i.nota || i.motivoFoto); return { ref: i.ref + (al ? ' ⚠️' : ''), bg: al ? '#fef2f2' : '#111418', fg: al ? '#b91c1c' : '#fff', border: al ? '1px solid #fca5a5' : '1px solid #111418' }; }),
+          temMais: l.length > 4, maisTxt: `+${l.length - 4}`, abrir: () => this.setState({ eView: 'marca', eMarca: m }) };
       }),
+      nObs: alertaItens.length,
+      obsStatBg: alertaItens.length ? '#fef2f2' : '#fff', obsStatBorder: alertaItens.length ? '2px solid #ef4444' : '1px solid #d4e0ed', obsStatFg: alertaItens.length ? '#b91c1c' : '#0b3558',
+      obsStatCursor: alertaItens.length ? 'pointer' : 'default',
+      abrirAlertas: () => alertaItens.length && this.setState({ eView: 'alertas', alertaMarca: null }),
+      temConfirmarFotos: confirmarFotos.length > 0,
+      confirmarFotosList: confirmarFotos.map(i => ({
+        marca: i.marca, ref: i.ref, motivo: i.motivoFoto || i.nota || 'pendência', quando: hora(i.fotosEnviadasEm),
+        recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
+        naoRecebi: () => this.setItem(i.id, { fotosEnviadas: false, conferidoNaoRecebido: true, conferidoEm: Date.now() })
+      })),
+      nFeitosHoje: itens.filter(i => i.status === 'feito' && i.feitoEm && diaKey(i.feitoEm) === diaKey(Date.now())).length,
+      temMarcasObs: alertaItens.length > 0,
+      marcasObs: [...new Set(alertaItens.map(i => i.marca))].map(m => {
+        const l = alertaItens.filter(i => i.marca === m);
+        return { marca: m, n: l.length, nTxt: l.length === 1 ? '1 pendência' : `${l.length} pendências`,
+          itens: l.slice(0, 4).map(i => ({ ref: i.ref, motivo: i.motivoFoto || i.nota || i.notaPainel || '' })),
+          temMais: l.length > 4, maisTxt: `+${l.length - 4}`, abrir: () => this.setState({ eView: 'alertas', alertaMarca: m }) };
+      }),
+      temFeitosRecentes: itens.some(i => i.status === 'feito'),
+      feitosRecentes: itens.filter(i => i.status === 'feito').sort((a, b) => (b.feitoEm || 0) - (a.feitoEm || 0)).slice(0, 8)
+        .map(i => ({ marca: i.marca, ref: i.ref, quando: hora(i.feitoEm), codigo: i.codigo, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa })),
+
+      nReceb: receb.length,
       mSel: { marca: marcaAtiva, nTxt: mSelN === 1 ? '1 faltando' : `${mSelN} faltando` },
       refsMarca: doMarca.map(i => {
         const codV = (s.codInline || {})[i.id] || '', obsV = (s.obsInline || {})[i.id] || '';
-        return { ...i, ...fotoInfo(i), temNota: !!i.nota,
+        const isAlerta = !!(i.nota || i.motivoFoto || i.notaPainel);
+        return { ...i, ...fotoInfo(i), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota, isAlerta,
+          cardBorder: isAlerta ? '2px solid #ef4444' : '1px solid #d4e0ed',
+          notaBoxBg: isAlerta ? '#fef2f2' : '#f0f3f8', notaBoxBorder: isAlerta ? '1px solid #fecaca' : '1px solid #e3ebf4', notaBoxFg: isAlerta ? '#991b1b' : '#476788',
+          motivoTxt: i.motivoFoto || '',
           codigo: codV, obs: obsV,
           onCodigo: e => this.setState(st => ({ codInline: { ...(st.codInline || {}), [i.id]: e.target.value.toUpperCase() } })),
           onObs: e => this.setState(st => ({ obsInline: { ...(st.obsInline || {}), [i.id]: e.target.value } })),
@@ -1190,14 +1440,29 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
           abrirObs: () => this.setState(st => ({ obsAberta: { ...(st.obsAberta || {}), [i.id]: true } }))
         };
       }),
-      temZoomMarca: !!(s.zoomMarcaId && doMarca.find(i => i.id === s.zoomMarcaId)),
-      zoomMarcaSrc: (doMarca.find(i => i.id === s.zoomMarcaId) || { fotos: [] }).fotos[0],
-      zoomMarcaMarca: (doMarca.find(i => i.id === s.zoomMarcaId) || {}).marca,
-      zoomMarcaRef: (doMarca.find(i => i.id === s.zoomMarcaId) || {}).ref,
+      temZoomMarca: !!(s.zoomMarcaId && itens.find(i => i.id === s.zoomMarcaId)),
+      zoomMarcaSrc: (itens.find(i => i.id === s.zoomMarcaId) || { fotos: [] }).fotos[0],
+      zoomMarcaMarca: (itens.find(i => i.id === s.zoomMarcaId) || {}).marca,
+      zoomMarcaRef: (itens.find(i => i.id === s.zoomMarcaId) || {}).ref,
       fecharZoomMarca: () => this.setState({ zoomMarcaId: null }),
+      eAlertas: view === 'alertas',
+      itensAlertaView: (s.alertaMarca ? alertaItens.filter(i => i.marca === s.alertaMarca) : alertaItens).map(i => {
+        const codV = (s.codInline || {})[i.id] || '';
+        return { ...i, ...fotoInfo(i), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota,
+          motivoTxt: i.motivoFoto || i.notaPainel || i.nota || 'Pendência de fotos',
+          jaRespondido: i.status === 'respondido', pendenteCod: i.status === 'pendente',
+          conferidoNaoRecebido: !!i.conferidoNaoRecebido,
+          codInput: codV, onCodigo: e => this.setState(st => ({ codInline: { ...(st.codInline || {}), [i.id]: e.target.value.toUpperCase() } })),
+          onEnter: e => { if (e.key === 'Enter') this.enviarInline(i, codV, ''); },
+          enviarOpacity: codV.trim() ? 1 : 0.35,
+          enviar: () => this.enviarInline(i, codV, ''),
+          onToggleFoto: () => i.fotos.length && this.setState({ zoomMarcaId: i.id }),
+          jaEnviei: () => { this.setItem(i.id, { fotosEnviadas: true, fotosEnviadasEm: Date.now(), conferidoNaoRecebido: false }); this.showToast('Marcado como enviado — aguardando confirmação da loja'); } };
+      }),
+      alertasTitulo: (() => { const n = (s.alertaMarca ? alertaItens.filter(i => i.marca === s.alertaMarca) : alertaItens).length; return n === 1 ? '1 pendência de fotos' : `${n} pendências de fotos`; })(),
       voltarHome: () => this.setState({ eView: 'home' }),
       voltarMarca: () => this.setState({ eView: 'marca', eMarca: marcaAtiva, codigo: '', obs: '' }),
-      atual: atual ? { ...atual, semFotos: !atual.fotos.length, variasFotos: atual.fotos.length > 1, nFotos: atual.fotos.length, temNota: !!atual.nota, pos: doMarca.indexOf(atual) + 1, tot: doMarca.length } : {},
+      atual: atual ? { ...atual, fotosObj: (atual.fotos || []).filter(fotoOk).map(src => ({ src })), semFotos: !atual.fotos.length, variasFotos: atual.fotos.length > 1, nFotos: atual.fotos.length, temNota: !!atual.nota, pos: doMarca.indexOf(atual) + 1, tot: doMarca.length } : {},
       codigo: s.codigo, obs: s.obs, mostrarObs: this.props.campoObservacao ?? true,
       onCodigo: e => this.setState({ codigo: e.target.value }),
       onObs: e => this.setState({ obs: e.target.value }),
@@ -1223,6 +1488,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       onRef: e => this.setState({ novaRef: e.target.value }),
       onRefEnter: e => { if (e.key === 'Enter') this.adicionar(); },
       onNota: e => this.setState({ novaNota: e.target.value }),
+      novoMotivo: s.novoMotivo, onNovoMotivo: e => this.setState({ novoMotivo: e.target.value }),
       addOpacity: podeAdd ? 1 : 0.35,
       adicionar: () => this.adicionar(),
       toggleImport: () => this.setState(st => ({ importAberto: !st.importAberto })),
@@ -1256,7 +1522,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       resumoHist: `${resp.length} código${resp.length === 1 ? '' : 's'} · ${remessas.length} registro${remessas.length === 1 ? '' : 's'}`,
       buscaSemResultado: resp.length > 0 && modoCatalogo && catalogo.length === 0,
       imprimirRelatorio: () => this.imprimirRelatorio(),
-      temComNota: pend.some(i => i.nota || i.motivoFoto), nComNota: pend.filter(i => i.nota || i.motivoFoto).length,
+      temComNota: itens.some(i => i.status !== 'feito' && (i.nota || i.motivoFoto)), nComNota: itens.filter(i => i.status !== 'feito' && (i.nota || i.motivoFoto)).length,
       gerarListaFotos: () => this.gerarListaFotos(),
       temRascunho: rasc.length > 0,
       rascunhoTxt: rasc.length === 1 ? '1 referência em rascunho' : `${rasc.length} referências em rascunho`,
@@ -1285,7 +1551,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         this.copiar(ms.map(m => m + '\n' + receb.filter(i => i.marca === m).map(i => `${i.ref} — ${i.codigo}${i.obs ? ' (' + i.obs + ')' : ''}`).join('\n')).join('\n\n'), 'todos');
         this.upd(l => l.map(i => i.status === 'respondido' ? { ...i, visto: true } : i));
       },
-      feitoTodos: () => this.upd(l => l.map(i => i.status === 'respondido' ? { ...i, status: 'feito', feitoEm: Date.now(), visto: true } : i)),
+      feitoTodos: () => { const n = this.cur.filter(i => i.status === 'respondido').length; this.upd(l => l.map(i => i.status === 'respondido' ? { ...i, status: 'feito', feitoEm: Date.now(), visto: true } : i)); if (n) this.showToast(`✅ ${n} código${n === 1 ? '' : 's'} já ${n === 1 ? 'está' : 'estão'} no site`); },
       listaVazia: listaLen === 0,
       vazioTxt: { aguardando: 'Nada esperando o escritório.', recebidos: 'Nenhum código novo ainda.', historico: 'O histórico aparece aqui conforme os códigos chegam.' }[s.aba],
       temModal: !!modalSrc,
@@ -1383,8 +1649,8 @@ ${blocos}
     const marca = s.novaMarca.trim().toUpperCase(), ref = s.novaRef.trim();
     if (!(marca && ref)) return;
     const criar = () => {
-      this.upd(l => [...l, novoItem({ marca, ref, nota: s.novaNota.trim(), fotos: s.novasFotos, status: 'rascunho', origem: 'avulso' })]);
-      this.setState({ novaRef: '', novaNota: '', novasFotos: [], aba: 'aguardando' });
+      this.upd(l => [...l, novoItem({ marca, ref, nota: s.novaNota.trim(), motivoFoto: s.novoMotivo, fotos: s.novasFotos, status: 'rascunho', origem: 'avulso' })]);
+      this.setState({ novaRef: '', novaNota: '', novoMotivo: '', novasFotos: [], aba: 'aguardando' });
       this.showToast('Adicionado ao rascunho');
     };
     const dup = this.state.itens.find(i => i.marca.toUpperCase() === marca && i.ref.toUpperCase() === ref.toUpperCase());
