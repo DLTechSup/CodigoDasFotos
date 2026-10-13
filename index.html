@@ -649,6 +649,55 @@ input,textarea,button{font-family:inherit}
           </div>
         </sc-if>
 
+        <sc-if value="{{ abaFazer }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ temFazer }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <sc-for list="{{ gruposFazer }}" as="g" hint-placeholder-count="1">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="font-size:15px;font-weight:800;color:#0b3558">{{ g.marca }}</span>
+                    <span style="min-width:26px;height:26px;padding:0 8px;border-radius:8px;background:#e6f0ff;color:#006bff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ g.n }}</span>
+                  </div>
+                  <sc-for list="{{ g.itens }}" as="it" hint-placeholder-count="2">
+                    <div style="background:#fff;border:1px solid #fecaca;border-radius:14px;padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+                      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">{{ it.ref }}</span>
+                        <span style="font-size:11px;font-weight:800;color:{{ it.tagFg }};background:{{ it.tagBg }};border-radius:999px;padding:2px 8px;letter-spacing:0.02em">{{ it.tag }}</span>
+                        <sc-if value="{{ it.temCodigo }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
+                            <button onClick="{{ it.copiar }}" title="Copiar código" style="border:2px solid #0b3558;background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;gap:1px;color:#0b3558">
+                              <span style="font-size:16px;font-weight:700;font-family:'JetBrains Mono',monospace">{{ it.codigo }}</span>
+                              <span style="font-size:10px;color:#476788;font-weight:600">{{ it.copiarTxt }}</span>
+                            </button>
+                            <button onClick="{{ it.abrir }}" title="Ver foto e referência" style="width:38px;height:38px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:15px;cursor:pointer">🔍</button>
+                          </div>
+                        </sc-if>
+                      </div>
+                      <select value="{{ it.motivoFoto }}" onChange="{{ it.onMotivoFoto }}" style="width:100%;max-width:360px;height:32px;border:1px solid #d4e0ed;border-radius:8px;padding:0 8px;font-size:13px;color:#0b3558;background:#fff;outline:none">
+                        <option value="">Situação da foto (opcional)</option>
+                        <option value="Falta o escritório mandar as fotos">Falta o escritório mandar as fotos</option>
+                        <option value="Não tenho fotos">Não tenho fotos</option>
+                        <option value="Somente foto de capa">Somente foto de capa</option>
+                        <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                      </select>
+                      <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação" style="width:100%;max-width:360px;height:32px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:13px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none">
+                      <sc-if value="{{ it.mostrarConfirmar }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex;gap:8px;max-width:360px">
+                          <button onClick="{{ it.recebi }}" style="flex:1;height:38px;border:0;border-radius:8px;background:#059669;color:#fff;font-size:12px;font-weight:800;cursor:pointer">✓ Recebi as fotos</button>
+                          <button onClick="{{ it.naoRecebi }}" style="flex:1;height:38px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">Ainda não recebi</button>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ !temFazer }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:24px;text-align:center;color:#476788;font-size:14px;background:#fff;border:1px solid #d4e0ed;border-radius:14px">Nenhuma pendência de foto no momento.</div>
+          </sc-if>
+        </sc-if>
+
         <sc-if value="{{ abaHistorico }}" hint-placeholder-val="{{ false }}">
           <sc-if value="{{ temHistorico }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -1032,8 +1081,10 @@ class Component extends DCLogic {
       this.setState({ itens });
       if (chegou.length && this.state.modo === 'painel') {
         const c = chegou[0];
-        this.showToast(chegou.length > 1 ? `${chegou.length} novos códigos chegaram` : `Novo código: ${c.marca} ${c.ref} → ${c.codigo}`);
+        const msg = chegou.length > 1 ? `${chegou.length} novos códigos chegaram` : `Novo código: ${c.marca} ${c.ref} → ${c.codigo}`;
+        this.showToast(msg);
         this.beep();
+        this.notificar(msg);
       } else if (novosFeitos.length && this.state.modo === 'escritorio') {
         const f = novosFeitos[0];
         this.showToast(novosFeitos.length > 1 ? `🔔 ${novosFeitos.length} produtos já estão no site` : `🔔 ${f.marca} ${f.ref} já está no site`);
@@ -1173,7 +1224,8 @@ class Component extends DCLogic {
 
     const aguard = itens.filter(i => i.status === 'rascunho' || i.status === 'pendente' || i.status === 'naosei');
     const rasc = itens.filter(i => i.status === 'rascunho');
-    const receb = itens.filter(i => i.status === 'respondido');
+    const receb = itens.filter(i => i.status === 'respondido' && !(i.nota || i.motivoFoto || i.notaPainel));
+    const fazer = itens.filter(i => i.status !== 'feito' && (i.nota || i.motivoFoto || i.notaPainel));
     const resp = itens.filter(i => i.status === 'feito' && i.feitoEm);
     const nNovos = receb.filter(i => !i.visto).length;
     const parsed = s.importTxt.trim() ? parseLista(s.importTxt) : [];
@@ -1331,8 +1383,28 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         return { marca: i.marca, ref: i.ref, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa, quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk),
           excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => this.upd(x => x.filter(y => y.id !== i.id))) };
       }) : [];
-    const abaDef = [['aguardando', 'Esperando código', aguard.length], ['recebidos', 'Códigos recebidos', receb.length], ['historico', 'Histórico', resp.length]];
-    const listaLen = { aguardando: aguard.length, recebidos: receb.length, historico: resp.length }[s.aba];
+    const abaDef = [['aguardando', 'Esperando código', aguard.length], ['recebidos', 'Códigos recebidos', receb.length], ['fazer', 'Pendências de fotos', fazer.length], ['historico', 'Histórico', resp.length]];
+    const listaLen = { aguardando: aguard.length, recebidos: receb.length, fazer: fazer.length, historico: resp.length }[s.aba];
+    const gruposFazer = [...new Set(fazer.map(i => i.marca))].map(m => {
+      const l = fazer.filter(i => i.marca === m);
+      return { marca: m, n: l.length, itens: l.map(i => {
+        const tag = i.conferidoNaoRecebido ? 'NÃO RECEBIDO AINDA' : i.fotosEnviadas ? 'CONFERIR RECEBIMENTO' : 'AGUARDANDO FOTO';
+        const tagBg = i.conferidoNaoRecebido ? '#450a0a' : i.fotosEnviadas ? '#fef9c3' : '#fef2f2';
+        const tagFg = i.conferidoNaoRecebido ? '#fecaca' : i.fotosEnviadas ? '#854d0e' : '#b91c1c';
+        const key = 'fz' + i.id;
+        return { ...i, temCodigo: !!i.codigo, tag, tagBg, tagFg,
+          motivoFoto: i.motivoFoto || '', onMotivoFoto: e => this.setItem(i.id, { motivoFoto: e.target.value }),
+          notaPainel: i.notaPainel || '', notaPainelBorda: i.notaPainel ? '#d4e0ed' : '#e3ebf4', notaPainelBg: i.notaPainel ? '#fff' : '#f8f9fb',
+          onNotaPainel: e => this.setItem(i.id, { notaPainel: e.target.value }),
+          mostrarConfirmar: !!i.fotosEnviadas,
+          copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
+          copiar: () => this.copiar(i.codigo, key),
+          abrir: () => this.setState({ modalId: i.id }),
+          recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
+          naoRecebi: () => this.setItem(i.id, { fotosEnviadas: false, conferidoNaoRecebido: true, conferidoEm: Date.now() })
+        };
+      }) };
+    });
     const mSelN = doMarca.length;
 
     return {
@@ -1378,7 +1450,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       alertaVer: () => { const i = novosEsc[0]; this.gravar(KEY_VISTO, Date.now()); this.setState({ vistoAte: Date.now(), eView: 'item', eId: i.id, eMarca: i.marca }); },
       alertaOk: () => { this.gravar(KEY_VISTO, Date.now()); this.setState({ vistoAte: Date.now() }); },
 
-      podeAtivarNotif: s.modo === 'escritorio' && view === 'home' && s.notifPerm === 'default',
+      podeAtivarNotif: (s.modo === 'escritorio' && view === 'home' || s.modo === 'painel') && s.notifPerm === 'default',
       ativarNotif: () => { try { Notification.requestPermission().then(p => { this.setState({ notifPerm: p }); if (p === 'granted') this.notificar('Avisos ativados. Você será avisado quando chegar produto novo.'); }); } catch (e) {} },
       irEsc: () => this.setState({ modo: 'escritorio' }), irPainel: () => this.setState({ modo: 'painel' }),
       temNovos: isAdmin && nNovos > 0, nNovos,
@@ -1405,7 +1477,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       temConfirmarFotos: confirmarFotos.length > 0,
       confirmarFotosList: confirmarFotos.map(i => ({
         marca: i.marca, ref: i.ref, motivo: i.motivoFoto || i.nota || 'pendência', quando: hora(i.fotosEnviadasEm),
-        recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
+        recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
         naoRecebi: () => this.setItem(i.id, { fotosEnviadas: false, conferidoNaoRecebido: true, conferidoEm: Date.now() })
       })),
       nFeitosHoje: itens.filter(i => i.status === 'feito' && i.feitoEm && diaKey(i.feitoEm) === diaKey(Date.now())).length,
@@ -1514,8 +1586,8 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         this.showToast(`${novos.length} adicionados ao rascunho` + (parsed.length - novos.length ? ` · ${parsed.length - novos.length} já estavam na fila` : ''));
       },
       abas: abaDef.map(([k, label, n]) => ({ label, n, bg: s.aba === k ? '#0b3558' : '#fff', fg: s.aba === k ? '#fff' : '#0b3558', borda: s.aba === k ? '#0b3558' : '#d4e0ed', ir: () => this.setState({ aba: k }) })),
-      abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaHistorico: s.aba === 'historico',
-      gruposAguard, gruposRecebidos, remessas: diasFiltrados, temHistorico: resp.length > 0,
+      abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaFazer: s.aba === 'fazer', abaHistorico: s.aba === 'historico',
+      gruposAguard, gruposRecebidos, gruposFazer, temFazer: fazer.length > 0, remessas: diasFiltrados, temHistorico: resp.length > 0,
       modoCatalogo, modoLista: !modoCatalogo, catalogo,
       buscaHist: s.buscaHist, onBuscaHist: e => this.setState({ buscaHist: e.target.value }),
       marcasHist, filtroMarcaHist: filtroMarca, onFiltroMarcaHist: e => this.setState({ filtroMarcaHist: e.target.value }),
