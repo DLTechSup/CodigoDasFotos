@@ -955,7 +955,7 @@ class Component extends DCLogic {
     this.onOffline = () => this.setState({ online: false });
     window.addEventListener('online', this.onOnline);
     window.addEventListener('offline', this.onOffline);
-    this.noDrop = e => { e.preventDefault(); };
+    this.noDrop = e => { if (!e.defaultPrevented) e.preventDefault(); };
     window.addEventListener('dragover', this.noDrop); window.addEventListener('drop', this.noDrop);
     this.init();
   }
@@ -1554,7 +1554,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       dropTxt: s.arrastando ? 'Solte as fotos aqui' : 'Clique ou arraste as fotos aqui',
       onDragOver: e => { e.preventDefault(); if (!s.arrastando) this.setState({ arrastando: true }); },
       onDragLeave: e => { if (!e.currentTarget.contains(e.relatedTarget)) this.setState({ arrastando: false }); },
-      onDrop: async e => { e.preventDefault(); this.setState({ arrastando: false }); const fs = Array.from(e.dataTransfer.files || []).filter(x => x.type.startsWith('image/')); if (!fs.length) return; const f = await this.lerFotos(fs); this.setState(st => ({ novasFotos: [...st.novasFotos, ...f] })); },
+      onDrop: async e => { e.preventDefault(); e.stopPropagation(); this.setState({ arrastando: false }); const fs = Array.from(e.dataTransfer.files || []).filter(x => x.type.startsWith('image/')); if (!fs.length) return this.showToast('Arraste um arquivo de imagem (jpg, png) do seu computador.'); const f = await this.lerFotos(fs); this.setState(st => ({ novasFotos: [...st.novasFotos, ...f] })); },
       onFiles: async e => { const f = await this.lerFotos(e.target.files); e.target.value = ''; this.setState(st => ({ novasFotos: [...st.novasFotos, ...f] })); },
       novaMarca: s.novaMarca, novaRef: s.novaRef, novaNota: s.novaNota, marcasTodas,
       onMarca: e => this.setState({ novaMarca: e.target.value.toUpperCase() }),
