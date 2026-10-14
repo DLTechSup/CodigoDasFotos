@@ -225,6 +225,7 @@ input,textarea,button{font-family:inherit}
               </span>
               <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
                 <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:24px;font-weight:800">{{ r.ref }}</span>
+                <sc-if value="{{ r.temNotaOf }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#476788;text-wrap:pretty">{{ r.notaOf }}</span></sc-if>
                 <sc-if value="{{ r.temNota }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px;font-weight:600;color:{{ r.notaBoxFg }};background:{{ r.notaBoxBg }};border:{{ r.notaBoxBorder }};border-radius:8px;padding:8px 10px;text-wrap:pretty">{{ r.nota }}</span></sc-if>
                 <input value="{{ r.codigo }}" onChange="{{ r.onCodigo }}" onKeyDown="{{ r.onEnter }}" autocomplete="off" autocapitalize="characters" placeholder="Código" style="width:100%;height:44px;border:2px solid #0b3558;border-radius:8px;padding:0 12px;font-size:16px;font-weight:600;font-family:'JetBrains Mono',ui-monospace,monospace;background:#fff;color:#0b3558;outline:none;text-transform:uppercase">
                 <sc-if value="{{ r.obsAberta }}" hint-placeholder-val="{{ false }}">
@@ -632,7 +633,7 @@ input,textarea,button{font-family:inherit}
                         <option value="Somente foto de capa">Somente foto de capa</option>
                         <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
                       </select>
-                      <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação" style="width:100%;height:30px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:12px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none;margin-top:2px">
+                      <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação (aparece pro escritório)" style="width:100%;height:30px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:12px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none;margin-top:2px">
                     </div>
                     <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
                       <button onClick="{{ it.copiar }}" title="Copiar código" style="border:2px solid #0b3558;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;gap:1px;color:#0b3558">
