@@ -17,6 +17,11 @@
 body{margin:0;background:#f8f9fb;color:#0b3558;font-family:"Manrope","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:#0b3558}a:hover{color:#006bff}
 @keyframes cfPulse{0%{box-shadow:0 0 0 0 rgba(176,230,30,.55)}70%{box-shadow:0 0 0 10px rgba(176,230,30,0)}100%{box-shadow:0 0 0 0 rgba(176,230,30,0)}}
+@media print{body *{visibility:hidden}.cf-catalogo-view,.cf-catalogo-view *{visibility:visible}.cf-catalogo-view{position:absolute!important;inset:auto!important;top:0;left:0;width:100%;overflow:visible!important;height:auto!important;padding:0!important}
+.cf-catalogo-grid{grid-template-columns:repeat(4,1fr)!important;gap:10px!important}
+.cf-catalogo-grid>div{break-inside:avoid}
+.cf-catalogo-grid>div:nth-child(12n+1):not(:first-child){break-before:page}
+@page{margin:12mm}}
 *{box-sizing:border-box}
 input,textarea,button{font-family:inherit}
 </style>
@@ -297,16 +302,16 @@ input,textarea,button{font-family:inherit}
                 <sc-if value="{{ r.conferidoNaoRecebido }}" hint-placeholder-val="{{ false }}">
                   <div style="background:#450a0a;color:#fecaca;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:700">Foi conferido e ainda não recebido as fotos</div>
                 </sc-if>
-                <button onClick="{{ r.jaEnviei }}" style="height:40px;border:1px solid #fecaca;border-radius:8px;background:#fff;color:#991b1b;font-size:13px;font-weight:800;cursor:pointer">📷 Já enviei as fotos</button>
                 <sc-if value="{{ r.jaRespondido }}" hint-placeholder-val="{{ false }}">
                   <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px">
                     <span style="font-size:14px;font-weight:800;color:#047857">✓ Código já recebido</span>
                     <span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:800;color:#064e3b">{{ r.codigo }}</span>
-                    <span style="font-size:14px;font-weight:600;color:#047857">Só falta a foto para ir ao site</span>
+                    <span style="font-size:14px;font-weight:600;color:#047857">Esperando receber as fotos para colocar no site</span>
                   </div>
                 </sc-if>
                 <sc-if value="{{ r.pendenteCod }}" hint-placeholder-val="{{ true }}">
                   <input value="{{ r.codInput }}" onChange="{{ r.onCodigo }}" onKeyDown="{{ r.onEnter }}" autocomplete="off" autocapitalize="characters" placeholder="Código" style="width:100%;height:44px;border:2px solid #0b3558;border-radius:8px;padding:0 12px;font-size:16px;font-weight:600;font-family:'JetBrains Mono',ui-monospace,monospace;background:#fff;color:#0b3558;outline:none;text-transform:uppercase">
+                  <input value="{{ r.obs }}" onChange="{{ r.onObs }}" placeholder="Observação (opcional)" style="width:100%;height:38px;border:1px solid #d4e0ed;border-radius:8px;padding:0 10px;font-size:14px;background:#fff;color:#0b3558;outline:none">
                   <button onClick="{{ r.enviar }}" style="height:42px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:14px;font-weight:700;cursor:pointer;opacity:{{ r.enviarOpacity }}">Enviar código</button>
                 </sc-if>
               </div>
@@ -804,6 +809,7 @@ input,textarea,button{font-family:inherit}
                 <sc-for list="{{ marcasHist }}" as="fm" hint-placeholder-count="0"><option value="{{ fm }}">{{ fm }}</option></sc-for>
               </select>
               <button onClick="{{ imprimirRelatorio }}" style="height:38px;padding:0 16px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">Imprimir relatório</button>
+              <button onClick="{{ baixarCatalogoFiltro }}" style="height:38px;padding:0 16px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#006bff;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">📷 Catálogo com fotos</button>
               <span style="font-size:13px;color:#476788;margin-left:auto">{{ resumoHist }}</span>
             </div>
           </sc-if>
@@ -913,6 +919,38 @@ input,textarea,button{font-family:inherit}
         <div style="background:#e6f0ff;border-radius:12px;padding:12px 14px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:#0b3558">{{ modalItem.codigo }}</div>
         <sc-if value="{{ modalItem.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:14px;color:#476788">Escritório: {{ modalItem.obs }}</div></sc-if>
         <button onClick="{{ modalCopiar }}" style="height:44px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:14px;font-weight:700;cursor:pointer">{{ modalCopiarTxt }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ temCatalogoView }}" hint-placeholder-val="{{ false }}">
+    <div class="cf-catalogo-view" style="position:fixed;inset:0;background:#fff;z-index:45;overflow:auto;padding:24px">
+      <div style="max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:20px;font-weight:800;color:#0b3558">Catálogo — fotos, marca e código</div>
+            <div style="font-size:13px;color:#476788">{{ catalogoViewSub }}</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button onClick="{{ imprimirCatalogoView }}" style="height:40px;padding:0 18px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Imprimir / Salvar PDF</button>
+            <button onClick="{{ fecharCatalogoView }}" style="height:40px;padding:0 18px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:13px;font-weight:700;cursor:pointer">Fechar</button>
+          </div>
+        </div>
+        <div class="cf-catalogo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px">
+          <sc-for list="{{ catalogoViewItens }}" as="cv" hint-placeholder-count="0">
+            <div style="border:1px solid #d4e0ed;border-radius:10px;overflow:hidden;break-inside:avoid">
+              <div style="width:100%;aspect-ratio:1/1;background:#f0f3f8;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8aa3bd">
+                <sc-if value="{{ cv.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ cv.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                <sc-if value="{{ cv.semFoto }}" hint-placeholder-val="{{ true }}">sem foto</sc-if>
+              </div>
+              <div style="padding:8px 10px;display:flex;flex-direction:column;gap:3px">
+                <span style="font-size:11px;font-weight:800;color:#476788">{{ cv.marca }}</span>
+                <span style="font-family:'Courier New',monospace;font-weight:700;font-size:14px">{{ cv.ref }}</span>
+                <span style="font-family:'Courier New',monospace;font-weight:800;color:#006bff;font-size:14px">{{ cv.codigo }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
       </div>
     </div>
   </sc-if>
@@ -1220,20 +1258,25 @@ class Component extends DCLogic {
   showToast(t) { clearTimeout(this.tt); this.setState({ toast: t }); this.tt = setTimeout(() => this.setState({ toast: '' }), 3200); }
 
   confirmar(msg, fn) { this.setState({ confirmMsg: msg, confirmFn: fn }); }
-  async baixarFotos(i) {
+  baixarFotos(i) {
     const fotos = (i.fotos || []).filter(fotoOk);
     if (!fotos.length) return;
-    for (let idx = 0; idx < fotos.length; idx++) {
-      try {
-        const src = fotos[idx];
-        const blob = src.startsWith('data:') ? await (await fetch(src)).blob() : await (await fetch(src, { mode: 'cors' })).blob();
+    const nome = idx => `${i.marca}_${i.ref}${fotos.length > 1 ? '_' + (idx + 1) : ''}.jpg`.replace(/[\\/:*?"<>|]/g, '_');
+    fotos.forEach((src, idx) => {
+      if (src.startsWith('data:') || src.startsWith(location.origin)) {
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${i.marca}_${i.ref}${fotos.length > 1 ? '_' + (idx + 1) : ''}.jpg`.replace(/[\\/:*?"<>|]/g, '_');
+        a.href = src; a.download = nome(idx);
         document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-      } catch (e) { this.showToast('Não consegui baixar uma das fotos'); }
-    }
+      } else {
+        fetch(src).then(r => r.blob()).then(blob => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob); a.download = nome(idx);
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        }).catch(() => window.open(src, '_blank', 'noopener'));
+      }
+    });
+    this.showToast(fotos.length > 1 ? `Baixando ${fotos.length} fotos` : 'Baixando foto');
   }
   gravar(k, v) {
     try { localStorage.setItem(k, JSON.stringify(v)); this.checarArmazenamento(); }
@@ -1668,7 +1711,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         };
       }),
       temZoomMarca: !!(s.zoomMarcaId && itens.find(i => i.id === s.zoomMarcaId)),
-      zoomMarcaSrc: (itens.find(i => i.id === s.zoomMarcaId) || { fotos: [] }).fotos[0],
+      zoomMarcaSrc: (itens.find(i => i.id === s.zoomMarcaId) || { fotos: [] }).fotos.filter(fotoOk)[0],
       zoomMarcaMarca: (itens.find(i => i.id === s.zoomMarcaId) || {}).marca,
       zoomMarcaRef: (itens.find(i => i.id === s.zoomMarcaId) || {}).ref,
       fecharZoomMarca: () => this.setState({ zoomMarcaId: null }),
@@ -1684,15 +1727,16 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         const m = s.alertaMarca;
         const l = alertaItens.filter(i => i.marca === m);
         return { marca: m, nTxt: l.length === 1 ? '1 pendência' : `${l.length} pendências`, itens: l.map(i => {
-          const codV = (s.codInline || {})[i.id] || '';
+          const codV = (s.codInline || {})[i.id] || '', obsV = (s.obsInline || {})[i.id] || '';
           return { ...i, ...fotoInfo(i), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota,
             motivoTxt: i.motivoFoto || i.notaPainel || i.nota || 'Pendência de fotos',
             jaRespondido: i.status === 'respondido', pendenteCod: i.status === 'pendente',
             conferidoNaoRecebido: !!i.conferidoNaoRecebido,
             codInput: codV, onCodigo: e => this.setState(st => ({ codInline: { ...(st.codInline || {}), [i.id]: e.target.value.toUpperCase() } })),
-            onEnter: e => { if (e.key === 'Enter') this.enviarInline(i, codV, ''); },
+            obs: obsV, onObs: e => this.setState(st => ({ obsInline: { ...(st.obsInline || {}), [i.id]: e.target.value } })),
+            onEnter: e => { if (e.key === 'Enter') this.enviarInline(i, codV, obsV); },
             enviarOpacity: codV.trim() ? 1 : 0.35,
-            enviar: () => this.enviarInline(i, codV, ''),
+            enviar: () => this.enviarInline(i, codV, obsV),
             onToggleFoto: () => i.fotos.length && this.setState({ zoomMarcaId: i.id }),
             jaEnviei: () => { this.setItem(i.id, { fotosEnviadas: true, fotosEnviadasEm: Date.now(), conferidoNaoRecebido: false, visto: false }); this.showToast('Marcado como enviado — aguardando confirmação da loja'); } };
         }) };
@@ -1765,6 +1809,12 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       modoCatalogo, modoLista: !modoCatalogo, catalogo,
       buscaHist: s.buscaHist, onBuscaHist: e => this.setState({ buscaHist: e.target.value }),
       marcasHist, filtroMarcaHist: filtroMarca, onFiltroMarcaHist: e => this.setState({ filtroMarcaHist: e.target.value }),
+      baixarCatalogoFiltro: () => this.baixarCatalogo(catalogoFull),
+      temCatalogoView: !!s.catalogoView,
+      catalogoViewSub: s.catalogoView ? `${s.catalogoView.length} referência${s.catalogoView.length === 1 ? '' : 's'}` : '',
+      catalogoViewItens: (s.catalogoView || []).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo || '', ...fotoInfo(i) })),
+      fecharCatalogoView: () => this.setState({ catalogoView: null }),
+      imprimirCatalogoView: () => window.print(),
       resumoHist: `${resp.length} código${resp.length === 1 ? '' : 's'} · ${remessas.length} registro${remessas.length === 1 ? '' : 's'}`,
       buscaSemResultado: resp.length > 0 && modoCatalogo && catalogo.length === 0,
       imprimirRelatorio: () => this.imprimirRelatorio(),
@@ -1804,7 +1854,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       listaVazia: listaLen === 0,
       vazioTxt: { aguardando: 'Nada esperando o escritório.', recebidos: 'Nenhum código novo ainda.', historico: 'O histórico aparece aqui conforme os códigos chegam.' }[s.aba],
       temModal: !!modalSrc,
-      modalItem: modalSrc ? { marca: modalSrc.marca, ref: modalSrc.ref, codigo: modalSrc.codigo, obs: modalSrc.obs, temObs: !!modalSrc.obs, fotos: modalSrc.fotos, semFotos: !modalSrc.fotos.length } : {},
+      modalItem: modalSrc ? { marca: modalSrc.marca, ref: modalSrc.ref, codigo: modalSrc.codigo, obs: modalSrc.obs, temObs: !!modalSrc.obs, fotos: (modalSrc.fotos || []).filter(fotoOk), semFotos: !(modalSrc.fotos || []).filter(fotoOk).length } : {},
       fecharModal: () => this.setState({ modalId: null, zoom: false }),
       pararClique: e => e.stopPropagation(),
       zoomToggle: e => { const r = e.target.getBoundingClientRect(); this.setState(st => ({ zoom: !st.zoom, zoomX: ((e.clientX - r.left) / r.width) * 100, zoomY: ((e.clientY - r.top) / r.height) * 100 })); },
@@ -1854,6 +1904,10 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       ${blocos}
     </body></html>`);
     win.document.close();
+  }
+  baixarCatalogo(lista) {
+    if (!lista.length) return this.showToast('Nenhuma referência para esse filtro.');
+    this.setState({ catalogoView: lista });
   }
   imprimirRelatorio() {
     const fm = this.state.filtroMarcaHist || '';
