@@ -476,6 +476,7 @@ input,textarea,button{font-family:inherit}
               <option value="Não tenho fotos">Não tenho fotos</option>
               <option value="Somente foto de capa">Somente foto de capa</option>
               <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+              <option value="Já tenho as fotos">Já tenho as fotos</option>
             </select>
           </div>
           <input value="{{ novaNota }}" onChange="{{ onNota }}" placeholder="Observação para o escritório (opcional)" style="height:46px;border:1px solid #d4e0ed;border-radius:12px;padding:0 12px;font-size:15px;outline:none">
@@ -577,6 +578,7 @@ input,textarea,button{font-family:inherit}
                 <option value="Não tenho fotos">Não tenho fotos</option>
                 <option value="Somente foto de capa">Somente foto de capa</option>
                 <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                <option value="Já tenho as fotos">Já tenho as fotos</option>
               </select>
               <sc-if value="{{ temFiltroMotivoRelatorio }}" hint-placeholder-val="{{ false }}">
                 <button onClick="{{ gerarListaFotosFiltrada }}" style="height:38px;padding:0 16px;border:0;border-radius:8px;background:#8a5a00;color:#fff;font-size:13px;font-weight:800;cursor:pointer">Gerar só esta situação</button>
@@ -624,6 +626,7 @@ input,textarea,button{font-family:inherit}
                         <option value="Não tenho fotos">Não tenho fotos</option>
                         <option value="Somente foto de capa">Somente foto de capa</option>
                         <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                        <option value="Já tenho as fotos">Já tenho as fotos</option>
                       </select>
                       <input value="{{ it.nota }}" onChange="{{ it.onNota }}" placeholder="+ observação" style="width:100%;height:32px;border:1px solid {{ it.notaBorda }};border-radius:8px;padding:0 10px;font-size:13px;color:#0b3558;background:{{ it.notaBg }};outline:none">
                       <sc-if value="{{ it.temObs }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;font-weight:600;color:#0b3558;text-wrap:pretty">Escritório: {{ it.obs }}</div></sc-if>
@@ -656,6 +659,7 @@ input,textarea,button{font-family:inherit}
                 <option value="Não tenho fotos">Não tenho fotos</option>
                 <option value="Somente foto de capa">Somente foto de capa</option>
                 <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                <option value="Já tenho as fotos">Já tenho as fotos</option>
               </select>
               <sc-if value="{{ temFiltroMotivoRelatorio }}" hint-placeholder-val="{{ false }}">
                 <button onClick="{{ gerarListaFotosFiltrada }}" style="height:38px;padding:0 16px;border:0;border-radius:8px;background:#8a5a00;color:#fff;font-size:13px;font-weight:800;cursor:pointer">Gerar só esta situação</button>
@@ -684,6 +688,7 @@ input,textarea,button{font-family:inherit}
                         <option value="Não tenho fotos">Não tenho fotos</option>
                         <option value="Somente foto de capa">Somente foto de capa</option>
                         <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                        <option value="Já tenho as fotos">Já tenho as fotos</option>
                       </select>
                       <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação (aparece pro escritório)" style="width:100%;height:30px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:12px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none;margin-top:2px">
                     </div>
@@ -732,6 +737,7 @@ input,textarea,button{font-family:inherit}
                         <option value="Não tenho fotos">Não tenho fotos</option>
                         <option value="Somente foto de capa">Somente foto de capa</option>
                         <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                        <option value="Já tenho as fotos">Já tenho as fotos</option>
                       </select>
                       <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação" style="width:100%;max-width:360px;height:32px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:13px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none">
                       <sc-if value="{{ it.mostrarConfirmar }}" hint-placeholder-val="{{ false }}">
@@ -780,6 +786,7 @@ input,textarea,button{font-family:inherit}
                         <option value="Não tenho fotos">Não tenho fotos</option>
                         <option value="Somente foto de capa">Somente foto de capa</option>
                         <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                        <option value="Já tenho as fotos">Já tenho as fotos</option>
                       </select>
                       <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação" style="width:100%;max-width:360px;height:32px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:13px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none">
                       <sc-if value="{{ it.mostrarConfirmar }}" hint-placeholder-val="{{ false }}">
@@ -797,6 +804,41 @@ input,textarea,button{font-family:inherit}
           </sc-if>
           <sc-if value="{{ !temFazerResp }}" hint-placeholder-val="{{ false }}">
             <div style="padding:24px;text-align:center;color:#476788;font-size:14px;background:#fff;border:1px solid #d4e0ed;border-radius:14px">Nenhum código de pendência recebido no momento.</div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ abaFeitosHoje }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+            <span style="font-size:14px;color:#476788">{{ resumoFeitosHoje }}</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <select value="{{ filtroMarcaHoje }}" onChange="{{ onFiltroMarcaHoje }}" style="height:38px;border:1px solid #d4e0ed;border-radius:8px;padding:0 10px;font-size:13px;color:#0b3558;background:#fff">
+                <option value="">Todas as marcas</option>
+                <sc-for list="{{ marcasFeitosHoje }}" as="mh" hint-placeholder-count="0"><option value="{{ mh }}">{{ mh }}</option></sc-for>
+              </select>
+              <button onClick="{{ gerarRelatorioHoje }}" style="height:38px;padding:0 16px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">🖨️ Gerar relatório</button>
+            </div>
+          </div>
+          <sc-if value="{{ temFeitosHoje }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:12px">
+              <sc-for list="{{ feitosHojeView }}" as="f" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #d4e0ed;border-radius:14px;overflow:hidden;display:flex;flex-direction:column">
+                  <div style="width:100%;aspect-ratio:1/1;background:repeating-linear-gradient(135deg,#f0f3f8 0 8px,#e3ebf4 8px 16px);display:flex;align-items:center;justify-content:center">
+                    <sc-if value="{{ f.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ f.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                  </div>
+                  <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px">
+                    <span style="font-size:10px;font-weight:800;color:#476788;letter-spacing:0.02em">{{ f.marca }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700">{{ f.ref }}</span>
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#059669;background:#ecfdf5;border-radius:4px;padding:1px 6px">{{ f.codigo }}</span>
+                      <span style="font-size:10px;color:#8aa3bd">{{ f.quando }}</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ !temFeitosHoje }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:24px;text-align:center;color:#476788;font-size:14px;background:#fff;border:1px solid #d4e0ed;border-radius:14px">Nada concluído hoje ainda.</div>
           </sc-if>
         </sc-if>
 
@@ -1392,6 +1434,8 @@ class Component extends DCLogic {
     const fazerPend = fazer.filter(i => i.status === 'pendente');
     const fazerResp = fazer.filter(i => i.status === 'respondido');
     const resp = itens.filter(i => i.status === 'feito' && i.feitoEm);
+    const diaKeyHoje = diaKey(Date.now());
+    const feitosHoje = resp.filter(i => diaKey(i.feitoEm) === diaKeyHoje);
     const nNovos = receb.filter(i => !i.visto).length;
     const parsed = s.importTxt.trim() ? parseLista(s.importTxt) : [];
     const podeEnviar = s.codigo.trim().length > 0;
@@ -1559,9 +1603,10 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       ['recebidos', 'Códigos recebidos', receb.length, receb.filter(i => !i.visto).length],
       ['fazer', 'Pendências', fazerPend.length, 0],
       ['fazerResp', 'Códigos de pendência recebidos', fazerResp.length, fazerResp.filter(i => !i.visto).length],
+      ['feitosHoje', 'Feitos hoje', feitosHoje.length, 0],
       ['historico', 'Histórico', resp.length, 0]
     ];
-    const listaLen = { aguardando: aguard.length, recebidos: receb.length, fazer: fazerPend.length, fazerResp: fazerResp.length, historico: resp.length }[s.aba];
+    const listaLen = { aguardando: aguard.length, recebidos: receb.length, fazer: fazerPend.length, fazerResp: fazerResp.length, feitosHoje: feitosHoje.length, historico: resp.length }[s.aba];
     const gruposFazer = [...new Set(fazerPend.map(i => i.marca))].map(m => {
       const l = fazerPend.filter(i => i.marca === m);
       return { marca: m, n: l.length, itens: l.map(i => {
@@ -1804,7 +1849,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       },
       abas: abaDef.map(([k, label, n, novos]) => ({ label, n, novos, temNovosAba: novos > 0, bg: s.aba === k ? '#0b3558' : '#fff', fg: s.aba === k ? '#fff' : '#0b3558', borda: s.aba === k ? '#0b3558' : '#d4e0ed', ir: () => this.setState({ aba: k }) })),
       temMaisCatalogo, catalogoRestante, carregarMaisCatalogo,
-      abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaFazer: s.aba === 'fazer', abaFazerResp: s.aba === 'fazerResp', abaHistorico: s.aba === 'historico',
+      abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaFazer: s.aba === 'fazer', abaFazerResp: s.aba === 'fazerResp', abaFeitosHoje: s.aba === 'feitosHoje', abaHistorico: s.aba === 'historico',
       gruposAguard, gruposRecebidos, gruposFazer, gruposFazerResp, temFazer: fazerPend.length > 0, temFazerResp: fazerResp.length > 0, remessas: diasFiltrados, temHistorico: resp.length > 0,
       modoCatalogo, modoLista: !modoCatalogo, catalogo,
       buscaHist: s.buscaHist, onBuscaHist: e => this.setState({ buscaHist: e.target.value }),
@@ -1852,7 +1897,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       },
       feitoTodos: () => { const n = this.cur.filter(i => i.status === 'respondido').length; this.upd(l => l.map(i => i.status === 'respondido' ? { ...i, status: 'feito', feitoEm: Date.now(), visto: true } : i)); if (n) this.showToast(`✅ ${n} código${n === 1 ? '' : 's'} já ${n === 1 ? 'está' : 'estão'} no site`); },
       listaVazia: listaLen === 0,
-      vazioTxt: { aguardando: 'Nada esperando o escritório.', recebidos: 'Nenhum código novo ainda.', historico: 'O histórico aparece aqui conforme os códigos chegam.' }[s.aba],
+      vazioTxt: { aguardando: 'Nada esperando o escritório.', recebidos: 'Nenhum código novo ainda.', feitosHoje: 'Nada concluído hoje ainda.', historico: 'O histórico aparece aqui conforme os códigos chegam.' }[s.aba],
       temModal: !!modalSrc,
       modalItem: modalSrc ? { marca: modalSrc.marca, ref: modalSrc.ref, codigo: modalSrc.codigo, obs: modalSrc.obs, temObs: !!modalSrc.obs, fotos: (modalSrc.fotos || []).filter(fotoOk), semFotos: !(modalSrc.fotos || []).filter(fotoOk).length } : {},
       fecharModal: () => this.setState({ modalId: null, zoom: false }),
@@ -1909,9 +1954,10 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
     if (!lista.length) return this.showToast('Nenhuma referência para esse filtro.');
     this.setState({ catalogoView: lista });
   }
-  imprimirRelatorio() {
+  imprimirRelatorio(listaOverride) {
     const fm = this.state.filtroMarcaHist || '';
-    const itens = this.state.itens.filter(i => i.status === 'feito' && i.feitoEm && (!fm || i.marca === fm)).slice().sort((a, b) => a.feitoEm - b.feitoEm);
+    const itens = listaOverride ? listaOverride.slice().sort((a, b) => a.feitoEm - b.feitoEm)
+      : this.state.itens.filter(i => i.status === 'feito' && i.feitoEm && (!fm || i.marca === fm)).slice().sort((a, b) => a.feitoEm - b.feitoEm);
     if (!itens.length) return this.showToast(fm ? `Nada concluído ainda para ${fm}.` : 'Nada no histórico ainda.');
     const win = window.open('', '_blank');
     if (!win) return this.showToast('Permita pop-ups para imprimir.');
