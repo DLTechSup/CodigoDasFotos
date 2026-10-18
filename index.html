@@ -74,6 +74,9 @@ input,textarea,button{font-family:inherit}
       <sc-if value="{{ eNaoAlertas }}" hint-placeholder-val="{{ true }}">
         <div style="display:flex;gap:8px;padding:4px;background:#f0f3f8;border-radius:12px;width:fit-content;max-width:100%;flex-wrap:wrap">
           <button onClick="{{ irHomeEsc }}" style="border:0;padding:10px 18px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;background:{{ tabEsperandoBg }};color:{{ tabEsperandoFg }};white-space:nowrap">Esperando código ({{ nPend }})</button>
+          <sc-if value="{{ temCodRecebidoSemFoto }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ abrirAlertasComCodigo }}" style="border:0;padding:10px 18px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;background:#ecfdf5;color:#047857;white-space:nowrap">📷 Código recebido, faltam fotos ({{ nCodRecebidoSemFoto }})</button>
+          </sc-if>
           <sc-if value="{{ temPendenciaFotoBtn }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ abrirAlertasHeader }}" style="border:0;padding:10px 18px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;background:#fff;color:#991b1b;white-space:nowrap">⚠️ Pendências ({{ nPendenciaFoto }})</button>
           </sc-if>
@@ -82,6 +85,9 @@ input,textarea,button{font-family:inherit}
       <sc-if value="{{ eAlertas }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;gap:8px;padding:4px;background:#f0f3f8;border-radius:12px;width:fit-content;max-width:100%;flex-wrap:wrap">
           <button onClick="{{ irHomeEsc }}" style="border:0;padding:10px 18px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;background:#fff;color:#0b3558;white-space:nowrap">Esperando código ({{ nPend }})</button>
+          <sc-if value="{{ temCodRecebidoSemFoto }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ abrirAlertasComCodigo }}" style="border:0;padding:10px 18px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;background:#ecfdf5;color:#047857;white-space:nowrap">📷 Código recebido, faltam fotos ({{ nCodRecebidoSemFoto }})</button>
+          </sc-if>
           <button onClick="{{ abrirAlertasHeader }}" style="border:0;padding:10px 18px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;background:#ef4444;color:#fff;white-space:nowrap">⚠️ Pendências ({{ nPendenciaFoto }})</button>
         </div>
       </sc-if>
@@ -233,6 +239,7 @@ input,textarea,button{font-family:inherit}
               <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
                 <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:24px;font-weight:800">{{ r.ref }}</span>
                 <sc-if value="{{ r.temNotaOf }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#476788;text-wrap:pretty">{{ r.notaOf }}</span></sc-if>
+                <sc-if value="{{ r.temValores }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:700;color:#0b7a4b;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;padding:5px 9px;width:fit-content">💲 {{ r.valoresTxt }}</span></sc-if>
                 <sc-if value="{{ r.temNota }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px;font-weight:600;color:{{ r.notaBoxFg }};background:{{ r.notaBoxBg }};border:{{ r.notaBoxBorder }};border-radius:8px;padding:8px 10px;text-wrap:pretty">{{ r.nota }}</span></sc-if>
                 <input value="{{ r.codigo }}" onChange="{{ r.onCodigo }}" onKeyDown="{{ r.onEnter }}" autocomplete="off" autocapitalize="characters" placeholder="Código" style="width:100%;height:44px;border:2px solid #0b3558;border-radius:8px;padding:0 12px;font-size:16px;font-weight:600;font-family:'JetBrains Mono',ui-monospace,monospace;background:#fff;color:#0b3558;outline:none;text-transform:uppercase">
                 <input value="{{ r.obs }}" onChange="{{ r.onObs }}" placeholder="Observação (opcional)" style="width:100%;height:38px;border:1px solid #d4e0ed;border-radius:8px;padding:0 10px;font-size:14px;background:#fff;color:#0b3558;outline:none">
@@ -260,7 +267,7 @@ input,textarea,button{font-family:inherit}
           <span style="width:34px;height:34px;border-radius:10px;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px">⚠️</span>
           <div>
             <div style="font-size:24px;font-weight:800;color:#991b1b">{{ alertasTitulo }}</div>
-            <div style="font-size:13px;color:#7f1d1d">Produtos com pendência de fotos — alguns já têm código, só falta a foto para ir ao site</div>
+            <div style="font-size:13px;color:#7f1d1d">{{ alertasTituloSub }}</div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px">
@@ -304,9 +311,8 @@ input,textarea,button{font-family:inherit}
                 </sc-if>
                 <sc-if value="{{ r.jaRespondido }}" hint-placeholder-val="{{ false }}">
                   <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px">
-                    <span style="font-size:14px;font-weight:800;color:#047857">✓ Código já recebido</span>
+                    <span style="font-size:14px;font-weight:800;color:#047857">✓ Código recebido, mas faltam as fotos</span>
                     <span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:800;color:#064e3b">{{ r.codigo }}</span>
-                    <span style="font-size:14px;font-weight:600;color:#047857">Esperando receber as fotos para colocar no site</span>
                   </div>
                 </sc-if>
                 <sc-if value="{{ r.pendenteCod }}" hint-placeholder-val="{{ true }}">
@@ -478,6 +484,18 @@ input,textarea,button{font-family:inherit}
               <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
               <option value="Já tenho as fotos">Já tenho as fotos</option>
             </select>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:0.04em;color:#476788;text-transform:uppercase">Valor no Bling</span>
+            <sc-for list="{{ novosValores }}" as="vl" hint-placeholder-count="1">
+              <div style="display:flex;gap:6px;align-items:center">
+                <input value="{{ vl.v }}" onChange="{{ vl.onChange }}" placeholder="Ex.: R$ 129,90" style="flex:1;min-width:0;height:42px;border:1px solid #d4e0ed;border-radius:10px;padding:0 12px;font-size:14px;outline:none">
+                <sc-if value="{{ vl.podeRemover }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ vl.remover }}" style="width:32px;height:32px;border-radius:8px;border:1px solid #d4e0ed;background:#fff;color:#476788;font-size:16px;cursor:pointer;flex:0 0 auto">×</button>
+                </sc-if>
+              </div>
+            </sc-for>
+            <button onClick="{{ addValor }}" style="align-self:flex-start;border:0;background:transparent;padding:2px 0;font-size:13px;font-weight:700;color:#006bff;cursor:pointer">+ adicionar outro valor</button>
           </div>
           <input value="{{ novaNota }}" onChange="{{ onNota }}" placeholder="Observação para o escritório (opcional)" style="height:46px;border:1px solid #d4e0ed;border-radius:12px;padding:0 12px;font-size:15px;outline:none">
           <button onClick="{{ adicionar }}" style="height:50px;border:0;border-radius:8px;background:#006bff;color:#fff;font-size:16px;font-weight:800;cursor:pointer;opacity:{{ addOpacity }}">Adicionar à lista</button>
@@ -693,10 +711,17 @@ input,textarea,button{font-family:inherit}
                       <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação (aparece pro escritório)" style="width:100%;height:30px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:12px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none;margin-top:2px">
                     </div>
                     <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
-                      <button onClick="{{ it.copiar }}" title="Copiar código" style="border:2px solid #0b3558;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;gap:1px;color:#0b3558">
-                        <span style="font-size:19px;font-weight:700;font-family:'JetBrains Mono',monospace">{{ it.codigo }}</span>
-                        <span style="font-size:11px;color:#476788;font-weight:600">{{ it.copiarTxt }}</span>
-                      </button>
+                      <sc-if value="{{ it.editandoCod }}" hint-placeholder-val="{{ false }}">
+                        <input value="{{ it.codEdit }}" onChange="{{ it.onCodEdit }}" onKeyDown="{{ it.onCodEditEnter }}" autocapitalize="characters" autoFocus="{{ true }}" style="width:150px;height:44px;border:2px solid #006bff;border-radius:8px;padding:0 10px;font-size:19px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#0b3558;outline:none;text-transform:uppercase">
+                        <button onClick="{{ it.salvarCodEdit }}" style="height:44px;padding:0 10px;border:0;border-radius:8px;background:#059669;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Salvar</button>
+                      </sc-if>
+                      <sc-if value="{{ it.naoEditandoCod }}" hint-placeholder-val="{{ true }}">
+                        <button onClick="{{ it.copiar }}" title="Copiar código" style="border:2px solid #0b3558;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;gap:1px;color:#0b3558">
+                          <span style="font-size:19px;font-weight:700;font-family:'JetBrains Mono',monospace">{{ it.codigo }}</span>
+                          <span style="font-size:11px;color:#476788;font-weight:600">{{ it.copiarTxt }}</span>
+                        </button>
+                        <button onClick="{{ it.editarCod }}" title="Corrigir código" style="width:36px;height:44px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:14px;cursor:pointer">✏️</button>
+                      </sc-if>
                       <button onClick="{{ it.abrir }}" title="Ver foto e referência" style="width:44px;height:44px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:16px;cursor:pointer">🔍</button>
                       <button onClick="{{ it.feito }}" style="height:44px;padding:0 14px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Feito</button>
                     </div>
@@ -709,6 +734,7 @@ input,textarea,button{font-family:inherit}
 
         <sc-if value="{{ abaFazer }}" hint-placeholder-val="{{ false }}">
           <sc-if value="{{ temFazer }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ baixarCatalogoPendencias }}" style="align-self:flex-start;height:38px;padding:0 16px;border:0;border-radius:8px;background:#0b3558;color:#fff;font-size:13px;font-weight:700;cursor:pointer">🖨️ Gerar relatório (foto, código e status)</button>
             <div style="display:flex;flex-direction:column;gap:16px">
               <sc-for list="{{ gruposFazer }}" as="g" hint-placeholder-count="1">
                 <div style="display:flex;flex-direction:column;gap:8px">
@@ -988,7 +1014,8 @@ input,textarea,button{font-family:inherit}
               <div style="padding:8px 10px;display:flex;flex-direction:column;gap:3px">
                 <span style="font-size:11px;font-weight:800;color:#476788">{{ cv.marca }}</span>
                 <span style="font-family:'Courier New',monospace;font-weight:700;font-size:14px">{{ cv.ref }}</span>
-                <span style="font-family:'Courier New',monospace;font-weight:800;color:#006bff;font-size:14px">{{ cv.codigo }}</span>
+                <sc-if value="{{ cv.temCodigo }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Courier New',monospace;font-weight:800;color:#006bff;font-size:14px">{{ cv.codigo }}</span></sc-if>
+                <sc-if value="{{ cv.temMotivo }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:800;color:#991b1b;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:2px 7px;width:fit-content">{{ cv.motivo }}</span></sc-if>
               </div>
             </div>
           </sc-for>
@@ -1084,7 +1111,7 @@ function parseLista(txt) {
 }
 const MARCAS_ALIAS = { "MARIAS SHOES": "MARIA'S SHOES", "MARIA'S SHOES": "MARIA'S SHOES" };
 const normMarca = m => { const k = (m || '').trim().toUpperCase().replace(/[’']/g, "'"); return MARCAS_ALIAS[k] || m.trim(); };
-const novoItem = p => ({ id: uid(), marca: normMarca(p.marca), ref: p.ref, nota: p.nota || '', motivoFoto: p.motivoFoto || '', data: p.data || hoje(), fotos: p.fotos || [], status: p.status || 'pendente', origem: p.origem || 'avulso', cadastradoEm: p.cadastradoEm || Date.now(), codigo: '', obs: '', criado: Date.now(), visto: true });
+const novoItem = p => ({ id: uid(), marca: normMarca(p.marca), ref: p.ref, nota: p.nota || '', motivoFoto: p.motivoFoto || '', valores: p.valores || [], data: p.data || hoje(), fotos: p.fotos || [], status: p.status || 'pendente', origem: p.origem || 'avulso', cadastradoEm: p.cadastradoEm || Date.now(), codigo: '', obs: '', criado: Date.now(), visto: true });
 function load() { const v = ler(KEY, null); return Array.isArray(v) ? v : parseLista(SEED).map(novoItem); }
 
 function resize(file) {
@@ -1115,7 +1142,7 @@ class Component extends DCLogic {
       modo: this.fixo ? q : (this.props.modoInicial === 'Meu painel' ? 'painel' : 'escritorio'),
       itens: [], fim: [],
       codigo: '', obs: '', aba: 'aguardando', eView: 'home', eMarca: null, eId: null,
-      novasFotos: [], novaMarca: '', novaRef: '', novaNota: '', novoMotivo: '', importTxt: '',
+      novasFotos: [], novaMarca: '', novaRef: '', novaNota: '', novoMotivo: '', novosValores: [''], importTxt: '',
       importAberto: false, toast: '', copiado: null, buscaHist: '', filtroMarcaHist: '', histAberto: {}, modalId: null, zoom: false,
       pronto: false, user: null, entrando: false, online: typeof navigator === 'undefined' || navigator.onLine,
       editId: null, editMarca: '', editRef: '',
@@ -1413,8 +1440,9 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state, itens = s.itens;
     const isAdmin = !!s.user;
-    const pend = itens.filter(i => i.status === 'pendente' && !i.motivoFoto);
-    const alertaItens = itens.filter(i => i.status !== 'feito' && i.motivoFoto && !i.fotosEnviadas);
+    const ehPendenciaFotoEsc = i => i.motivoFoto && i.motivoFoto !== 'Já tenho as fotos';
+    const pend = itens.filter(i => i.status === 'pendente' && !ehPendenciaFotoEsc(i));
+    const alertaItens = itens.filter(i => i.status !== 'feito' && ehPendenciaFotoEsc(i) && !i.fotosEnviadas);
     const confirmarFotos = itens.filter(i => i.status !== 'feito' && i.fotosEnviadas);
     const marcasOrd = [...new Set(pend.map(i => i.marca))];
     const itemSel = pend.find(i => i.id === s.eId);
@@ -1427,10 +1455,11 @@ class Component extends DCLogic {
     const novosEsc = pend.filter(i => (i.criado || 0) > (s.vistoAte || 0));
     const refTxt = n => n === 1 ? '1 referência' : `${n} referências`;
 
-    const aguard = itens.filter(i => (i.status === 'rascunho' || i.status === 'pendente' || i.status === 'naosei') && !i.motivoFoto);
+    const ehPendenciaFoto = i => i.motivoFoto && i.motivoFoto !== 'Já tenho as fotos';
+    const aguard = itens.filter(i => (i.status === 'rascunho' || i.status === 'pendente' || i.status === 'naosei') && !ehPendenciaFoto(i));
     const rasc = itens.filter(i => i.status === 'rascunho');
-    const receb = itens.filter(i => i.status === 'respondido' && !i.motivoFoto);
-    const fazer = itens.filter(i => i.status !== 'feito' && i.motivoFoto);
+    const receb = itens.filter(i => i.status === 'respondido' && !ehPendenciaFoto(i));
+    const fazer = itens.filter(i => i.status !== 'feito' && ehPendenciaFoto(i));
     const fazerPend = fazer.filter(i => i.status === 'pendente');
     const fazerResp = fazer.filter(i => i.status === 'respondido');
     const resp = itens.filter(i => i.status === 'feito' && i.feitoEm);
@@ -1446,9 +1475,11 @@ const fotoInfo = i => { const fs = (i.fotos || []).filter(fotoOk); return { temF
 
     const sel = s.sel || {};
     const setSel = (ids, v) => this.setState(st => { const n = { ...(st.sel || {}) }; ids.forEach(id => { if (v) n[id] = true; else delete n[id]; }); return { sel: n }; });
+    const fmrGlobal = s.filtroMotivoRelatorio || '';
+    const aguardView = fmrGlobal ? aguard.filter(i => i.motivoFoto === fmrGlobal) : aguard;
     const nSel = aguard.filter(i => sel[i.id]).length;
-    const gruposAguard = [...new Set(aguard.map(i => i.marca))].map(m => {
-      const l = aguard.filter(i => i.marca === m);
+    const gruposAguard = [...new Set(aguardView.map(i => i.marca))].map(m => {
+      const l = aguardView.filter(i => i.marca === m);
       const todos = l.every(i => sel[i.id]);
       return { marca: m, n: l.length, sel: todos, toggle: () => setSel(l.map(i => i.id), !todos), itens: l.map(i => ({
         ...i, ...fotoInfo(i), temNota: !!i.nota, temObs: !!i.obs,
@@ -1480,8 +1511,9 @@ const fotoInfo = i => { const fs = (i.fotos || []).filter(fotoOk); return { temF
       })) };
     });
 
-const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
-      const l = receb.filter(i => i.marca === m).sort((a, b) => b.respondidoEm - a.respondidoEm);
+const recebView = fmrGlobal ? receb.filter(i => i.motivoFoto === fmrGlobal) : receb;
+const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
+      const l = recebView.filter(i => i.marca === m).sort((a, b) => b.respondidoEm - a.respondidoEm);
       return { marca: m, n: l.length, itens: l.map(i => {
         const key = 'r' + i.id;
         return { ...i, temObs: !!i.obs, novo: !i.visto,
@@ -1495,7 +1527,13 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
           feito: () => this.confirmar(`Marcar ${i.marca} ${i.ref} como feito? Vai para o histórico.`, () => { this.setItem(i.id, { status: 'feito', feitoEm: Date.now(), visto: true }); this.showToast(`✅ ${i.marca} ${i.ref} já está no site`); }),
           copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
           copiar: () => { this.copiar(i.codigo, key); if (!i.visto) this.setItem(i.id, { visto: true }); },
-          abrir: () => { if (!i.visto) this.setItem(i.id, { visto: true }); this.setState({ modalId: i.id }); }
+          abrir: () => { if (!i.visto) this.setItem(i.id, { visto: true }); this.setState({ modalId: i.id }); },
+          editandoCod: s.editandoCodId === i.id, naoEditandoCod: s.editandoCodId !== i.id,
+          codEdit: s.editandoCodId === i.id ? (s.codEditVal ?? i.codigo) : i.codigo,
+          onCodEdit: e => this.setState({ codEditVal: e.target.value.toUpperCase() }),
+          editarCod: () => this.setState({ editandoCodId: i.id, codEditVal: i.codigo }),
+          onCodEditEnter: e => { if (e.key === 'Enter') this.setItem(i.id, { codigo: (this.state.codEditVal || '').trim() || i.codigo }) || this.setState({ editandoCodId: null }); },
+          salvarCodEdit: () => { this.setItem(i.id, { codigo: (this.state.codEditVal || '').trim() || i.codigo }); this.setState({ editandoCodId: null }); this.showToast('Código corrigido'); }
         };
       }) };
     });
@@ -1601,18 +1639,22 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
     const abaDef = [
       ['aguardando', 'Esperando código', aguard.length, 0],
       ['recebidos', 'Códigos recebidos', receb.length, receb.filter(i => !i.visto).length],
-      ['fazer', 'Pendências', fazerPend.length, 0],
-      ['fazerResp', 'Códigos de pendência recebidos', fazerResp.length, fazerResp.filter(i => !i.visto).length],
+      ['fazer', 'Pendências', fazer.length, 0],
+      ['fazerResp', 'Código recebido, faltam fotos', fazerResp.length, fazerResp.filter(i => !i.visto).length],
       ['feitosHoje', 'Feitos hoje', feitosHoje.length, 0],
       ['historico', 'Histórico', resp.length, 0]
     ];
-    const listaLen = { aguardando: aguard.length, recebidos: receb.length, fazer: fazerPend.length, fazerResp: fazerResp.length, feitosHoje: feitosHoje.length, historico: resp.length }[s.aba];
-    const gruposFazer = [...new Set(fazerPend.map(i => i.marca))].map(m => {
-      const l = fazerPend.filter(i => i.marca === m);
+    const listaLen = { aguardando: aguard.length, recebidos: receb.length, fazer: fazer.length, fazerResp: fazerResp.length, feitosHoje: feitosHoje.length, historico: resp.length }[s.aba];
+    const fmr = s.filtroMotivoRelatorio || '';
+    const fazerPendView = fmr ? fazerPend.filter(i => i.motivoFoto === fmr) : fazerPend;
+    const fazerRespView = fmr ? fazerResp.filter(i => i.motivoFoto === fmr) : fazerResp;
+    const fazerTodosView = [...fazerPendView, ...fazerRespView];
+    const gruposFazer = [...new Set(fazerTodosView.map(i => i.marca))].map(m => {
+      const l = fazerTodosView.filter(i => i.marca === m);
       return { marca: m, n: l.length, itens: l.map(i => {
-        const tag = i.conferidoNaoRecebido ? 'NÃO RECEBIDO AINDA' : i.fotosEnviadas ? 'CONFERIR RECEBIMENTO' : 'AGUARDANDO FOTO';
-        const tagBg = i.conferidoNaoRecebido ? '#450a0a' : i.fotosEnviadas ? '#fef9c3' : '#fef2f2';
-        const tagFg = i.conferidoNaoRecebido ? '#fecaca' : i.fotosEnviadas ? '#854d0e' : '#b91c1c';
+        const tag = !i.codigo ? 'FALTA CÓDIGO E FOTO' : i.conferidoNaoRecebido ? 'NÃO RECEBIDO AINDA' : i.fotosEnviadas ? 'CONFERIR RECEBIMENTO' : 'CÓDIGO OK · AGUARDANDO FOTO';
+        const tagBg = !i.codigo ? '#fef2f2' : i.conferidoNaoRecebido ? '#450a0a' : i.fotosEnviadas ? '#fef9c3' : '#ecfdf5';
+        const tagFg = !i.codigo ? '#b91c1c' : i.conferidoNaoRecebido ? '#fecaca' : i.fotosEnviadas ? '#854d0e' : '#047857';
         const key = 'fz' + i.id;
         return { ...i, temCodigo: !!i.codigo, tag, tagBg, tagFg,
           motivoFoto: i.motivoFoto || '', onMotivoFoto: e => this.setItem(i.id, { motivoFoto: e.target.value }),
@@ -1628,8 +1670,8 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         };
       }) };
     });
-    const gruposFazerResp = [...new Set(fazerResp.map(i => i.marca))].map(m => {
-      const l = fazerResp.filter(i => i.marca === m);
+    const gruposFazerResp = [...new Set(fazerRespView.map(i => i.marca))].map(m => {
+      const l = fazerRespView.filter(i => i.marca === m);
       return { marca: m, n: l.length, itens: l.map(i => {
         const tag = i.conferidoNaoRecebido ? 'NÃO RECEBIDO AINDA' : i.fotosEnviadas ? 'CONFERIR RECEBIMENTO' : 'AGUARDANDO FOTO';
         const tagBg = i.conferidoNaoRecebido ? '#450a0a' : i.fotosEnviadas ? '#fef9c3' : '#fef2f2';
@@ -1744,6 +1786,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
           cardBorder: isAlerta ? '2px solid #ef4444' : '1px solid #d4e0ed',
           notaBoxBg: isAlerta ? '#fef2f2' : '#f0f3f8', notaBoxBorder: isAlerta ? '1px solid #fecaca' : '1px solid #e3ebf4', notaBoxFg: isAlerta ? '#991b1b' : '#476788',
           motivoTxt: i.motivoFoto || '',
+          valoresTxt: (i.valores || []).filter(Boolean).join(' · '), temValores: (i.valores || []).filter(Boolean).length > 0,
           codigo: codV, obs: obsV,
           onCodigo: e => this.setState(st => ({ codInline: { ...(st.codInline || {}), [i.id]: e.target.value.toUpperCase() } })),
           onObs: e => this.setState(st => ({ obsInline: { ...(st.obsInline || {}), [i.id]: e.target.value } })),
@@ -1763,14 +1806,15 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       eAlertas: view === 'alertas' && !s.alertaMarca,
       eAlertaMarca: view === 'alertas' && !!s.alertaMarca,
       voltarAlertas: () => this.setState({ alertaMarca: null }),
-      marcasAlertaTiles: [...new Set(alertaItens.map(i => i.marca))].map(m => {
-        const l = alertaItens.filter(i => i.marca === m);
+      alertasTituloSub: s.alertaFiltro === 'comCodigo' ? 'Código recebido, faltam as fotos' : 'Produtos com pendência de fotos — alguns já têm código, só falta a foto para ir ao site',
+      marcasAlertaTiles: [...new Set(alertaItens.filter(i => !s.alertaFiltro || (s.alertaFiltro === 'comCodigo' ? i.status === 'respondido' : i.status !== 'respondido')).map(i => i.marca))].map(m => {
+        const l = alertaItens.filter(i => i.marca === m && (!s.alertaFiltro || (s.alertaFiltro === 'comCodigo' ? i.status === 'respondido' : i.status !== 'respondido')));
         return { marca: m, n: l.length, chips: l.slice(0, 3).map(i => i.ref), temMais: l.length > 3, maisTxt: `+${l.length - 3}`,
           abrir: () => this.setState({ alertaMarca: m }) };
       }),
       alertaMarcaSel: (() => {
         const m = s.alertaMarca;
-        const l = alertaItens.filter(i => i.marca === m);
+        const l = alertaItens.filter(i => i.marca === m && (!s.alertaFiltro || (s.alertaFiltro === 'comCodigo' ? i.status === 'respondido' : i.status !== 'respondido')));
         return { marca: m, nTxt: l.length === 1 ? '1 pendência' : `${l.length} pendências`, itens: l.map(i => {
           const codV = (s.codInline || {})[i.id] || '', obsV = (s.obsInline || {})[i.id] || '';
           return { ...i, ...fotoInfo(i), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota,
@@ -1786,11 +1830,14 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
             jaEnviei: () => { this.setItem(i.id, { fotosEnviadas: true, fotosEnviadasEm: Date.now(), conferidoNaoRecebido: false, visto: false }); this.showToast('Marcado como enviado — aguardando confirmação da loja'); } };
         }) };
       })(),
-      nPendenciaFoto: itens.filter(i => i.status !== 'feito' && i.motivoFoto).length,
-      temPendenciaFotoBtn: itens.filter(i => i.status !== 'feito' && i.motivoFoto).length > 0,
-      resumoMarcasPendencia: (() => { const ms = [...new Set(alertaItens.map(i => i.marca))]; return ms.length === 1 ? 'em 1 marca' : `em ${ms.length} marcas`; })(),
-      pendenciaPlural: itens.filter(i => i.status !== 'feito' && i.motivoFoto).length === 1 ? '' : 's',
-      abrirAlertasHeader: () => this.setState({ eView: 'alertas', alertaMarca: null }),
+      nPendenciaFoto: alertaItens.filter(i => i.status !== 'respondido').length,
+      temPendenciaFotoBtn: alertaItens.filter(i => i.status !== 'respondido').length > 0,
+      nCodRecebidoSemFoto: alertaItens.filter(i => i.status === 'respondido').length,
+      temCodRecebidoSemFoto: alertaItens.filter(i => i.status === 'respondido').length > 0,
+      resumoMarcasPendencia: (() => { const ms = [...new Set(alertaItens.filter(i => i.status !== 'respondido').map(i => i.marca))]; return ms.length === 1 ? 'em 1 marca' : `em ${ms.length} marcas`; })(),
+      pendenciaPlural: alertaItens.filter(i => i.status !== 'respondido').length === 1 ? '' : 's',
+      abrirAlertasHeader: () => this.setState({ eView: 'alertas', alertaMarca: null, alertaFiltro: 'semCodigo' }),
+      abrirAlertasComCodigo: () => this.setState({ eView: 'alertas', alertaMarca: null, alertaFiltro: 'comCodigo' }),
       eNaoAlertas: view !== 'alertas',
       tabEsperandoBg: '#0b3558', tabEsperandoFg: '#fff',
       alertasTitulo: (() => { const n = (s.alertaMarca ? alertaItens.filter(i => i.marca === s.alertaMarca) : alertaItens).length; return n === 1 ? '1 pendência de fotos' : `${n} pendências de fotos`; })(),
@@ -1823,6 +1870,12 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       onRefEnter: e => { if (e.key === 'Enter') this.adicionar(); },
       onNota: e => this.setState({ novaNota: e.target.value }),
       novoMotivo: s.novoMotivo, onNovoMotivo: e => this.setState({ novoMotivo: e.target.value }),
+      novosValores: (s.novosValores || ['']).map((v, idx) => ({
+        v, idx, podeRemover: (s.novosValores || ['']).length > 1,
+        onChange: e => this.setState(st => { const arr = [...(st.novosValores || [''])]; arr[idx] = e.target.value; return { novosValores: arr }; }),
+        remover: () => this.setState(st => ({ novosValores: (st.novosValores || ['']).filter((_, i2) => i2 !== idx) }))
+      })),
+      addValor: () => this.setState(st => ({ novosValores: [...(st.novosValores || ['']), ''] })),
       addOpacity: podeAdd ? 1 : 0.35,
       adicionar: () => this.adicionar(),
       toggleImport: () => this.setState(st => ({ importAberto: !st.importAberto })),
@@ -1849,15 +1902,22 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       },
       abas: abaDef.map(([k, label, n, novos]) => ({ label, n, novos, temNovosAba: novos > 0, bg: s.aba === k ? '#0b3558' : '#fff', fg: s.aba === k ? '#fff' : '#0b3558', borda: s.aba === k ? '#0b3558' : '#d4e0ed', ir: () => this.setState({ aba: k }) })),
       temMaisCatalogo, catalogoRestante, carregarMaisCatalogo,
+      filtroMarcaHoje: s.filtroMarcaHoje || '', onFiltroMarcaHoje: e => this.setState({ filtroMarcaHoje: e.target.value }),
+      marcasFeitosHoje: [...new Set(feitosHoje.map(i => normMarca(i.marca)))].sort(),
+      feitosHojeView: feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje).sort((a, b) => b.feitoEm - a.feitoEm).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo, quando: hora(i.feitoEm), ...fotoInfo(i) })),
+      temFeitosHoje: feitosHoje.length > 0,
+      resumoFeitosHoje: `${feitosHoje.length} código${feitosHoje.length === 1 ? '' : 's'} hoje · ${new Date().toLocaleDateString('pt-BR')}`,
+      gerarRelatorioHoje: () => this.imprimirRelatorio(feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje)),
       abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaFazer: s.aba === 'fazer', abaFazerResp: s.aba === 'fazerResp', abaFeitosHoje: s.aba === 'feitosHoje', abaHistorico: s.aba === 'historico',
-      gruposAguard, gruposRecebidos, gruposFazer, gruposFazerResp, temFazer: fazerPend.length > 0, temFazerResp: fazerResp.length > 0, remessas: diasFiltrados, temHistorico: resp.length > 0,
+      gruposAguard, gruposRecebidos, gruposFazer, gruposFazerResp, temFazer: fazerTodosView.length > 0, temFazerResp: fazerRespView.length > 0, remessas: diasFiltrados, temHistorico: resp.length > 0,
       modoCatalogo, modoLista: !modoCatalogo, catalogo,
       buscaHist: s.buscaHist, onBuscaHist: e => this.setState({ buscaHist: e.target.value }),
       marcasHist, filtroMarcaHist: filtroMarca, onFiltroMarcaHist: e => this.setState({ filtroMarcaHist: e.target.value }),
       baixarCatalogoFiltro: () => this.baixarCatalogo(catalogoFull),
       temCatalogoView: !!s.catalogoView,
       catalogoViewSub: s.catalogoView ? `${s.catalogoView.length} referência${s.catalogoView.length === 1 ? '' : 's'}` : '',
-      catalogoViewItens: (s.catalogoView || []).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo || '', ...fotoInfo(i) })),
+      catalogoViewItens: (s.catalogoView || []).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo || '', temCodigo: !!i.codigo,
+        motivo: i.motivoFoto ? (i.codigo ? 'Código já recebido, faltam as fotos' : 'Falta código e faltam as fotos') : '', temMotivo: !!i.motivoFoto, ...fotoInfo(i) })),
       fecharCatalogoView: () => this.setState({ catalogoView: null }),
       imprimirCatalogoView: () => window.print(),
       resumoHist: `${resp.length} código${resp.length === 1 ? '' : 's'} · ${remessas.length} registro${remessas.length === 1 ? '' : 's'}`,
@@ -1865,6 +1925,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
       imprimirRelatorio: () => this.imprimirRelatorio(),
       temComNota: itens.some(i => i.status !== 'feito' && (i.nota || i.motivoFoto)), nComNota: itens.filter(i => i.status !== 'feito' && (i.nota || i.motivoFoto)).length,
       gerarListaFotos: () => this.gerarListaFotos(),
+      baixarCatalogoPendencias: () => this.baixarCatalogo(fazer),
       filtroMotivoRelatorio: s.filtroMotivoRelatorio || '', temFiltroMotivoRelatorio: !!s.filtroMotivoRelatorio,
       onFiltroMotivoRelatorio: e => this.setState({ filtroMotivoRelatorio: e.target.value }),
       gerarListaFotosFiltrada: () => this.gerarListaFotos(s.filtroMotivoRelatorio),
@@ -1875,7 +1936,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
         this.upd(l => l.map(i => i.status === 'rascunho' ? { ...i, status: 'pendente', criado: Date.now() } : i));
         this.showToast(n === 1 ? '1 referência enviada para o escritório' : `${n} referências enviadas para o escritório`);
       },
-      temAguard: aguard.length > 0,
+      temAguard: aguardView.length > 0,
       todosSel: aguard.length > 0 && nSel === aguard.length,
       toggleTodos: () => setSel(aguard.map(i => i.id), nSel !== aguard.length),
       selTxt: nSel ? (nSel === 1 ? '1 selecionado' : `${nSel} selecionados`) : '',
@@ -1888,7 +1949,7 @@ const gruposRecebidos = [...new Set(receb.map(i => i.marca))].map(m => {
           this.showToast(nSel === 1 ? '1 referência apagada' : `${nSel} referências apagadas`);
         });
       },
-      temRecebidos: receb.length > 0,
+      temRecebidos: recebView.length > 0,
       copiarRecebidosTxt: s.copiado === 'todos' ? 'Copiado ✓' : 'Copiar todos',
       copiarRecebidos: () => {
         const ms = [...new Set(receb.map(i => i.marca))];
@@ -2000,8 +2061,9 @@ ${blocos}
     const marca = s.novaMarca.trim().toUpperCase(), ref = s.novaRef.trim();
     if (!(marca && ref)) return;
     const criar = () => {
-      this.upd(l => [...l, novoItem({ marca, ref, nota: s.novaNota.trim(), motivoFoto: s.novoMotivo, fotos: s.novasFotos, status: 'rascunho', origem: 'avulso' })]);
-      this.setState({ novaRef: '', novaNota: '', novoMotivo: '', novasFotos: [], aba: 'aguardando' });
+      const valores = (s.novosValores || []).map(v => v.trim()).filter(Boolean);
+      this.upd(l => [...l, novoItem({ marca, ref, nota: s.novaNota.trim(), motivoFoto: s.novoMotivo, valores, fotos: s.novasFotos, status: 'rascunho', origem: 'avulso' })]);
+      this.setState({ novaRef: '', novaNota: '', novoMotivo: '', novosValores: [''], novasFotos: [], aba: 'aguardando' });
       this.showToast('Adicionado ao rascunho');
     };
     const dup = this.state.itens.find(i => i.marca.toUpperCase() === marca && i.ref.toUpperCase() === ref.toUpperCase());
