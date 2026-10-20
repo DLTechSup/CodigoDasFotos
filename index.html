@@ -778,7 +778,7 @@ input,textarea,button{font-family:inherit}
                           <button onClick="{{ it.naoRecebi }}" style="flex:1;height:38px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">Ainda não recebi</button>
                         </div>
                       </sc-if>
-                      <button onClick="{{ it.pendenciaFeita }}" style="align-self:flex-start;height:34px;padding:0 14px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">✓ Pendência concluída</button>
+                      <button onClick="{{ it.pendenciaFeita }}" style="align-self:flex-start;height:34px;padding:0 14px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">✓ Recebi as fotos (falta código)</button>
                     </div>
                   </sc-for>
                 </div>
@@ -827,7 +827,7 @@ input,textarea,button{font-family:inherit}
                           <button onClick="{{ it.naoRecebi }}" style="flex:1;height:38px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">Ainda não recebi</button>
                         </div>
                       </sc-if>
-                      <button onClick="{{ it.pendenciaFeita }}" style="align-self:flex-start;height:34px;padding:0 14px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">✓ Pendência concluída</button>
+                      <button onClick="{{ it.pendenciaFeita }}" style="align-self:flex-start;height:34px;padding:0 14px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:12px;font-weight:700;cursor:pointer">✓ Fotos recebidas</button>
                     </div>
                   </sc-for>
                 </div>
@@ -1755,7 +1755,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
           copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
           copiar: () => this.copiar(i.codigo, key),
           abrir: () => this.setState({ modalId: i.id }),
-          pendenciaFeita: () => this.confirmar(`Marcar ${i.marca} ${i.ref} como concluído? Vai para o histórico.`, () => { this.setItem(i.id, { status: 'feito', feitoEm: Date.now(), visto: true }); this.showToast(`✅ ${i.marca} ${i.ref} já está no site`); }),
+          pendenciaFeita: () => this.confirmar(`Recebeu as fotos de ${i.marca} ${i.ref}? Ela volta para Esperando código.`, () => { this.setItem(i.id, { motivoFoto: '', fotosEnviadas: false, conferidoNaoRecebido: false }); this.showToast(`${i.marca} ${i.ref} voltou para Esperando código`); }),
           recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
           naoRecebi: () => this.setItem(i.id, { fotosEnviadas: false, conferidoNaoRecebido: true, conferidoEm: Date.now() })
         };
@@ -1776,7 +1776,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
           copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
           copiar: () => { this.copiar(i.codigo, key); if (!i.visto) this.setItem(i.id, { visto: true }); },
           abrir: () => { if (!i.visto) this.setItem(i.id, { visto: true }); this.setState({ modalId: i.id }); },
-          pendenciaFeita: () => this.confirmar(`Marcar ${i.marca} ${i.ref} como concluído? Vai para o histórico.`, () => { this.setItem(i.id, { status: 'feito', feitoEm: Date.now(), visto: true }); this.showToast(`✅ ${i.marca} ${i.ref} já está no site`); }),
+          pendenciaFeita: () => this.confirmar(`Fotos recebidas de ${i.marca} ${i.ref}? Ela vai para Códigos recebidos.`, () => { this.setItem(i.id, { motivoFoto: '', fotosEnviadas: false, conferidoNaoRecebido: false }); this.showToast(`${i.marca} ${i.ref} foi para Códigos recebidos`); }),
           recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
           naoRecebi: () => this.setItem(i.id, { fotosEnviadas: false, conferidoNaoRecebido: true, conferidoEm: Date.now() })
         };
