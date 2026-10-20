@@ -460,9 +460,11 @@ input,textarea,button{font-family:inherit}
           <sc-if value="{{ temNovasFotos }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
               <sc-for list="{{ novasFotos }}" as="nf" hint-placeholder-count="0">
-                <div style="position:relative">
-                  <img src="{{ nf.src }}" alt="" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block">
-                  <button onClick="{{ nf.remover }}" style="position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:12px;cursor:pointer;line-height:1">×</button>
+                <div style="display:flex;flex-direction:column;gap:3px">
+                  <div style="position:relative">
+                    <img src="{{ nf.src }}" alt="" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block">
+                    <button onClick="{{ nf.remover }}" style="position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:12px;cursor:pointer;line-height:1">×</button>
+                  </div>
                 </div>
               </sc-for>
             </div>
@@ -709,6 +711,10 @@ input,textarea,button{font-family:inherit}
                         <option value="Já tenho as fotos">Já tenho as fotos</option>
                       </select>
                       <input value="{{ it.notaPainel }}" onChange="{{ it.onNotaPainel }}" placeholder="+ minha observação (aparece pro escritório)" style="width:100%;height:30px;border:1px solid {{ it.notaPainelBorda }};border-radius:8px;padding:0 10px;font-size:12px;color:#0b3558;background:{{ it.notaPainelBg }};outline:none;margin-top:2px">
+                      <div style="display:flex;gap:14px;margin-top:4px">
+                        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#476788;cursor:pointer"><input type="checkbox" checked="{{ it.enviadoSite }}" onChange="{{ it.onEnviadoSite }}">Enviado ao site</label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#476788;cursor:pointer"><input type="checkbox" checked="{{ it.enviadoAtacado }}" onChange="{{ it.onEnviadoAtacado }}">Enviado ao Atacado</label>
+                      </div>
                     </div>
                     <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
                       <sc-if value="{{ it.editandoCod }}" hint-placeholder-val="{{ false }}">
@@ -833,6 +839,43 @@ input,textarea,button{font-family:inherit}
           </sc-if>
         </sc-if>
 
+        <sc-if value="{{ abaLembretes }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ temLembretes }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <sc-for list="{{ gruposLembretes }}" as="g" hint-placeholder-count="1">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="font-size:15px;font-weight:800;color:#0b3558">{{ g.marca }}</span>
+                    <span style="min-width:26px;height:26px;padding:0 8px;border-radius:8px;background:#e6f0ff;color:#006bff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ g.n }}</span>
+                  </div>
+                  <sc-for list="{{ g.itens }}" as="it" hint-placeholder-count="2">
+                    <div style="background:#fff;border:2px solid #ef4444;border-radius:14px;overflow:hidden">
+                      <div style="background:#ef4444;color:#fff;padding:8px 12px;font-size:14px;font-weight:800">⚠️ Falta enviar ao site do Atacado</div>
+                      <div style="padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                        <div style="flex:1 1 160px;min-width:0;display:flex;flex-direction:column;gap:3px">
+                          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">{{ it.ref }}</span>
+                          <sc-if value="{{ it.motivoFoto }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#476788">{{ it.motivoFoto }}</span></sc-if>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
+                          <button onClick="{{ it.copiar }}" title="Copiar código" style="border:2px solid #0b3558;background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-end;gap:1px;color:#0b3558">
+                            <span style="font-size:16px;font-weight:700;font-family:'JetBrains Mono',monospace">{{ it.codigo }}</span>
+                            <span style="font-size:10px;color:#476788;font-weight:600">{{ it.copiarTxt }}</span>
+                          </button>
+                          <button onClick="{{ it.abrir }}" title="Ver foto e referência" style="width:38px;height:38px;border:1px solid #d4e0ed;border-radius:8px;background:#fff;color:#0b3558;font-size:15px;cursor:pointer">🔍</button>
+                          <button onClick="{{ it.onEnviadoAtacado }}" style="height:38px;padding:0 14px;border:0;border-radius:8px;background:#059669;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Enviado ao Atacado</button>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ !temLembretes }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:24px;text-align:center;color:#476788;font-size:14px;background:#fff;border:1px solid #d4e0ed;border-radius:14px">Nenhum lembrete no momento.</div>
+          </sc-if>
+        </sc-if>
+
         <sc-if value="{{ abaFeitosHoje }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
             <span style="font-size:14px;color:#476788">{{ resumoFeitosHoje }}</span>
@@ -858,6 +901,7 @@ input,textarea,button{font-family:inherit}
                       <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#059669;background:#ecfdf5;border-radius:4px;padding:1px 6px">{{ f.codigo }}</span>
                       <span style="font-size:10px;color:#8aa3bd">{{ f.quando }}</span>
                     </div>
+                    <button onClick="{{ f.excluir }}" style="align-self:flex-end;border:0;background:transparent;padding:2px 0 0;font-size:11px;color:#c0264b;cursor:pointer">apagar</button>
                   </div>
                 </div>
               </sc-for>
@@ -898,9 +942,15 @@ input,textarea,button{font-family:inherit}
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
                       <span style="font-size:11px;color:#8aa3bd">{{ c.quando }}</span>
                       <div style="display:flex;gap:8px">
-                        <sc-if value="{{ c.temFoto }}" hint-placeholder-val="{{ false }}"><button onClick="{{ c.baixar }}" title="Baixar fotos" style="border:0;background:transparent;padding:0;font-size:11px;color:#006bff;cursor:pointer">baixar</button></sc-if>
+                        <sc-if value="{{ c.temFoto }}" hint-placeholder-val="{{ false }}">
+                          <button onClick="{{ c.baixar }}" title="Baixar fotos" style="border:0;background:transparent;padding:0;font-size:11px;color:#006bff;cursor:pointer">baixar</button>
+                        </sc-if>
                         <button onClick="{{ c.excluir }}" title="Apagar" style="border:0;background:transparent;padding:0;font-size:11px;color:#c0264b;cursor:pointer">apagar</button>
                       </div>
+                    </div>
+                    <div style="display:flex;gap:10px">
+                      <label style="display:flex;align-items:center;gap:5px;font-size:10px;color:#476788;cursor:pointer"><input type="checkbox" checked="{{ c.enviadoSite }}" onChange="{{ c.onEnviadoSite }}">Site</label>
+                      <label style="display:flex;align-items:center;gap:5px;font-size:10px;color:#476788;cursor:pointer"><input type="checkbox" checked="{{ c.enviadoAtacado }}" onChange="{{ c.onEnviadoAtacado }}">Atacado</label>
                     </div>
                   </div>
                 </div>
@@ -1326,7 +1376,23 @@ class Component extends DCLogic {
   }
   showToast(t) { clearTimeout(this.tt); this.setState({ toast: t }); this.tt = setTimeout(() => this.setState({ toast: '' }), 3200); }
 
-  confirmar(msg, fn) { this.setState({ confirmMsg: msg, confirmFn: fn }); }
+  confirmar(msg, fn, fnNao) { this.setState({ confirmMsg: msg, confirmFn: fn, confirmFnNao: fnNao }); }
+  marcarEnviadoSite(i, valor) {
+    if (!valor) return this.setItem(i.id, { enviadoSite: false });
+    if (i.status === 'feito') { this.setItem(i.id, { enviadoSite: true }); return; }
+    this.setItem(i.id, { enviadoSite: true });
+    this.confirmar(`${i.marca} ${i.ref} — foi enviado ao site do Atacado também?`,
+      () => { this.setItem(i.id, { enviadoAtacado: true, status: 'feito', feitoEm: Date.now(), visto: true }); this.showToast(`✅ ${i.marca} ${i.ref} já está nos dois sites`); },
+      () => this.showToast(`Lembrete criado: falta enviar ${i.marca} ${i.ref} ao site do Atacado`)
+    );
+  }
+  marcarEnviadoAtacado(i, valor) {
+    if (!valor) return this.setItem(i.id, { enviadoAtacado: false });
+    const patch = { enviadoSite: true, enviadoAtacado: true, visto: true };
+    if (i.status !== 'feito') { patch.status = 'feito'; patch.feitoEm = Date.now(); }
+    this.setItem(i.id, patch);
+    this.showToast(`✅ ${i.marca} ${i.ref} já está nos dois sites`);
+  }
   baixarFotos(i) {
     const fotos = (i.fotos || []).filter(fotoOk);
     if (!fotos.length) return;
@@ -1458,7 +1524,8 @@ class Component extends DCLogic {
     const ehPendenciaFoto = i => i.motivoFoto && i.motivoFoto !== 'Já tenho as fotos';
     const aguard = itens.filter(i => (i.status === 'rascunho' || i.status === 'pendente' || i.status === 'naosei') && !ehPendenciaFoto(i));
     const rasc = itens.filter(i => i.status === 'rascunho');
-    const receb = itens.filter(i => i.status === 'respondido' && !ehPendenciaFoto(i));
+    const receb = itens.filter(i => i.status === 'respondido' && !ehPendenciaFoto(i) && !(i.enviadoSite && !i.enviadoAtacado));
+    const lembretes = itens.filter(i => i.enviadoSite && !i.enviadoAtacado);
     const fazer = itens.filter(i => i.status !== 'feito' && ehPendenciaFoto(i));
     const fazerPend = fazer.filter(i => i.status === 'pendente');
     const fazerResp = fazer.filter(i => i.status === 'respondido');
@@ -1533,7 +1600,22 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
           onCodEdit: e => this.setState({ codEditVal: e.target.value.toUpperCase() }),
           editarCod: () => this.setState({ editandoCodId: i.id, codEditVal: i.codigo }),
           onCodEditEnter: e => { if (e.key === 'Enter') this.setItem(i.id, { codigo: (this.state.codEditVal || '').trim() || i.codigo }) || this.setState({ editandoCodId: null }); },
-          salvarCodEdit: () => { this.setItem(i.id, { codigo: (this.state.codEditVal || '').trim() || i.codigo }); this.setState({ editandoCodId: null }); this.showToast('Código corrigido'); }
+          salvarCodEdit: () => { this.setItem(i.id, { codigo: (this.state.codEditVal || '').trim() || i.codigo }); this.setState({ editandoCodId: null }); this.showToast('Código corrigido'); },
+          enviadoSite: !!i.enviadoSite, enviadoAtacado: !!i.enviadoAtacado,
+          onEnviadoSite: e => this.marcarEnviadoSite(i, e.target.checked),
+          onEnviadoAtacado: e => this.marcarEnviadoAtacado(i, e.target.checked)
+        };
+      }) };
+    });
+    const gruposLembretes = [...new Set(lembretes.map(i => i.marca))].map(m => {
+      const l = lembretes.filter(i => i.marca === m).sort((a, b) => b.respondidoEm - a.respondidoEm);
+      return { marca: m, n: l.length, itens: l.map(i => {
+        const key = 'lb' + i.id;
+        return { ...i, ...fotoInfo(i), copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
+          copiar: () => this.copiar(i.codigo, key),
+          abrir: () => this.setState({ modalId: i.id }),
+          motivoFoto: i.motivoFoto || '',
+          onEnviadoAtacado: () => this.marcarEnviadoAtacado(i, true)
         };
       }) };
     });
@@ -1631,6 +1713,9 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
         const hk = 'cat' + i.id;
         return { marca: i.marca, ref: i.ref, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa, quando: hora(i.feitoEm), codigoTxt: s.copiado === hk ? 'Copiado ✓' : i.codigo, copiar: () => this.copiar(i.codigo, hk),
           baixar: () => this.baixarFotos(i),
+          enviadoSite: !!i.enviadoSite, enviadoAtacado: !!i.enviadoAtacado,
+          onEnviadoSite: e => this.marcarEnviadoSite(i, e.target.checked),
+          onEnviadoAtacado: e => this.marcarEnviadoAtacado(i, e.target.checked),
           excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => this.upd(x => x.filter(y => y.id !== i.id))) };
       });
     const temMaisCatalogo = catalogoFull.length > catPagina;
@@ -1641,10 +1726,11 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       ['recebidos', 'Códigos recebidos', receb.length, receb.filter(i => !i.visto).length],
       ['fazer', 'Pendências', fazer.length, 0],
       ['fazerResp', 'Código recebido, faltam fotos', fazerResp.length, fazerResp.filter(i => !i.visto).length],
+      ['lembretes', 'Lembretes (falta Atacado)', lembretes.length, 0],
       ['feitosHoje', 'Feitos hoje', feitosHoje.length, 0],
       ['historico', 'Histórico', resp.length, 0]
     ];
-    const listaLen = { aguardando: aguard.length, recebidos: receb.length, fazer: fazer.length, fazerResp: fazerResp.length, feitosHoje: feitosHoje.length, historico: resp.length }[s.aba];
+    const listaLen = { aguardando: aguard.length, recebidos: receb.length, fazer: fazer.length, fazerResp: fazerResp.length, lembretes: lembretes.length, feitosHoje: feitosHoje.length, historico: resp.length }[s.aba];
     const fmr = s.filtroMotivoRelatorio || '';
     const fazerPendView = fmr ? fazerPend.filter(i => i.motivoFoto === fmr) : fazerPend;
     const fazerRespView = fmr ? fazerResp.filter(i => i.motivoFoto === fmr) : fazerResp;
@@ -1856,14 +1942,15 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
         this.avancar(atual); this.showToast('Marcado como "não sei"');
       },
       // painel
-      novasFotos: s.novasFotos.map((src, k) => ({ src, remover: () => this.setState(st => ({ novasFotos: st.novasFotos.filter((_, j) => j !== k) })) })),
+      novasFotos: s.novasFotos.map((nf, k) => ({ src: nf.src,
+        remover: () => this.setState(st => ({ novasFotos: st.novasFotos.filter((_, j) => j !== k) })) })),
       temNovasFotos: s.novasFotos.length > 0,
       dropBorda: s.arrastando ? '#006bff' : '#a6bbd1', dropBg: s.arrastando ? '#e6f0ff' : '#f8f9fb',
       dropTxt: s.arrastando ? 'Solte as fotos aqui' : 'Clique ou arraste as fotos aqui',
       onDragOver: e => { e.preventDefault(); if (!s.arrastando) this.setState({ arrastando: true }); },
       onDragLeave: e => { if (!e.currentTarget.contains(e.relatedTarget)) this.setState({ arrastando: false }); },
-      onDrop: async e => { e.preventDefault(); e.stopPropagation(); this.setState({ arrastando: false }); const fs = Array.from(e.dataTransfer.files || []).filter(x => x.type.startsWith('image/')); if (!fs.length) return this.showToast('Arraste um arquivo de imagem (jpg, png) do seu computador.'); const f = await this.lerFotos(fs); this.setState(st => ({ novasFotos: [...st.novasFotos, ...f] })); },
-      onFiles: async e => { const f = await this.lerFotos(e.target.files); e.target.value = ''; this.setState(st => ({ novasFotos: [...st.novasFotos, ...f] })); },
+      onDrop: async e => { e.preventDefault(); e.stopPropagation(); this.setState({ arrastando: false }); const fs = Array.from(e.dataTransfer.files || []).filter(x => x.type.startsWith('image/')); if (!fs.length) return this.showToast('Arraste um arquivo de imagem (jpg, png) do seu computador.'); const f = await this.lerFotos(fs); this.setState(st => ({ novasFotos: [...st.novasFotos, ...f.map(src => ({ src, cor: '' }))] })); },
+      onFiles: async e => { const f = await this.lerFotos(e.target.files); e.target.value = ''; this.setState(st => ({ novasFotos: [...st.novasFotos, ...f.map(src => ({ src, cor: '' }))] })); },
       novaMarca: s.novaMarca, novaRef: s.novaRef, novaNota: s.novaNota, marcasTodas,
       onMarca: e => this.setState({ novaMarca: e.target.value.toUpperCase() }),
       onRef: e => this.setState({ novaRef: e.target.value }),
@@ -1904,12 +1991,13 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       temMaisCatalogo, catalogoRestante, carregarMaisCatalogo,
       filtroMarcaHoje: s.filtroMarcaHoje || '', onFiltroMarcaHoje: e => this.setState({ filtroMarcaHoje: e.target.value }),
       marcasFeitosHoje: [...new Set(feitosHoje.map(i => normMarca(i.marca)))].sort(),
-      feitosHojeView: feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje).sort((a, b) => b.feitoEm - a.feitoEm).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo, quando: hora(i.feitoEm), ...fotoInfo(i) })),
+      feitosHojeView: feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje).sort((a, b) => b.feitoEm - a.feitoEm).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo, quando: hora(i.feitoEm), ...fotoInfo(i),
+        excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref}? Isso remove do histórico também.`, () => this.upd(x => x.filter(y => y.id !== i.id))) })),
       temFeitosHoje: feitosHoje.length > 0,
       resumoFeitosHoje: `${feitosHoje.length} código${feitosHoje.length === 1 ? '' : 's'} hoje · ${new Date().toLocaleDateString('pt-BR')}`,
       gerarRelatorioHoje: () => this.imprimirRelatorio(feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje)),
-      abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaFazer: s.aba === 'fazer', abaFazerResp: s.aba === 'fazerResp', abaFeitosHoje: s.aba === 'feitosHoje', abaHistorico: s.aba === 'historico',
-      gruposAguard, gruposRecebidos, gruposFazer, gruposFazerResp, temFazer: fazerTodosView.length > 0, temFazerResp: fazerRespView.length > 0, remessas: diasFiltrados, temHistorico: resp.length > 0,
+      abaAguardando: s.aba === 'aguardando', abaRecebidos: s.aba === 'recebidos', abaFazer: s.aba === 'fazer', abaFazerResp: s.aba === 'fazerResp', abaLembretes: s.aba === 'lembretes', abaFeitosHoje: s.aba === 'feitosHoje', abaHistorico: s.aba === 'historico',
+      gruposAguard, gruposRecebidos, gruposFazer, gruposFazerResp, gruposLembretes, temLembretes: lembretes.length > 0, temFazer: fazerTodosView.length > 0, temFazerResp: fazerRespView.length > 0, remessas: diasFiltrados, temHistorico: resp.length > 0,
       modoCatalogo, modoLista: !modoCatalogo, catalogo,
       buscaHist: s.buscaHist, onBuscaHist: e => this.setState({ buscaHist: e.target.value }),
       marcasHist, filtroMarcaHist: filtroMarca, onFiltroMarcaHist: e => this.setState({ filtroMarcaHist: e.target.value }),
@@ -1973,8 +2061,8 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       modalCopiarTxt: s.copiado === modalKey ? 'Copiado ✓' : 'Copiar código',
       modalCopiar: () => modalSrc && this.copiar(modalSrc.codigo, modalKey),
       temConfirm: !!s.confirmFn, confirmMsg: s.confirmMsg,
-      confirmSim: () => { const fn = s.confirmFn; this.setState({ confirmFn: null, confirmMsg: '' }); if (fn) fn(); },
-      confirmNao: () => this.setState({ confirmFn: null, confirmMsg: '' }),
+      confirmSim: () => { const fn = s.confirmFn; this.setState({ confirmFn: null, confirmMsg: '', confirmFnNao: null }); if (fn) fn(); },
+      confirmNao: () => { const fnNao = s.confirmFnNao; this.setState({ confirmFn: null, confirmMsg: '', confirmFnNao: null }); if (fnNao) fnNao(); },
       semConexao: !s.online,
       temToast: !!s.toast, toast: s.toast
     };
@@ -2062,7 +2150,7 @@ ${blocos}
     if (!(marca && ref)) return;
     const criar = () => {
       const valores = (s.novosValores || []).map(v => v.trim()).filter(Boolean);
-      this.upd(l => [...l, novoItem({ marca, ref, nota: s.novaNota.trim(), motivoFoto: s.novoMotivo, valores, fotos: s.novasFotos, status: 'rascunho', origem: 'avulso' })]);
+      this.upd(l => [...l, novoItem({ marca, ref, nota: s.novaNota.trim(), motivoFoto: s.novoMotivo, valores, fotos: s.novasFotos.map(f => f.src), status: 'rascunho', origem: 'avulso' })]);
       this.setState({ novaRef: '', novaNota: '', novoMotivo: '', novosValores: [''], novasFotos: [], aba: 'aguardando' });
       this.showToast('Adicionado ao rascunho');
     };
