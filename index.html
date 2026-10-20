@@ -196,7 +196,7 @@ input,textarea,button{font-family:inherit}
             <sc-for list="{{ feitosRecentes }}" as="f" hint-placeholder-count="0">
               <div style="background:#fff;border:1px solid #d4e0ed;border-radius:14px;overflow:hidden;display:flex;flex-direction:column">
                 <div style="width:100%;aspect-ratio:1/1;background:repeating-linear-gradient(135deg,#f0f3f8 0 8px,#e3ebf4 8px 16px);display:flex;align-items:center;justify-content:center">
-                  <sc-if value="{{ f.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ f.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                  <sc-if value="{{ f.capaOk }}" hint-placeholder-val="{{ false }}"><img src="{{ f.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
                 </div>
                 <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px">
                   <span style="font-size:10px;font-weight:800;color:#476788;letter-spacing:0.02em">{{ f.marca }}</span>
@@ -233,7 +233,7 @@ input,textarea,button{font-family:inherit}
                 <div style="background:#ef4444;color:#fff;padding:8px 12px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px">⚠️ {{ r.motivoTxt }}</div>
               </sc-if>
               <span onClick="{{ r.onToggleFoto }}" style="width:100%;aspect-ratio:1/1;overflow:hidden;cursor:zoom-in;background:repeating-linear-gradient(135deg,#f0f3f8 0 8px,#e3ebf4 8px 16px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#5f7d9c">
-                <sc-if value="{{ r.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ r.capa }}" alt="" style="width:100%;height:100%;object-fit:contain"></sc-if>
+                <sc-if value="{{ r.capaOk }}" hint-placeholder-val="{{ false }}"><img src="{{ r.capa }}" alt="" style="width:100%;height:100%;object-fit:contain"></sc-if>
                 <sc-if value="{{ r.semFoto }}" hint-placeholder-val="{{ true }}">sem foto</sc-if>
               </span>
               <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
@@ -251,7 +251,7 @@ input,textarea,button{font-family:inherit}
         <sc-if value="{{ temZoomMarca }}" hint-placeholder-val="{{ false }}">
           <div onClick="{{ fecharZoomMarca }}" style="position:fixed;inset:0;z-index:35;display:flex;align-items:center;justify-content:center;padding:40px;background:rgba(240,243,248,.9);backdrop-filter:blur(6px);cursor:zoom-out">
             <div style="position:relative;max-width:90vw;max-height:90vh;box-shadow:rgba(11,53,88,.25) 0 20px 60px;border-radius:12px;overflow:hidden">
-              <img src="{{ zoomMarcaSrc }}" alt="" style="display:block;max-width:90vw;max-height:90vh;object-fit:contain">
+              <sc-if value="{{ temZoomMarcaSrc }}" hint-placeholder-val="{{ false }}"><img src="{{ zoomMarcaSrc }}" alt="" style="display:block;max-width:90vw;max-height:90vh;object-fit:contain"></sc-if>
               <div style="position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(11,53,88,.88));padding:28px 20px 14px;display:flex;flex-direction:column;gap:2px">
                 <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:0.04em;text-transform:uppercase;text-shadow:0 1px 3px rgba(0,0,0,.6)">{{ zoomMarcaMarca }}</span>
                 <span style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)">{{ zoomMarcaRef }}</span>
@@ -299,7 +299,7 @@ input,textarea,button{font-family:inherit}
             <div style="display:flex;flex-direction:column;background:#fef2f2;border:2px solid #ef4444;border-radius:16px;overflow:hidden">
               <div style="background:#ef4444;color:#fff;padding:8px 12px;font-size:15px;font-weight:800">⚠️ {{ r.motivoTxt }}</div>
               <span onClick="{{ r.onToggleFoto }}" style="width:100%;aspect-ratio:1/1;overflow:hidden;cursor:zoom-in;background:repeating-linear-gradient(135deg,#fef2f2 0 8px,#fee2e2 8px 16px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#b91c1c">
-                <sc-if value="{{ r.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ r.capa }}" alt="" style="width:100%;height:100%;object-fit:contain"></sc-if>
+                <sc-if value="{{ r.capaOk }}" hint-placeholder-val="{{ false }}"><img src="{{ r.capa }}" alt="" style="width:100%;height:100%;object-fit:contain"></sc-if>
                 <sc-if value="{{ r.semFoto }}" hint-placeholder-val="{{ true }}">sem foto</sc-if>
               </span>
               <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
@@ -327,7 +327,7 @@ input,textarea,button{font-family:inherit}
         <sc-if value="{{ temZoomMarca }}" hint-placeholder-val="{{ false }}">
           <div onClick="{{ fecharZoomMarca }}" style="position:fixed;inset:0;z-index:35;display:flex;align-items:center;justify-content:center;padding:40px;background:rgba(240,243,248,.9);backdrop-filter:blur(6px);cursor:zoom-out">
             <div style="position:relative;max-width:90vw;max-height:90vh;box-shadow:rgba(11,53,88,.25) 0 20px 60px;border-radius:12px;overflow:hidden">
-              <img src="{{ zoomMarcaSrc }}" alt="" style="display:block;max-width:90vw;max-height:90vh;object-fit:contain">
+              <sc-if value="{{ temZoomMarcaSrc }}" hint-placeholder-val="{{ false }}"><img src="{{ zoomMarcaSrc }}" alt="" style="display:block;max-width:90vw;max-height:90vh;object-fit:contain"></sc-if>
               <div style="position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(11,53,88,.88));padding:28px 20px 14px;display:flex;flex-direction:column;gap:2px">
                 <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:0.04em;text-transform:uppercase;text-shadow:0 1px 3px rgba(0,0,0,.6)">{{ zoomMarcaMarca }}</span>
                 <span style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)">{{ zoomMarcaRef }}</span>
@@ -346,7 +346,7 @@ input,textarea,button{font-family:inherit}
           <div style="flex:2 1 360px;min-width:0;display:flex;flex-direction:column;gap:8px;order:1">
             <div style="display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:18px">
               <sc-for list="{{ atual.fotosObj }}" as="f" hint-placeholder-count="0">
-                <img src="{{ f.src }}" alt="" style="flex:0 0 100%;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:18px;scroll-snap-align:start;background:#e3ebf4">
+                <sc-if value="{{ f.srcOk }}" hint-placeholder-val="{{ false }}"><img src="{{ f.src }}" alt="" style="flex:0 0 100%;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:18px;scroll-snap-align:start;background:#e3ebf4"></sc-if>
               </sc-for>
               <sc-if value="{{ atual.semFotos }}" hint-placeholder-val="{{ true }}">
                 <div style="flex:0 0 100%;aspect-ratio:4/3;border-radius:18px;border:1px solid #d4e0ed;background:repeating-linear-gradient(135deg,#f0f3f8 0 10px,#e3ebf4 10px 20px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#476788">sem foto · confira pela referência</div>
@@ -462,7 +462,7 @@ input,textarea,button{font-family:inherit}
               <sc-for list="{{ novasFotos }}" as="nf" hint-placeholder-count="0">
                 <div style="display:flex;flex-direction:column;gap:3px">
                   <div style="position:relative">
-                    <img src="{{ nf.src }}" alt="" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block">
+                    <sc-if value="{{ nf.srcOk }}" hint-placeholder-val="{{ false }}"><img src="{{ nf.src }}" alt="" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block"></sc-if>
                     <button onClick="{{ nf.remover }}" style="position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:12px;cursor:pointer;line-height:1">×</button>
                   </div>
                 </div>
@@ -628,6 +628,16 @@ input,textarea,button{font-family:inherit}
                           <input value="{{ it.editMarca }}" onChange="{{ it.onEditMarca }}" placeholder="Marca" style="flex:1 1 90px;min-width:0;height:32px;border:1px solid #d4e0ed;border-radius:8px;padding:0 8px;font-size:13px;color:#0b3558;outline:none">
                           <input value="{{ it.editRef }}" onChange="{{ it.onEditRef }}" placeholder="Referência" style="flex:1 1 90px;min-width:0;height:32px;border:1px solid #d4e0ed;border-radius:8px;padding:0 8px;font-size:13px;font-family:'JetBrains Mono',monospace;color:#0b3558;outline:none">
                         </div>
+                        <input value="{{ it.editValor }}" onChange="{{ it.onEditValor }}" placeholder="Valor no Bling (ex.: R$ 129,90)" style="height:32px;border:1px solid #d4e0ed;border-radius:8px;padding:0 8px;font-size:13px;color:#0b7a4b;outline:none">
+                        <input value="{{ it.editNotaPainel }}" onChange="{{ it.onEditNotaPainel }}" placeholder="Minha observação (deixe vazio para não mostrar nada)" style="height:32px;border:1px solid #d4e0ed;border-radius:8px;padding:0 8px;font-size:13px;color:#0b3558;outline:none">
+                        <select value="{{ it.editMotivoFoto }}" onChange="{{ it.onEditMotivoFoto }}" style="height:32px;border:1px solid #d4e0ed;border-radius:8px;padding:0 8px;font-size:13px;color:#0b3558;background:#fff;outline:none">
+                          <option value="">Situação da foto (nenhuma)</option>
+                          <option value="Já tenho as fotos">Já tenho as fotos</option>
+                          <option value="Falta o escritório mandar as fotos">Falta o escritório mandar as fotos</option>
+                          <option value="Não tenho fotos">Não tenho fotos</option>
+                          <option value="Somente foto de capa">Somente foto de capa</option>
+                          <option value="Foto de baixa qualidade">Foto de baixa qualidade</option>
+                        </select>
                         <div style="display:flex;gap:6px">
                           <button onClick="{{ it.salvarEdicao }}" style="height:28px;padding:0 10px;border:0;border-radius:6px;background:#0b3558;color:#fff;font-size:12px;font-weight:700;cursor:pointer">Salvar</button>
                           <button onClick="{{ it.cancelarEdicao }}" style="height:28px;padding:0 10px;border:1px solid #d4e0ed;border-radius:6px;background:#fff;color:#0b3558;font-size:12px;cursor:pointer">Cancelar</button>
@@ -892,7 +902,7 @@ input,textarea,button{font-family:inherit}
               <sc-for list="{{ feitosHojeView }}" as="f" hint-placeholder-count="4">
                 <div style="background:#fff;border:1px solid #d4e0ed;border-radius:14px;overflow:hidden;display:flex;flex-direction:column">
                   <div style="width:100%;aspect-ratio:1/1;background:repeating-linear-gradient(135deg,#f0f3f8 0 8px,#e3ebf4 8px 16px);display:flex;align-items:center;justify-content:center">
-                    <sc-if value="{{ f.temFoto }}" hint-placeholder-val="{{ false }}"><img src="{{ f.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                    <sc-if value="{{ f.capaOk }}" hint-placeholder-val="{{ false }}"><img src="{{ f.capa }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
                   </div>
                   <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px">
                     <span style="font-size:10px;font-weight:800;color:#476788;letter-spacing:0.02em">{{ f.marca }}</span>
@@ -1199,7 +1209,7 @@ class Component extends DCLogic {
       novasFotos: [], novaMarca: '', novaRef: '', novaNota: '', novoMotivo: '', novosValores: [''], importTxt: '',
       importAberto: false, toast: '', copiado: null, buscaHist: '', filtroMarcaHist: '', histAberto: {}, modalId: null, zoom: false,
       pronto: false, user: null, entrando: false, online: typeof navigator === 'undefined' || navigator.onLine,
-      editId: null, editMarca: '', editRef: '',
+      editId: null, editMarca: '', editRef: '', editValor: '',
       lu: '', ls: '', ls2: '', loginErro: '',
       usuarios: [], acessosAberto: false, nu: '', ns: '', np: 'escritorio', criando: false,
       vistoAte: ler(KEY_VISTO, 0), notifPerm: typeof Notification !== 'undefined' ? Notification.permission : 'unsupported'
@@ -1230,11 +1240,16 @@ class Component extends DCLogic {
       const lib = await esperar(() => window.supabase, 8000);
       if (lib) { this.cfg = cfg; this.sb = lib.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey); }
     }
+    let usouSupabase = false;
     if (this.sb) {
-      const { data } = await this.sb.auth.getSession();
-      if (data && data.session) await this.carregarPerfil(data.session.user, false);
-      await this.carregarDados();
-    } else {
+      try {
+        const { data } = await this.sb.auth.getSession();
+        if (data && data.session) await this.carregarPerfil(data.session.user, false);
+        await this.carregarDados();
+        usouSupabase = true;
+      } catch (e) { this.sb = null; this.showToast('Sem conexão com o servidor — usando dados salvos neste dispositivo'); }
+    }
+    if (!usouSupabase) {
       this.cur = load(); this.setState({ itens: this.cur, fim: ler(KEY_FIM, []) });
       const u = ler(KEY_SESSAO, null), x = u && this.usuariosLocais().find(y => y.u === u);
       if (x) this.entrou({ u: x.u, papel: 'admin' }, false);
@@ -1251,7 +1266,7 @@ class Component extends DCLogic {
   }
   async carregarDados() {
     const { data, error } = await this.sb.from('itens').select('id,doc');
-    if (error) return this.showToast('Erro ao carregar: ' + error.message);
+    if (error) throw error;
     this.cur = data.map(r => r.doc).sort((a, b) => (a.criado || 0) - (b.criado || 0));
     this.setState({ itens: this.cur });
     const fr = await this.sb.from('fins').select('em');
@@ -1568,12 +1583,18 @@ const fotoInfo = i => { const fs = (i.fotos || []).filter(fotoOk); return { temF
         editRef: s.editId === i.id ? s.editRef : i.ref,
         onEditMarca: e => this.setState({ editMarca: e.target.value.toUpperCase() }),
         onEditRef: e => this.setState({ editRef: e.target.value }),
-        editar: () => this.setState({ editId: i.id, editMarca: i.marca, editRef: i.ref }),
+        editValor: s.editId === i.id ? s.editValor : (i.valores || [])[0] || '',
+        onEditValor: e => this.setState({ editValor: e.target.value }),
+        editNotaPainel: s.editId === i.id ? s.editNotaPainel : (i.notaPainel || ''),
+        onEditNotaPainel: e => this.setState({ editNotaPainel: e.target.value }),
+        editMotivoFoto: s.editId === i.id ? s.editMotivoFoto : (i.motivoFoto || ''),
+        onEditMotivoFoto: e => this.setState({ editMotivoFoto: e.target.value }),
+        editar: () => this.setState({ editId: i.id, editMarca: i.marca, editRef: i.ref, editValor: (i.valores || [])[0] || '', editNotaPainel: i.notaPainel || '', editMotivoFoto: i.motivoFoto || '' }),
         cancelarEdicao: () => this.setState({ editId: null }),
         salvarEdicao: () => {
-          const nm = (this.state.editMarca || '').trim(), nr = (this.state.editRef || '').trim();
+          const nm = (this.state.editMarca || '').trim(), nr = (this.state.editRef || '').trim(), nv = (this.state.editValor || '').trim(), nnp = (this.state.editNotaPainel || '').trim(), nmf = this.state.editMotivoFoto || '';
           if (!nm || !nr) return this.showToast('Preencha marca e referência');
-          this.setItem(i.id, { marca: nm, ref: nr });
+          this.setItem(i.id, { marca: nm, ref: nr, valores: nv ? [nv] : [], notaPainel: nmf === 'Já tenho as fotos' ? '' : nnp, motivoFoto: nmf });
           this.setState({ editId: null });
         },
         onDragOver: e => e.preventDefault(),
@@ -1755,7 +1776,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
           copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
           copiar: () => this.copiar(i.codigo, key),
           abrir: () => this.setState({ modalId: i.id }),
-          pendenciaFeita: () => this.confirmar(`Recebeu as fotos de ${i.marca} ${i.ref}? Ela volta para Esperando código.`, () => { this.setItem(i.id, { motivoFoto: '', fotosEnviadas: false, conferidoNaoRecebido: false }); this.showToast(`${i.marca} ${i.ref} voltou para Esperando código`); }),
+          pendenciaFeita: () => this.confirmar(`Recebeu as fotos de ${i.marca} ${i.ref}? Ela volta para Esperando código.`, () => { this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }); this.showToast(`${i.marca} ${i.ref} voltou para Esperando código`); }),
           recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
           naoRecebi: () => this.setItem(i.id, { fotosEnviadas: false, conferidoNaoRecebido: true, conferidoEm: Date.now() })
         };
@@ -1776,7 +1797,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
           copiarTxt: s.copiado === key ? 'Copiado ✓' : 'Copiar',
           copiar: () => { this.copiar(i.codigo, key); if (!i.visto) this.setItem(i.id, { visto: true }); },
           abrir: () => { if (!i.visto) this.setItem(i.id, { visto: true }); this.setState({ modalId: i.id }); },
-          pendenciaFeita: () => this.confirmar(`Fotos recebidas de ${i.marca} ${i.ref}? Ela vai para Códigos recebidos.`, () => { this.setItem(i.id, { motivoFoto: '', fotosEnviadas: false, conferidoNaoRecebido: false }); this.showToast(`${i.marca} ${i.ref} foi para Códigos recebidos`); }),
+          pendenciaFeita: () => this.confirmar(`Fotos recebidas de ${i.marca} ${i.ref}? Ela vai para Códigos recebidos.`, () => { this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }); this.showToast(`${i.marca} ${i.ref} foi para Códigos recebidos`); }),
           recebi: () => this.setItem(i.id, { motivoFoto: '', nota: '', notaPainel: '', fotosEnviadas: false, conferidoNaoRecebido: false }),
           naoRecebi: () => this.setItem(i.id, { fotosEnviadas: false, conferidoNaoRecebido: true, conferidoEm: Date.now() })
         };
@@ -1866,14 +1887,14 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       }),
       temFeitosRecentes: itens.some(i => i.status === 'feito'),
       feitosRecentes: itens.filter(i => i.status === 'feito').sort((a, b) => (b.feitoEm || 0) - (a.feitoEm || 0)).slice(0, 8)
-        .map(i => ({ marca: i.marca, ref: i.ref, quando: hora(i.feitoEm), codigo: i.codigo, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa })),
+        .map(i => ({ marca: i.marca, ref: i.ref, quando: hora(i.feitoEm), codigo: i.codigo, temFoto: fotoInfo(i).temFoto, capa: fotoInfo(i).capa, capaOk: fotoOk(fotoInfo(i).capa) })),
 
       nReceb: receb.length,
       mSel: { marca: marcaAtiva, nTxt: mSelN === 1 ? '1 faltando' : `${mSelN} faltando` },
       refsMarca: doMarca.map(i => {
         const codV = (s.codInline || {})[i.id] || '', obsV = (s.obsInline || {})[i.id] || '';
-        const isAlerta = !!(i.nota || i.motivoFoto || i.notaPainel);
-        return { ...i, ...fotoInfo(i), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota, isAlerta,
+        const isAlerta = !!(i.nota || i.motivoFoto);
+        return { ...i, ...fotoInfo(i), capaOk: fotoOk(fotoInfo(i).capa), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota, isAlerta,
           cardBorder: isAlerta ? '2px solid #ef4444' : '1px solid #d4e0ed',
           notaBoxBg: isAlerta ? '#fef2f2' : '#f0f3f8', notaBoxBorder: isAlerta ? '1px solid #fecaca' : '1px solid #e3ebf4', notaBoxFg: isAlerta ? '#991b1b' : '#476788',
           motivoTxt: i.motivoFoto || '',
@@ -1891,6 +1912,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       }),
       temZoomMarca: !!(s.zoomMarcaId && itens.find(i => i.id === s.zoomMarcaId)),
       zoomMarcaSrc: (itens.find(i => i.id === s.zoomMarcaId) || { fotos: [] }).fotos.filter(fotoOk)[0],
+      temZoomMarcaSrc: fotoOk((itens.find(i => i.id === s.zoomMarcaId) || { fotos: [] }).fotos.filter(fotoOk)[0]),
       zoomMarcaMarca: (itens.find(i => i.id === s.zoomMarcaId) || {}).marca,
       zoomMarcaRef: (itens.find(i => i.id === s.zoomMarcaId) || {}).ref,
       fecharZoomMarca: () => this.setState({ zoomMarcaId: null }),
@@ -1908,7 +1930,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
         const l = alertaItens.filter(i => i.marca === m && (!s.alertaFiltro || (s.alertaFiltro === 'comCodigo' ? i.status === 'respondido' : i.status !== 'respondido')));
         return { marca: m, nTxt: l.length === 1 ? '1 pendência' : `${l.length} pendências`, itens: l.map(i => {
           const codV = (s.codInline || {})[i.id] || '', obsV = (s.obsInline || {})[i.id] || '';
-          return { ...i, ...fotoInfo(i), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota,
+          return { ...i, ...fotoInfo(i), capaOk: fotoOk(fotoInfo(i).capa), temNota: !!i.notaPainel, nota: i.notaPainel, temNotaOf: !!i.nota, notaOf: i.nota,
             motivoTxt: i.motivoFoto || i.notaPainel || i.nota || 'Pendência de fotos',
             jaRespondido: i.status === 'respondido', pendenteCod: i.status === 'pendente',
             conferidoNaoRecebido: !!i.conferidoNaoRecebido,
@@ -1934,7 +1956,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       alertasTitulo: (() => { const n = (s.alertaMarca ? alertaItens.filter(i => i.marca === s.alertaMarca) : alertaItens).length; return n === 1 ? '1 pendência de fotos' : `${n} pendências de fotos`; })(),
       voltarHome: () => this.setState({ eView: 'home' }),
       voltarMarca: () => this.setState({ eView: 'marca', eMarca: marcaAtiva, codigo: '', obs: '' }),
-      atual: atual ? { ...atual, fotosObj: (atual.fotos || []).filter(fotoOk).map(src => ({ src })), semFotos: !atual.fotos.length, variasFotos: atual.fotos.length > 1, nFotos: atual.fotos.length, temNota: !!atual.nota, pos: doMarca.indexOf(atual) + 1, tot: doMarca.length } : {},
+      atual: atual ? { ...atual, fotosObj: (atual.fotos || []).filter(fotoOk).map(src => ({ src, srcOk: true })), semFotos: !atual.fotos.length, variasFotos: atual.fotos.length > 1, nFotos: atual.fotos.length, temNota: !!atual.nota, pos: doMarca.indexOf(atual) + 1, tot: doMarca.length } : {},
       codigo: s.codigo, obs: s.obs, mostrarObs: this.props.campoObservacao ?? true,
       onCodigo: e => this.setState({ codigo: e.target.value }),
       onObs: e => this.setState({ obs: e.target.value }),
@@ -1947,7 +1969,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
         this.avancar(atual); this.showToast('Marcado como "não sei"');
       },
       // painel
-      novasFotos: s.novasFotos.map((nf, k) => ({ src: nf.src,
+      novasFotos: s.novasFotos.map((nf, k) => ({ src: nf.src, srcOk: fotoOk(nf.src),
         remover: () => this.setState(st => ({ novasFotos: st.novasFotos.filter((_, j) => j !== k) })) })),
       temNovasFotos: s.novasFotos.length > 0,
       dropBorda: s.arrastando ? '#006bff' : '#a6bbd1', dropBg: s.arrastando ? '#e6f0ff' : '#f8f9fb',
@@ -1996,7 +2018,7 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       temMaisCatalogo, catalogoRestante, carregarMaisCatalogo,
       filtroMarcaHoje: s.filtroMarcaHoje || '', onFiltroMarcaHoje: e => this.setState({ filtroMarcaHoje: e.target.value }),
       marcasFeitosHoje: [...new Set(feitosHoje.map(i => normMarca(i.marca)))].sort(),
-      feitosHojeView: feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje).sort((a, b) => b.feitoEm - a.feitoEm).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo, quando: hora(i.feitoEm), ...fotoInfo(i),
+      feitosHojeView: feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje).sort((a, b) => b.feitoEm - a.feitoEm).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo, quando: hora(i.feitoEm), ...fotoInfo(i), capaOk: fotoOk(fotoInfo(i).capa),
         excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref}? Isso remove do histórico também.`, () => this.upd(x => x.filter(y => y.id !== i.id))),
         restaurar: () => this.confirmar(`Restaurar ${i.marca} ${i.ref} para Códigos recebidos? Sai do histórico e de Feitos hoje.`, () => { this.setItem(i.id, { status: 'respondido', feitoEm: null, enviadoSite: false, enviadoAtacado: false, visto: false }); this.showToast('Restaurado para Códigos recebidos'); }) })),
       temFeitosHoje: feitosHoje.length > 0,
