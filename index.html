@@ -901,7 +901,10 @@ input,textarea,button{font-family:inherit}
                       <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#059669;background:#ecfdf5;border-radius:4px;padding:1px 6px">{{ f.codigo }}</span>
                       <span style="font-size:10px;color:#8aa3bd">{{ f.quando }}</span>
                     </div>
-                    <button onClick="{{ f.excluir }}" style="align-self:flex-end;border:0;background:transparent;padding:2px 0 0;font-size:11px;color:#c0264b;cursor:pointer">apagar</button>
+                    <div style="display:flex;gap:10px;align-self:flex-end">
+                      <button onClick="{{ f.restaurar }}" style="border:0;background:transparent;padding:2px 0 0;font-size:11px;color:#006bff;cursor:pointer">restaurar</button>
+                      <button onClick="{{ f.excluir }}" style="border:0;background:transparent;padding:2px 0 0;font-size:11px;color:#c0264b;cursor:pointer">apagar</button>
+                    </div>
                   </div>
                 </div>
               </sc-for>
@@ -945,6 +948,7 @@ input,textarea,button{font-family:inherit}
                         <sc-if value="{{ c.temFoto }}" hint-placeholder-val="{{ false }}">
                           <button onClick="{{ c.baixar }}" title="Baixar fotos" style="border:0;background:transparent;padding:0;font-size:11px;color:#006bff;cursor:pointer">baixar</button>
                         </sc-if>
+                        <button onClick="{{ c.restaurar }}" title="Restaurar para Códigos recebidos" style="border:0;background:transparent;padding:0;font-size:11px;color:#006bff;cursor:pointer">restaurar</button>
                         <button onClick="{{ c.excluir }}" title="Apagar" style="border:0;background:transparent;padding:0;font-size:11px;color:#c0264b;cursor:pointer">apagar</button>
                       </div>
                     </div>
@@ -1716,7 +1720,8 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
           enviadoSite: !!i.enviadoSite, enviadoAtacado: !!i.enviadoAtacado,
           onEnviadoSite: e => this.marcarEnviadoSite(i, e.target.checked),
           onEnviadoAtacado: e => this.marcarEnviadoAtacado(i, e.target.checked),
-          excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => this.upd(x => x.filter(y => y.id !== i.id))) };
+          excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref} do histórico?`, () => this.upd(x => x.filter(y => y.id !== i.id))),
+          restaurar: () => this.confirmar(`Restaurar ${i.marca} ${i.ref} para Códigos recebidos? Sai do histórico.`, () => { this.setItem(i.id, { status: 'respondido', feitoEm: null, enviadoSite: false, enviadoAtacado: false, visto: false }); this.showToast('Restaurado para Códigos recebidos'); }) };
       });
     const temMaisCatalogo = catalogoFull.length > catPagina;
     const catalogoRestante = catalogoFull.length - catPagina;
@@ -1992,7 +1997,8 @@ const gruposRecebidos = [...new Set(recebView.map(i => i.marca))].map(m => {
       filtroMarcaHoje: s.filtroMarcaHoje || '', onFiltroMarcaHoje: e => this.setState({ filtroMarcaHoje: e.target.value }),
       marcasFeitosHoje: [...new Set(feitosHoje.map(i => normMarca(i.marca)))].sort(),
       feitosHojeView: feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje).sort((a, b) => b.feitoEm - a.feitoEm).map(i => ({ marca: i.marca, ref: i.ref, codigo: i.codigo, quando: hora(i.feitoEm), ...fotoInfo(i),
-        excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref}? Isso remove do histórico também.`, () => this.upd(x => x.filter(y => y.id !== i.id))) })),
+        excluir: () => this.confirmar(`Apagar ${i.marca} ${i.ref}? Isso remove do histórico também.`, () => this.upd(x => x.filter(y => y.id !== i.id))),
+        restaurar: () => this.confirmar(`Restaurar ${i.marca} ${i.ref} para Códigos recebidos? Sai do histórico e de Feitos hoje.`, () => { this.setItem(i.id, { status: 'respondido', feitoEm: null, enviadoSite: false, enviadoAtacado: false, visto: false }); this.showToast('Restaurado para Códigos recebidos'); }) })),
       temFeitosHoje: feitosHoje.length > 0,
       resumoFeitosHoje: `${feitosHoje.length} código${feitosHoje.length === 1 ? '' : 's'} hoje · ${new Date().toLocaleDateString('pt-BR')}`,
       gerarRelatorioHoje: () => this.imprimirRelatorio(feitosHoje.filter(i => !s.filtroMarcaHoje || normMarca(i.marca) === s.filtroMarcaHoje)),
