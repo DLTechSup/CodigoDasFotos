@@ -443,40 +443,82 @@ function topo(C, modo) {
 
 /* ============ ESCRITÓRIO ============ */
 function escritorio(C, r) {
-  const sub = r.path.split('/')[2] || '';
-  const nCod = C.oCod.length, nFot = C.oFotos.length;
-  const faixa = (nCod || nFot) ? `<div class="alarm"><div class="alarm-in"><span class="pulse"></span><span><b>A loja está esperando:</b> ${[nCod && plural(nCod, 'código'), nFot && plural(nFot, 'foto pendente', 'fotos pendentes')].filter(Boolean).join(' e ')}</span><span class="alarm-links">${nCod ? '<a href="#/escritorio/codigos">Enviar códigos →</a>' : ''}${nFot ? '<a href="#/escritorio/fotos">Enviar fotos →</a>' : ''}</span></div></div>` : `<div class="ok-bar"><div class="alarm-in">✓ Tudo em dia — nada pendente para enviar à loja</div></div>`;
-  const tab = (k, t, n, cls) => `<a href="#/escritorio${k ? '/' + k : ''}" class="${sub === k ? 'on' : ''}">${t}${n != null ? ` <span class="cnt ${n ? cls : ''}">${n}</span>` : ''}</a>`;
-  const tabs = `<div class="tabs-wrap"><nav class="tabs">${tab('', 'Pendências', C.oTotalRefs, 'red')}${tab('codigos', 'Falta código', nCod, 'red')}${tab('fotos', 'Falta foto', nFot, 'red')}${tab('enviadas', 'Fotos enviadas', C.oConf.length, 'amber')}${tab('feitos', 'Já no site', null)}</nav></div>`;
+  const parts = r.path.split('/'), sub = parts[2] || '';
+  const tab = (k, t, n, c) => `<a href="#/escritorio${k ? '/' + k : ''}" class="${(sub === k || (k === '' && sub === 'marca')) ? 'on' : ''}">${t}${n ? ` <span class="of-cnt ${c || ''}">${n}</span>` : ''}</a>`;
+  const nav = `<nav class="of-nav"><div class="of-nav-in">${tab('', 'Marcas', C.oTotalRefs)}${tab('fotos', 'Faltam fotos', C.oFotos.length)}${tab('enviadas', 'Fotos enviadas', C.oConf.length, 'amber')}${tab('feitos', 'Já no site')}</div></nav>`;
   let body;
-  if (sub === 'codigos') body = escCodigos(C, r.q);
+  if (sub === 'marca') body = escMarca(C, decodeURIComponent(parts.slice(3).join('/')));
+  else if (sub === 'codigos') body = escCodigos(C, r.q);
   else if (sub === 'fotos') body = escFotos(C, r.q);
   else if (sub === 'enviadas') body = escEnviadas(C);
   else if (sub === 'feitos') body = escFeitos(C);
   else body = escHome(C);
-  return faixa + tabs + `<main class="wrap">${body}</main>`;
+  return `<div class="of">${nav}<main class="of-wrap">${body}</main></div>`;
+}
+const linkMarca = m => '#/escritorio/marca/' + encodeURIComponent(m);
+function colagem(lista) {
+  const fs = lista.map(i => fotosDe(i)[0]).filter(Boolean).slice(0, 4);
+  if (!fs.length) return `<div class="bt-col n0"><span>sem fotos</span></div>`;
+  return `<div class="bt-col n${fs.length}">${fs.map(f => `<img src="${esc(f)}" alt="" loading="lazy">`).join('')}</div>`;
+}
+function tileMarca(m, cod, fot) {
+  const l = cod.length ? cod : fot, n = l.length;
+  const refs = l.slice(0, 3).map(i => `<span>${esc(i.ref)}</span>`).join('') + (n > 3 ? `<span class="mais">+${n - 3}</span>` : '');
+  const extra = cod.length && fot.length ? `<div class="bt-x">⚠ ${plural(fot.length, 'foto pendente', 'fotos pendentes')}</div>` : '';
+  return `<a class="bt${cod.length ? '' : ' red'}" href="${linkMarca(m)}">${colagem(l)}<div class="bt-b">
+    <div class="bt-h"><span class="bt-name">${esc(m)}</span><span class="bt-num">${n}</span></div>
+    <div class="bt-t">${cod.length ? (n === 1 ? 'modelo esperando código' : 'modelos esperando código') : (n === 1 ? 'modelo sem foto' : 'modelos sem foto')}</div>
+    <div class="bt-refs">${refs}</div>${extra}
+    <span class="bt-go">Abrir marca <i>→</i></span></div></a>`;
 }
 function escHome(C) {
-  const nCod = C.oCod.length, nFot = C.oFotos.length, comCod = C.oFotos.filter(i => i.status === 'respondido').length;
+  const nCod = C.oCod.length, nFot = C.oFotos.length;
   const novos = C.oCod.filter(i => (i.criado || 0) > (S.vistoAte || 0));
-  const alerta = novos.length ? `<div class="banner blue"><div class="bx"><b>${novos.length === 1 ? '1 produto novo chegou' : novos.length + ' produtos novos chegaram'}</b><span>${esc([...new Set(novos.map(i => i.marca))].join(' · '))}</span></div><a class="btn dark" href="#/escritorio/codigos" data-act="visto">Ver agora</a><button class="btn icon" data-act="visto" title="Dispensar">×</button></div>` : '';
-  const notif = S.notifPerm === 'default' ? `<button class="lnk" data-act="notif" style="align-self:flex-start">🔔 Receber aviso neste aparelho quando chegar produto novo</button>` : '';
-  const hero = C.oTotalRefs ? `<section class="hero"><div><h1>O que falta enviar para a loja</h1><p>Cada item abaixo está travando um produto de ir para o site.</p><div class="hero-n">${C.oTotalRefs}<small>${C.oTotalRefs === 1 ? 'referência pendente' : 'referências pendentes'}</small></div></div>
-    <div class="hero-cards">
-      <a class="hc ${nCod ? 'red' : ''}" href="#/escritorio/codigos"><span class="n">${nCod}</span><span class="t">Falta o código</span><span class="s">Digitar o código das fotos</span><span class="go">${nCod ? 'Enviar códigos →' : 'Nada pendente'}</span></a>
-      <a class="hc ${nFot ? 'red' : ''}" href="#/escritorio/fotos"><span class="n">${nFot}</span><span class="t">Falta a foto</span><span class="s">${comCod ? `${comCod} já ${comCod === 1 ? 'tem' : 'têm'} código, só falta a foto` : 'Mandar as fotos para a loja'}</span><span class="go">${nFot ? 'Ver fotos pendentes →' : 'Nada pendente'}</span></a>
-      <a class="hc" href="#/escritorio/enviadas"><span class="n">${C.oConf.length}</span><span class="t">Fotos enviadas</span><span class="s">Aguardando a loja confirmar o recebimento</span><span class="go">Ver lista →</span></a>
-    </div></section>`
-    : `<section class="hero ok"><div><h1>Tudo em dia ✓</h1><p>Nenhum código nem foto pendente. Quando a loja cadastrar um produto novo, ele aparece aqui.</p></div><div class="hero-cards"><div class="hc" style="background:#fff;box-shadow:var(--ring)"><span class="n">${C.feitosHoje.length}</span><span class="t">Feitos hoje</span><span class="s" style="color:var(--mute)">Produtos que já foram para o site</span></div></div></section>`;
-  const linhas = porMarca([...C.oCod, ...C.oFotos.filter(i => i.status !== 'pendente')]).map(([m]) => {
-    const c = C.oCod.filter(i => i.marca === m).length, f = C.oFotos.filter(i => i.marca === m).length;
-    const dest = c ? 'codigos' : 'fotos';
-    return `<tr class="clk" data-href="#/escritorio/${dest}?m=${encodeURIComponent(m)}"><td class="m">${esc(m)}</td><td class="num">${c ? `<span class="pill red">${c}</span>` : '<span class="zero">—</span>'}</td><td class="num">${f ? `<span class="pill red">${f}</span>` : '<span class="zero">—</span>'}</td><td class="num" style="width:40px;color:var(--mute)">›</td></tr>`;
-  }).join('');
-  const tabela = linhas ? `<div class="box"><div class="box-h"><h3>Pendências por marca</h3><span class="ri-sub">Toque numa marca para resolver</span></div><table class="tbl"><thead><tr><th>Marca</th><th class="num">Falta código</th><th class="num">Falta foto</th><th></th></tr></thead><tbody>${linhas}</tbody></table></div>` : '';
-  const recentes = C.feitos.slice(0, 6);
-  const rec = recentes.length ? `<div class="h2">Já foram para o site</div><div class="hist">${recentes.map(i => `<div class="hc2">${ph(i)}<div class="hc2-b"><span class="oc-mk">${esc(i.marca)}</span><span class="ri-ref">${esc(i.ref)}</span><span class="ri-sub">${esc(hora(i.feitoEm))}</span></div></div>`).join('')}</div>` : '';
-  return alerta + notif + hero + tabela + rec;
+  const data = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  const partes = [nCod && `<em>${plural(nCod, 'código')}</em>`, nFot && `<em>${plural(nFot, 'foto', 'fotos')}</em>`].filter(Boolean);
+  const titulo = partes.length ? `Faltam ${partes.join(' e ')} para a loja.` : 'Tudo em dia. <span class="ok">Nada pendente.</span>';
+  const meta = [C.oConf.length && `<a href="#/escritorio/enviadas"><b>${C.oConf.length}</b> ${C.oConf.length === 1 ? 'foto enviada' : 'fotos enviadas'} aguardando a loja</a>`, `<span><b>${C.feitosHoje.length}</b> ${C.feitosHoje.length === 1 ? 'produto foi' : 'produtos foram'} para o site hoje</span>`].filter(Boolean).join('');
+  const head = `<header class="of-head"><div class="of-date">${esc(data)}</div><h1 class="of-title">${titulo}</h1><div class="of-meta">${meta}</div>
+    ${S.notifPerm === 'default' ? `<button class="of-notif" data-act="notif">🔔 Avisar neste aparelho quando chegar produto novo</button>` : ''}</header>`;
+  const alerta = novos.length ? `<div class="of-new"><span class="of-pulse"></span><div><b>${novos.length === 1 ? 'Chegou 1 produto novo' : `Chegaram ${novos.length} produtos novos`}</b><span>${esc([...new Set(novos.map(i => i.marca))].join(' · '))}</span></div><a href="${linkMarca(novos[0].marca)}" data-act="visto">Ver agora</a><button data-act="visto" title="Dispensar">×</button></div>` : '';
+  const gCod = porMarca(C.oCod);
+  const secCod = gCod.length ? `<section class="of-sec"><div class="of-sec-h"><h2>Marcas esperando código</h2><span>Toque na marca para ver os modelos e digitar os códigos</span></div><div class="bt-grid">${gCod.map(([m, l]) => tileMarca(m, l, C.oFotos.filter(i => i.marca === m))).join('')}</div></section>` : '';
+  const soFoto = porMarca(C.oFotos.filter(i => !C.oCod.some(c => c.marca === i.marca)));
+  const secFot = soFoto.length ? `<section class="of-sec"><div class="of-sec-h"><h2>Marcas com fotos pendentes</h2><span>O código já foi, falta mandar as fotos</span></div><div class="bt-grid">${soFoto.map(([m, l]) => tileMarca(m, [], l)).join('')}</div></section>` : '';
+  const vaz = !gCod.length && !soFoto.length ? `<div class="of-empty"><div class="of-empty-i">✓</div><b>Nenhuma marca esperando</b><span>Quando a loja cadastrar um produto novo, a marca aparece aqui.</span></div>` : '';
+  const rec = C.feitos.slice(0, 10);
+  const strip = rec.length ? `<section class="of-sec"><div class="of-sec-h"><h2>Já foram para o site</h2><a href="#/escritorio/feitos">Ver todos →</a></div><div class="of-strip">${rec.map(i => { const f = fotosDe(i)[0]; return `<button class="of-mini" data-act="ver" data-id="${i.id}"><span class="ph">${f ? `<img src="${esc(f)}" alt="" loading="lazy">` : ''}</span><b>${esc(i.ref)}</b><small>${esc(i.marca)}</small></button>`; }).join('')}</div></section>` : '';
+  return head + alerta + secCod + secFot + vaz + strip;
+}
+function modelo(i, n, tipo) {
+  const f = fotosDe(i), pf = ehPF(i);
+  const obs = [i.nota, i.notaPainel].filter(Boolean);
+  const temCod = i.status === 'respondido' && i.codigo;
+  const fotosHtml = `<div class="mc-ph"><button class="mc-main" data-act="ver" data-id="${i.id}">${f.length ? `<img src="${esc(f[0])}" alt="" loading="lazy">` : '<span class="ph-none">sem foto<br>confira pela referência</span>'}${f.length > 1 ? `<span class="mc-nf">${f.length} fotos</span>` : ''}</button>${f.length > 1 ? `<div class="mc-thumbs">${f.slice(1, 5).map(s => `<button data-act="ver" data-id="${i.id}"><img src="${esc(s)}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}</div>`;
+  const codigoForm = `<div class="mc-code"><label>Código das fotos</label><div class="row2"><input class="in code big" data-draft="cod:${i.id}" data-k="cod:${i.id}" data-enter="enviar" data-id="${i.id}" data-upper value="${val('cod:' + i.id)}" placeholder="Digite o código" autocomplete="off" autocapitalize="characters" enterkeyhint="send"><button class="btn dark lg" data-act="enviar" data-id="${i.id}">Enviar</button></div>
+    <input class="in sm" data-draft="obs:${i.id}" data-k="obs:${i.id}" data-enter="enviar" data-id="${i.id}" value="${val('obs:' + i.id)}" placeholder="Sua observação para a loja (opcional)"></div>`;
+  let acoes;
+  if (tipo === 'codigo') acoes = codigoForm + `<button class="lnk mute" data-act="naosei" data-id="${i.id}" style="align-self:flex-start">Não sei o código</button>`;
+  else acoes = (temCod ? `<div class="code-ok"><span>✓ Código já enviado</span><b>${esc(i.codigo)}</b></div>` : i.status === 'pendente' ? '<div class="ri-sub">O código deste modelo está na lista de cima.</div>' : '') + `<button class="btn red lg" data-act="jaEnviei" data-id="${i.id}">${ic('check')} Já enviei as fotos</button>`;
+  return `<article class="mc${tipo === 'foto' ? ' foto' : ''}">${fotosHtml}<div class="mc-b">
+    <div class="mc-top"><span class="mc-idx">${String(n).padStart(2, '0')}</span><span>Fotos de ${esc(i.data)}</span>${valoresTxt(i)}</div>
+    <div class="mc-ref">${esc(i.ref)}</div>
+    ${pf ? `<div class="mc-flag">⚠ ${esc(i.motivoFoto)}</div>` : ''}
+    ${i.conferidoNaoRecebido && tipo === 'foto' ? `<div class="mc-flag dark">A loja conferiu e ainda não recebeu as fotos. Envie de novo.</div>` : ''}
+    ${obs.length ? `<div class="mc-obs"><span>Observação da loja</span>${obs.map(o => `<p>${esc(o)}</p>`).join('')}</div>` : ''}
+    ${acoes}
+  </div></article>`;
+}
+function escMarca(C, m) {
+  const cod = C.oCod.filter(i => i.marca === m), fot = C.oFotos.filter(i => i.marca === m);
+  const back = `<a class="of-back" href="#/escritorio">← Todas as marcas</a>`;
+  const outras = porMarca(C.oCod).map(([x]) => x).filter(x => x !== m);
+  if (!cod.length && !fot.length) return back + `<div class="of-empty"><div class="of-empty-i">✓</div><b>${esc(m)} concluída</b><span>Não falta mais nada desta marca.</span>${outras.length ? `<a class="btn dark lg" href="${linkMarca(outras[0])}">Próxima marca: ${esc(outras[0])} →</a>` : `<a class="btn lg" href="#/escritorio">Voltar ao início</a>`}</div>`;
+  const resumo = [cod.length && plural(cod.length, 'modelo esperando código', 'modelos esperando código'), fot.length && plural(fot.length, 'modelo sem foto', 'modelos sem foto')].filter(Boolean).join(' · ');
+  return back + `<header class="mk-head"><h1>${esc(m)}</h1><p>${resumo}</p></header>` +
+    (cod.length ? `<section class="of-sec"><div class="of-sec-h"><h2>Esperando código</h2><span>Confira pela foto e digite o código de cada modelo</span></div><div class="mc-list">${cod.map((i, k) => modelo(i, k + 1, 'codigo')).join('')}</div></section>` : '') +
+    (fot.length ? `<section class="of-sec"><div class="of-sec-h"><h2 class="red">Faltam fotos</h2><span>Mande as fotos para a loja e marque como enviado</span></div><div class="mc-list">${fot.map((i, k) => modelo(i, k + 1, 'foto')).join('')}</div></section>` : '') +
+    (outras.length ? `<div class="mk-next"><span>Outras marcas esperando:</span>${outras.map(x => `<a href="${linkMarca(x)}">${esc(x)} <b>${C.oCod.filter(i => i.marca === x).length}</b></a>`).join('')}</div>` : '');
 }
 function cardCodigo(i) {
   const pf = ehPF(i);
@@ -505,18 +547,17 @@ function cardFoto(i) {
   </div></article>`;
 }
 function escFotos(C, q) {
-  const l = filtraMarca(C.oFotos, q);
-  const head = `<div class="ph"><div><h1>Falta a foto</h1><p>Mande as fotos para a loja e toque em <b>Já enviei as fotos</b>. A loja confirma quando receber.</p></div></div>`;
-  if (!C.oFotos.length) return head + vazio('Nenhuma foto pendente');
-  return head + marcaChips(C.oFotos, q, '/escritorio/fotos') + porMarca(l).map(([m, it]) => `<section class="grp"><div class="grp-h">${esc(m)} <span class="cnt red">${it.length}</span><span class="ln"></span></div><div class="cards">${it.map(cardFoto).join('')}</div></section>`).join('');
+  const head = `<header class="mk-head"><h1>Faltam fotos</h1><p>Mande as fotos para a loja e toque em <b>Já enviei as fotos</b>. A loja confirma quando receber.</p></header>`;
+  if (!C.oFotos.length) return head + `<div class="of-empty"><div class="of-empty-i">✓</div><b>Nenhuma foto pendente</b></div>`;
+  return head + porMarca(C.oFotos).map(([m, it]) => `<section class="of-sec"><div class="of-sec-h"><h2><a href="${linkMarca(m)}">${esc(m)}</a></h2><span>${plural(it.length, 'modelo')}</span></div><div class="mc-list">${it.map((i, k) => modelo(i, k + 1, 'foto')).join('')}</div></section>`).join('');
 }
 function escEnviadas(C) {
-  const head = `<div class="ph"><div><h1>Fotos enviadas</h1><p>Você marcou que enviou. Falta a loja confirmar que recebeu.</p></div></div>`;
+  const head = `<header class="mk-head"><h1>Fotos enviadas</h1><p>Você marcou que enviou. Falta a loja confirmar que recebeu.</p></header>`;
   if (!C.oConf.length) return head + vazio('Nada aguardando confirmação');
   return head + `<div class="list">${C.oConf.map(i => `<div class="ri nochk">${thumbBtn(i)}<div class="ri-b"><div class="ri-t"><span class="ri-ref">${esc(i.ref)}</span><span class="ri-mk">${esc(i.marca)}</span><span class="pill amber">Aguardando a loja</span></div><span class="ri-sub">${esc(i.motivoFoto)} · enviado em ${esc(hora(i.fotosEnviadasEm))}</span></div><div class="ri-a"><button class="lnk mute" data-act="desfazerEnvio" data-id="${i.id}">Desfazer</button></div></div>`).join('')}</div>`;
 }
 function escFeitos(C) {
-  const head = `<div class="ph"><div><h1>Já no site</h1><p>Produtos que a loja já publicou com os seus códigos.</p></div></div>`;
+  const head = `<header class="mk-head"><h1>Já no site</h1><p>Produtos que a loja já publicou com os seus códigos.</p></header>`;
   if (!C.feitos.length) return head + vazio('Nenhum produto concluído ainda');
   return head + `<div class="hist">${C.feitos.slice(0, 60).map(i => `<div class="hc2">${ph(i)}<div class="hc2-b"><span class="oc-mk">${esc(i.marca)}</span><span class="ri-ref">${esc(i.ref)}</span><span class="pill green" style="width:fit-content">${esc(i.codigo)}</span><span class="ri-sub">${esc(hora(i.feitoEm))}</span></div></div>`).join('')}</div>`;
 }
